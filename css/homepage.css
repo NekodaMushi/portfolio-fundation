@@ -33,10 +33,51 @@ body .central{
   display: flex;
   flex-direction: column;
   justify-content:space-between;
+  padding: 20px;
+}
+
+.mid_container_item {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+  padding-left: 25px;
+  padding: 20px;
 }
 
 .box {
   max-width: 10%;
   max-height: 10%;
-  border: 1px solid black
+  border: 1px solid black;
+  padding: 20px
+}
+
+#box1 {
+  margin-left: 15%;
+}
+
+#box2 {
+  margin-left: 40%;
+
+}
+
+#box3 {
+  margin-left: 15%;
+
+}
+
+#box4 {
+  margin-left: 15%;
+
+}
+#box5 {
+  margin-left: 65%;
+
+}
+#box6 {
+  margin-left: 25%;
+
+}
+
+#last_container {
+  padding-bottom: 60px;
 }
