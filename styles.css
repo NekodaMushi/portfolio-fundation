@@ -1,0 +1,38 @@
+
+
+@import 'css/grid.css';
+@import 'css/homepage.css';
+@import 'css/waves.css';
+
+body .central{
+  margin: 0;
+  color: white;
+  background: #000;
+  font-family: 'Prompt', sans-serif;
+}
+
+/* section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 400px;
+  padding: 100px 20vx;
+} */
+
+.top_section {
+  background: #001220;
+}
+.blue {
+  background: #3c31dd;
+}
+.red {
+  background: #c71218;
+}
+.pink {
+  background: #ff0066;
+}
+.dark {
+  background: #0f0f10;
+}
+
