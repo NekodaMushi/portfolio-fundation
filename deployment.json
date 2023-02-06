@@ -1,0 +1,24 @@
+{
+  "contract": {
+    "address": "0x47A8AA3f97C87bb261cA8635A56cd811fd035C77",
+    "signerAddress": "0x9166202FD48BAD039B2914B52D443E74Cc38Fa24",
+    "abi": [
+      "constructor()",
+      "event Bid(address indexed sender, uint256 amount)",
+      "event End(address highestBidder, uint256 highestBid)",
+      "event Start()",
+      "event Withdraw(address indexed bidder, uint256 amount)",
+      "function bid() payable",
+      "function bids(address) view returns (uint256)",
+      "function end()",
+      "function endAt() view returns (uint256)",
+      "function ended() view returns (bool)",
+      "function highestBid() view returns (uint256)",
+      "function highestBidder() view returns (address)",
+      "function seller() view returns (address)",
+      "function start(uint256 startingBid)",
+      "function started() view returns (bool)",
+      "function withdraw() payable"
+    ]
+  }
+}
