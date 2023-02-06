@@ -1,0 +1,19 @@
+html,
+body {
+  margin: 0px;
+  height: 100%;
+}
+
+div {
+  min-height: 100px;
+}
+
+/* .auction__big__section {
+  height: 50px;
+} */
+
+section, aside, div, article {
+  border: 1px solid black;
+}
+
+
