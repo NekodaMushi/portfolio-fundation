@@ -4,9 +4,9 @@ body {
   height: 100%;
 }
 
-div {
+/* div {
   min-height: 100px;
-}
+} */
 
 /* .auction__big__section {
   height: 50px;
@@ -15,5 +15,4 @@ div {
 section, aside, div, article {
   border: 1px solid black;
 }
-
 
