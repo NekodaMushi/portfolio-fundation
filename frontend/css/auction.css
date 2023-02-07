@@ -1,14 +1,13 @@
 .auction__full__section {
   display: flex;
   align-content: center;
-  height: 100vh;
+  /* height: 100vh; */
   flex-direction: column;
 }
 .auction__big__section {
   display: flex;
   align-content: center;
   flex: 1;
-  height: 65;
 }
 
 .auction__pic__details {
@@ -50,7 +49,6 @@
 .auction__name__owner__makeoffer {
   display: flex;
   flex-direction: column;
-  height: 30%;
 }
 .auction__name__owner__makeoffer__container {
   display: flex;
@@ -59,21 +57,75 @@
 
 .auction__history {
   display: flex;
-  height: 70%;
+  flex-direction: column;
+}
+
+.graph__container__wrapper {
+  display: flex;
+  padding: 1.5%;
+}
+
+.graph__container {
+  display: flex;
+  padding: 1%;
 }
 
 .auction__big__transaction {
   display: flex;
-  height: 35%;
   flex-direction: column;
 }
 
 .auction__offers {
   display: flex;
-  height: 50%;
 }
 
 .auction__transaction__history {
   display: flex;
-  height: 50%;
+}
+
+
+
+
+/* Event Counter */
+#sale__end {
+  width: 100%;
+  flex-direction: row;
+}
+
+.event__counter__container__wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+.event__counter__top {
+  display: flex;
+  width: 100%;
+}
+#event__counter__top__wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}
+.event__counter__bot {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+#event__counter__bot__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.event__counter__bot__left {
+  display: flex;
+  flex-direction: row;
+}
+
+.span__time__data {
+  color : rgb(240, 81, 81)
+}
+
+.event__hours_min_sec__text {
+  font-weight: 400;
+  font-size: 15px;
+  color: rgb(53, 56, 64);
 }
