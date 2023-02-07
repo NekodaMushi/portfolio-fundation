@@ -53,6 +53,7 @@
 .auction__name__owner__makeoffer__container {
   display: flex;
   flex-direction: row;
+  padding: 1%;
 }
 
 .auction__history {
@@ -70,24 +71,17 @@
   padding: 1%;
 }
 
-.auction__big__transaction {
-  display: flex;
-  flex-direction: column;
-}
 
 .auction__offers {
   display: flex;
 }
 
-.auction__transaction__history {
-  display: flex;
-}
 
 
 
 
 /* Event Counter */
-#sale__end {
+.sale__end {
   width: 100%;
   flex-direction: row;
 }
@@ -101,7 +95,7 @@
   display: flex;
   width: 100%;
 }
-#event__counter__top__wrapper {
+.event__counter__top__wrapper {
   display: flex;
   width: 100%;
   flex-direction: row;
@@ -111,7 +105,7 @@
   justify-content: space-between;
   flex-direction: row;
 }
-#event__counter__bot__wrapper {
+.event__counter__bot__wrapper {
   display: flex;
   flex-direction: column;
 }
@@ -120,7 +114,7 @@
   flex-direction: row;
 }
 
-.span__time__data {
+.event__hours_min_sec__data {
   color : rgb(240, 81, 81)
 }
 
@@ -129,3 +123,55 @@
   font-size: 15px;
   color: rgb(53, 56, 64);
 }
+
+/* BOTTOM Part - Offers - Transfer */
+
+.auction__big__transaction {
+  display: flex;
+  flex-direction: column;
+}
+
+.of__tr {
+  grid-row: 2 / span 3;
+  background-color: #fff;
+  border-radius: 1rem;
+  overflow: scroll;
+}
+
+.of__tr__row {
+  padding: 2.25rem 4rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.of__tr__type {
+  color: rgb(74, 16, 16);
+  padding: 0.1rem 1rem;
+  margin-right: 2rem;
+}
+
+.details {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #666;
+}
+
+.of__tr__price {
+  width: 10%;
+}
+
+.of__tr__expir {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #666;
+  margin-left: 20%;
+}
+
+.of__tr__from {
+  font-size: 1.7rem;
+  margin-left: auto;
+}
+
