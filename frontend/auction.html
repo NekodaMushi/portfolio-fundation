@@ -41,13 +41,14 @@
         </div>
       </div>
     </nav>
-
+    <!-- MAIN PART -->
     <main class="auction__full__section">
             <section class="auction__big__section">
+              <!-- LEFT PART-->
                 <aside class="auction__pic__details">
                   <div class="auction__pic__article__details__container">
                       <div class="auction__article__picture">
-                          <div class="auction__picture"><img src="image_file.jpg" alt="Description of the image"></div>
+                          <div class="auction__picture"><img src="img/car.jpg" alt="Car img" width="150" height="130"></div>
                       </div>
                       <div class="auction__article__details">
                           <div class="auction__details__container">
@@ -72,8 +73,8 @@
                           </div>
                       </div>
                   </div>
-                </aside> <!-- .auction_big_left_side-->
-
+                </aside> 
+                <!-- RIGHT PART-->
                 <article class="auction__name__history__descr">
                     <div class="auction__name__owner__makeoffer">
                         <div class="auction__name__owner__makeoffer__container">
@@ -83,16 +84,16 @@
                           <div class="auction__name__info">Owned by</div>
                           <div class="auction__name__info__value">$data</div>
                         </div>
-                        <div class="auction__name__owner__makeoffer__container" id="sale__end">
+                        <div class="auction__name__owner__makeoffer__container sale__end">
                             <div class="event__counter__container__wrapper">
                                 <div class="event__counter__top">
-                                    <div id="event__counter__top__wrapper"> 
+                                    <div class="event__counter__top__wrapper"> 
                                       <div>Sale end</div>
                                       <div>$data</div>
                                     </div>
                                 </div>
                                 <div class="event__counter__bot">
-                                  <div id="event__counter__bot__wrapper">  <!--Bigger than top-->
+                                  <div class="event__counter__bot__wrapper">  <!--Bigger than top-->
                                       <div class="event__counter__bot__left">
                                           <div class="event__counter__time__container">
                                               <div class="event__hours_min_sec__data">00</div>
@@ -121,16 +122,60 @@
                         </div>
                         <div class="graph__container__wrapper">
                             <div class="graph__container">
-                                <div class="graph">graph</div>
+                                <div class="graph"><img src="img/graph_example.png" alt="Car img" width="736" height="332"></div>
                             </div>
                         </div>
                     </div>
                     <div class="auction__desc"></div>
-                </article><!-- .auction__right__side__name___history__descr-->
+                </article>
             </section>
+
+
+            <!-- BOTTOM Part -->
             <section class="auction__big__transaction">
-              <div class="auction__offers">Offers</div>
-              <div class="auction__transaction__history">Transferts</div>
+
+              <!-- OFFERS -->
+              <div class="of__tr">
+                <div class="of__tr__title">Offers</div>
+                <div class="of__tr__row details">
+                  <div class="of__tr__type of__tr__price details">Price</div>
+                  <div class="of__tr__expir">Expiration</div>
+                  <div class="of__tr__from">From</div>
+                </div>
+                <div class="of__tr__row">
+                  <div class="of__tr__type of__tr__price">1 eth</div>
+                  <div class="of__tr__expir">in 2 days</div>
+                  <div class="of__tr__from">0x534534..</div>
+                </div>
+                <div class="of__tr__row">
+                  <div class="of__tr__type of__tr__price">0.5 eth</div>
+                  <div class="of__tr__expir">in 5 days</div>
+                  <div class="of__tr__from">0x8923da..</div>
+                </div>
+              </div>
+
+                <!-- TRANSFERT -->
+                
+                  <div class="of__tr">
+                    <div class="of__tr__title">Transfert</div>
+                    <div class="of__tr__row details">
+                      <div class="of__tr__type of__tr__price details">Price</div>
+                      <div class="of__tr__expir">Expiration</div>
+                      <div class="of__tr__from">From</div>
+                    </div>
+                    <div class="of__tr__row">
+                      <div class="of__tr__type of__tr__price">1 eth</div>
+                      <div class="of__tr__expir">in 2 days</div>
+                      <div class="of__tr__from">0x534534..</div>
+                    </div>
+                    <div class="of__tr__row">
+                      <div class="of__tr__type of__tr__price">0.5 eth</div>
+                      <div class="of__tr__expir">in 5 days</div>
+                      <div class="of__tr__from">0x8923da..</div>
+                    </div>
+                  </div>
+
+                
             </section>
     </main>
 
@@ -140,3 +185,5 @@
     
   </body>
 </html>
+
+
