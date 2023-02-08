@@ -1,0 +1,34 @@
+@media (max-width: 576px) {
+  .navbar-nav {
+    flex-direction: column;
+  }
+
+  .nav-item {
+    margin-bottom: 10px;
+  }
+
+  .navbar-btn {
+    margin-top: 10px;
+  }
+
+  .auction__big__section{ 
+    flex-direction: column;
+    flex: 1;
+  }
+  .auction__pic__details, .auction__name__history__descr{
+    width: 100%;
+  }
+}
+
+@media (width <= 578px) {
+  .auction__pic__details {
+    width: 100%;
+  }
+  .auction__pic__article__details__container {
+    width: 100%;
+  }
+  .auction__big__section {
+    display: flex;
+    flex-direction: column;
+  }
+}
