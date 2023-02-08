@@ -5,6 +5,8 @@
 @import 'css/auction.css';
 @import 'css/waves.css';
 
+@import 'css/media_queries.css';
+
 /* body .central{
   margin: 0;
   color: white;
