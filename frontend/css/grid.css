@@ -20,6 +20,41 @@
   }
 }
 
+.btn {
+  padding: 0.7em 2em;
+  border-radius: 0.3em;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(
+    90deg, #e76509, #e5ec0b
+  );
+  color: rgb(255, 255, 255);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(
+    90deg, #257f05, #e4ec0b7f
+  );
+}
+
+.btn-secondary {
+  border: 1px #0ab9bc solid;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #fff;
+  color: #111;
+}
+
+.btn-group .btn {
+  margin: 1em;
+}
+
 footer {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
