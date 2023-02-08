@@ -31,4 +31,10 @@
     display: flex;
     flex-direction: column;
   }
+  .price__eth {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
+
