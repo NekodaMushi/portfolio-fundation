@@ -50,6 +50,17 @@
   justify-content: space-between;
 }
 
+.auction__article__description {
+  display: flex;
+  margin: 10% 0;
+  justify-content: center;
+}
+
+.auction__article__description__text {
+  display: flex;
+  padding: 2%;
+}
+
 /* RIGHT PART */
 
 .auction__name__owner__makeoffer {
@@ -173,12 +184,13 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid #eee;
+  justify-content: center;
 }
 
 .of__tr__type {
   color: rgb(74, 16, 16);
   padding: 0.1rem 1rem;
-  margin-right: 2rem;
+  margin-right: 0;;
 }
 
 .details {
@@ -189,7 +201,10 @@
 }
 
 .of__tr__price {
-  width: 10%;
+  font-size: 20px;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
 }
 
 .of__tr__expir {
@@ -197,7 +212,7 @@
   text-transform: uppercase;
   font-weight: 500;
   color: #666;
-  margin-left: 20%;
+  margin:0 20%;
 }
 
 .of__tr__from {
