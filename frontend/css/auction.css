@@ -20,6 +20,7 @@
   width: 70%;
 }
 
+/* LEFT PART */
 .auction__pic__article__details__container {
   display: flex;
   flex-direction: column;
@@ -46,6 +47,8 @@
   justify-content: space-between;
 }
 
+/* RIGHT PART */
+
 .auction__name__owner__makeoffer {
   display: flex;
   flex-direction: column;
@@ -71,14 +74,21 @@
   padding: 1%;
 }
 
+.graph {
+  width: 100%;
+  height: auto;
+}
 
-.auction__offers {
+.event__counter__time__container{
   display: flex;
+  flex-direction: column;
 }
 
 
 
-
+.auction__offers {
+  display: flex;
+}
 
 /* Event Counter */
 .sale__end {
@@ -86,10 +96,25 @@
   flex-direction: row;
 }
 
+.separator {
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.align {
+  padding: 2%;
+}
+
 .event__counter__container__wrapper {
   display: flex;
   width: 100%;
   flex-direction: column;
+}
+
+
+
+.event__counter__container {
+  width: 100%;
 }
 .event__counter__top {
   display: flex;
@@ -108,6 +133,7 @@
 .event__counter__bot__wrapper {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 .event__counter__bot__left {
   display: flex;
@@ -123,6 +149,7 @@
   font-size: 15px;
   color: rgb(53, 56, 64);
 }
+
 
 /* BOTTOM Part - Offers - Transfer */
 

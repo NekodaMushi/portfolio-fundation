@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
 
   <body class="central"> 
@@ -53,23 +54,23 @@
                       <div class="auction__article__details">
                           <div class="auction__details__container">
                             <div class="auction__details__name">Details</div>
-                            <div class="auction__details__value">possible_btn</div>
+                            <div class="auction__details__value separator">possible_btn</div>
                           </div>
                           <div class="auction__details__container">
                             <div class="auction__details__name">Blockchain</div>
-                            <div class="auction__details__value">data</div>
+                            <div class="auction__details__value separator">data</div>
                           </div>
                           <div class="auction__details__container">
                             <div class="auction__details__name">Contract Address</div>
-                            <div class="auction__details__value">data</div>
+                            <div class="auction__details__value separator">data</div>
                           </div>
                           <div class="auction__details__container">
                             <div class="auction__details__name">Token ID</div>
-                            <div class="auction__details__value">data</div>
+                            <div class="auction__details__value separator">data</div>
                           </div>
                           <div class="auction__details__container">
                             <div class="auction__details__name">Token Standard</div>
-                            <div class="auction__details__value">data</div>
+                            <div class="auction__details__value separator">data</div>
                           </div>
                       </div>
                   </div>
@@ -82,28 +83,32 @@
                         </div>
                         <div class="auction__name__owner__makeoffer__container">
                           <div class="auction__name__info">Owned by</div>
-                          <div class="auction__name__info__value">$data</div>
+                          <div class="auction__name__info__value separator">$data</div>
                         </div>
                         <div class="auction__name__owner__makeoffer__container sale__end">
                             <div class="event__counter__container__wrapper">
                                 <div class="event__counter__top">
                                     <div class="event__counter__top__wrapper"> 
                                       <div>Sale end</div>
-                                      <div>$data</div>
+                                      <div class="separator">$data</div>
                                     </div>
                                 </div>
                                 <div class="event__counter__bot">
                                   <div class="event__counter__bot__wrapper">  <!--Bigger than top-->
                                       <div class="event__counter__bot__left">
-                                          <div class="event__counter__time__container">
+                                        <div class="event__counter__time__container align">
+                                          <div class="event__hours_min_sec__data">00</div>
+                                          <div class="event__hours_min_sec__text">Days</div>
+                                      </div>
+                                          <div class="event__counter__time__container align">
                                               <div class="event__hours_min_sec__data">00</div>
                                               <div class="event__hours_min_sec__text">Hours</div>
                                           </div>
-                                          <div class="event__counter__time__container">
+                                          <div class="event__counter__time__container align">
                                               <div class="event__hours_min_sec__data">00</div>
                                               <div class="event__hours_min_sec__text">Min</div>
                                           </div>
-                                          <div class="event__counter__time__container">
+                                          <div class="event__counter__time__container align">
                                               <div class="event__hours_min_sec__data">00</div>
                                               <div class="event__hours_min_sec__text">Sec</div>
                                           </div>
@@ -113,16 +118,18 @@
                             </div>
                         </div>
                         <div class="auction__name__owner__makeoffer__container">
-                          <div class="auction__name__info">Button</div>
+                          <div class="auction__name__info btn-group">
+                            <div class="btn btn-primary">Bids</div>
+                            </div>
                         </div>
                     </div>
                     <div class="auction__history">
                         <div class="price__history">
-                          <span>Price History</span>
+                          <span class="separator">Price History</span>
                         </div>
                         <div class="graph__container__wrapper">
                             <div class="graph__container">
-                                <div class="graph"><img src="img/graph_example.png" alt="Car img" width="736" height="332"></div>
+                                <div class="graph"><img src="img/graph_example.png" alt="Car img"></div>
                             </div>
                         </div>
                     </div>
@@ -136,19 +143,19 @@
 
               <!-- OFFERS -->
               <div class="of__tr">
-                <div class="of__tr__title">Offers</div>
+                <div class="of__tr__title  separator">Offers</div>
                 <div class="of__tr__row details">
                   <div class="of__tr__type of__tr__price details">Price</div>
                   <div class="of__tr__expir">Expiration</div>
                   <div class="of__tr__from">From</div>
                 </div>
                 <div class="of__tr__row">
-                  <div class="of__tr__type of__tr__price">1 eth</div>
+                  <div class="of__tr__type of__tr__price"><i class="fa-brands fa-ethereum"></i> 1 eth</div>
                   <div class="of__tr__expir">in 2 days</div>
                   <div class="of__tr__from">0x534534..</div>
                 </div>
                 <div class="of__tr__row">
-                  <div class="of__tr__type of__tr__price">0.5 eth</div>
+                  <div class="of__tr__type of__tr__price"><i class="fa-brands fa-ethereum"></i> 0.5 eth</div>
                   <div class="of__tr__expir">in 5 days</div>
                   <div class="of__tr__from">0x8923da..</div>
                 </div>
@@ -157,19 +164,19 @@
                 <!-- TRANSFERT -->
                 
                   <div class="of__tr">
-                    <div class="of__tr__title">Transfert</div>
+                    <div class="of__tr__title  separator">Transfert</div>
                     <div class="of__tr__row details">
                       <div class="of__tr__type of__tr__price details">Price</div>
                       <div class="of__tr__expir">Expiration</div>
                       <div class="of__tr__from">From</div>
                     </div>
                     <div class="of__tr__row">
-                      <div class="of__tr__type of__tr__price">1 eth</div>
+                      <div class="of__tr__type of__tr__price"><i class="fa-brands fa-ethereum"></i> 1 eth</div>
                       <div class="of__tr__expir">in 2 days</div>
                       <div class="of__tr__from">0x534534..</div>
                     </div>
                     <div class="of__tr__row">
-                      <div class="of__tr__type of__tr__price">0.5 eth</div>
+                      <div class="of__tr__type of__tr__price"><i class="fa-brands fa-ethereum"></i> 0.5 eth</div>
                       <div class="of__tr__expir">in 5 days</div>
                       <div class="of__tr__from">0x8923da..</div>
                     </div>
