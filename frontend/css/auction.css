@@ -175,10 +175,27 @@
 
 .of__tr {
   grid-row: 2 / span 3;
-  background-color: #fff;
   border-radius: 1rem;
   overflow: scroll;
+  
 }
+
+.of__tr::-webkit-scrollbar {
+  width: 0.5em;
+  background-color: transparent;
+}
+
+.of__tr::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+}
+
+.of__tr::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+
 
 .of__tr__row {
   padding: 2.25rem 4rem;
@@ -260,4 +277,12 @@
 
 .border-dyn > :last-child {
   margin-bottom: 0;
+}
+
+
+body {
+  background-image: url('./../img/blurry-gradient-haikei.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
