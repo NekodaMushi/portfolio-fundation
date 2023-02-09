@@ -18,9 +18,7 @@
   .auction__pic__details, .auction__name__history__descr{
     width: 100%;
   }
-}
 
-@media (width <= 578px) {
   .auction__pic__details {
     width: 100%;
   }
