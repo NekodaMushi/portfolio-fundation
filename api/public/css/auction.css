@@ -4,6 +4,7 @@
   /* height: 100vh; */
   flex-direction: column;
 }
+
 .auction__big__section {
   display: flex;
   align-content: center;
@@ -26,7 +27,7 @@
 .auction__pic__article__details__container {
   display: flex;
   flex-direction: column;
-  flex:1;
+  flex: 1;
   padding: 2%;
 }
 
@@ -36,14 +37,17 @@
   padding: 5%;
   margin: 20%;
 }
+
 .auction__picture {
   border: 5px solid gold;
   padding: 2%;
 }
+
 .auction__article__details {
   display: flex;
   flex-direction: column;
 }
+
 .auction__details__container {
   display: flex;
   justify-content: space-between;
@@ -67,6 +71,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .auction__name__owner__makeoffer__container {
   display: flex;
   flex-direction: row;
@@ -93,7 +98,7 @@
   height: auto;
 }
 
-.event__counter__time__container{
+.event__counter__time__container {
   display: flex;
   flex-direction: column;
 }
@@ -131,32 +136,37 @@
 .event__counter__container {
   width: 100%;
 }
+
 .event__counter__top {
   display: flex;
   width: 100%;
 }
+
 .event__counter__top__wrapper {
   display: flex;
   width: 100%;
   flex-direction: row;
 }
+
 .event__counter__bot {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
+
 .event__counter__bot__wrapper {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
+
 .event__counter__bot__left {
   display: flex;
   flex-direction: row;
 }
 
 .event__hours_min_sec__data {
-  color : rgb(240, 81, 81)
+  color: rgb(240, 81, 81)
 }
 
 .event__hours_min_sec__text {
@@ -177,7 +187,7 @@
   grid-row: 2 / span 3;
   border-radius: 1rem;
   overflow: scroll;
-  
+
 }
 
 .of__tr::-webkit-scrollbar {
@@ -208,7 +218,8 @@
 .of__tr__type {
   color: rgb(74, 16, 16);
   padding: 0.1rem 1rem;
-  margin-right: 0;;
+  margin-right: 0;
+  ;
 }
 
 .details {
@@ -230,7 +241,7 @@
   text-transform: uppercase;
   font-weight: 500;
   color: #666;
-  margin:0 20%;
+  margin: 0 20%;
 }
 
 .of__tr__from {
@@ -245,11 +256,11 @@
 .border-round {
   padding: 1rem;
   margin: 0.5rem;
-  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
-    0 5px 15px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
+    0 5px 15px 0 rgba(0, 0, 0, 0.08);
 
   border-radius: 0.5rem;
-  
+
   border-left: 0 solid #333131;
   transition: border-left 300ms ease-in-out, padding-left 300ms ease-in-out;
 }
@@ -257,10 +268,10 @@
 .little__border-round {
   padding: 1rem;
   margin: 0.5rem;
-  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
-    0 5px 15px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
+    0 5px 15px 0 rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
-  
+
   border-left: 0 solid #33313185;
   transition: border-left 300ms ease-in-out, padding-left 300ms ease-in-out;
 }
@@ -271,11 +282,11 @@
   border-left: 0.5rem solid #3b37372f;
 }
 
-.border-dyn > :first-child {
+.border-dyn> :first-child {
   margin-top: 0;
 }
 
-.border-dyn > :last-child {
+.border-dyn> :last-child {
   margin-bottom: 0;
 }
 
@@ -296,12 +307,12 @@ body {
   width: 25%;
   height: 25%;
   background-color: white;
-  z-index: 1; 
+  z-index: 1;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-color: #666;
   border-radius: 0.5rem;
   background-image: url("../img/purple-blue5.png");
-  
+
 
   background-size: cover;
   background-repeat: no-repeat;
@@ -321,4 +332,10 @@ body {
   right: 20px;
   font-size: 30px;
   cursor: pointer;
+}
+
+#balance {
+  position: absolute;
+  bottom: 0.8px;
+  right: 90px;
 }

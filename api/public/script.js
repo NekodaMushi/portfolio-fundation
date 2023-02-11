@@ -49,7 +49,7 @@ async function getAccess() {
   setTimeout(() => {
     walletConnected.removeEventListener('', walletConnected);
   }, 3000);
-  
+
 }
 
 
@@ -57,15 +57,36 @@ async function getAccess() {
 
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   contract ? displayWallet.style.display = "none" : displayWallet.style.display = "block";
 }); // Doesn't work for now
 
 // Bid button
-bidBtn.addEventListener("click", function() {
+bidBtn.addEventListener("click", function () {
   popup.style.display = "block";
 });
 
-closeBtn.addEventListener("click", function() {
+closeBtn.addEventListener("click", function () {
   popup.style.display = "none";
 });
+
+
+//  Get text value of div using its class
+
+fetch('http://localhost:3000/auction')
+  .then(res => res.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const nameItem = doc.querySelector('.name__item');
+    console.log(nameItem.textContent);
+  });
+
+
+// Change text value of div
+
+fetch('http://localhost:3000/auction')
+  .then(res => res.text())
+  .then(newName => {
+    document.querySelector('.name__item').innerHTML = 'fabien';
+  });

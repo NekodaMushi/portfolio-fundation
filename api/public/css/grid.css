@@ -6,17 +6,13 @@
 }
 
 .btn-primary {
-  background: linear-gradient(
-    90deg, #e76509, #e5ec0b
-  );
+  background: linear-gradient(90deg, #9909e7, #0b7cec);
   color: rgb(255, 255, 255);
   border: none;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(
-    90deg, #257f05, #e4ec0b7f
-  );
+  background: linear-gradient(90deg, #9909e7c8, #0b7becbb);
 }
 
 .btn-secondary {
