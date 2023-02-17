@@ -39,9 +39,84 @@
 }
 
 .auction__picture {
-  border: 5px solid gold;
+  --box-border--border: linear-gradient(105deg, rgb(255 46 144) 0%, rgb(61 35 185) 100%);
   padding: 2%;
 }
+
+/*  */
+
+@import url('https://fonts.googleapis.com/css?family=Raleway:200');
+
+#boxNFT {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 420px;
+  height: 210px;
+  color: white;
+  font-family: 'Raleway';
+  font-size: 2.5rem;
+}
+
+#imgNFT {
+  max-width: 400px;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+
+
+.auction__picture {
+  --borderWidth: 2px;
+  position: relative;
+  border-radius: var(--borderWidth);
+}
+
+.auction__picture:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: calc(2 * var(--borderWidth));
+  z-index: -1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*  */
 
 .auction__article__details {
   display: flex;
@@ -120,6 +195,15 @@
 .separator {
   margin-left: 1%;
   margin-right: 1%;
+}
+
+.price__history {
+  display: flex;
+  justify-content: space-between;
+}
+
+#dateHistory {
+  margin-left: 0;
 }
 
 .align {
@@ -227,13 +311,17 @@
   text-transform: uppercase;
   font-weight: 500;
   color: #666;
+  padding-left: 3.8%;
 }
 
 .of__tr__price {
   font-size: 20px;
   padding: 10px;
-  width: 200px;
   text-align: center;
+}
+
+.price__eth {
+  padding-left: 0.6%;
 }
 
 .of__tr__expir {
@@ -241,7 +329,11 @@
   text-transform: uppercase;
   font-weight: 500;
   color: #666;
-  margin: 0 20%;
+  margin: 0 40%;
+}
+
+.adj__left {
+  padding-left: 0.75%;
 }
 
 .of__tr__from {
