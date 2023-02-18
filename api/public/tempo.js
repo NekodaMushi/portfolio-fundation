@@ -599,3 +599,413 @@ newstr = str.slice(0, 4) + '...' + str.slice(-4);
 
 
 console.log(newstr);
+
+
+
+
+
+// const el = document.querySelector('#nameItem');
+// fetch('http://localhost:3000/api/auctionvalues/123')
+//   .then(res => res.json())
+//   .then(response => {
+//     console.log(response);
+//     el.target.innerHTML = response.title
+
+//   })
+
+
+// fetch('http://localhost:3000/')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   const el = document.querySelector("#name__item");
+// el.addEventListener("click", function(el){
+//   fetch('http://localhost:3000/toto')
+//   .then(res => res.json())
+//   .then(response => {
+//     console.log(response.title)
+//   });
+// }, false);
+
+
+
+
+
+
+
+
+
+
+
+
+// Change text value of div
+
+// fetch('http://localhost:3000/auction')
+//   .then(res => res.text())
+//   .then(html => {
+//     document.querySelector('.name__item').innerHTML = 'fabien';
+//   });
+
+
+//  Get text value of div using its class
+
+// fetch('http://localhost:3000/auction')
+//    .then(res => res.text())
+//    .then(html => {
+//    //const parser = new DOMParser();
+//    const doc = parser.parseFromString(html, 'text/html');
+//    const nameItem = doc.querySelector('.name__item');
+//    console.log(nameItem.textContent);
+//   })
+
+
+// Last test
+
+// const el = document.querySelector('#name__item');
+// el.addEventListener('click', function (event) {
+//   fetch('http://localhost:3000/api/auctionvalues/123')
+//     .then(res => res.json())
+//     .then(response => {
+//       console.log(response);
+//       event.target.innerHTML = response.title
+
+//     })
+
+// }, false)
+
+
+// const el1 = document.querySelector('#temp1');
+// console.log(el1);
+
+// const elCausing = document.querySelector('#temp2');
+// elCausing.addEventListener('click', function (e) {
+//   fetch('http://localhost:3000/api/saleends')
+//     .then(res => res.json())
+//     .then(response => {
+//       console.log(response);
+//       el1.innerHTML = response.title
+
+//     });
+// }, false);
+
+
+
+// TEST
+
+
+// fetch('http://localhost:3000/api/auctionvalues/auctionId')
+//   .then(res => res.json())
+//   .then(response => {
+//     console.log(response);
+//     bChain.innerHTML = response;
+
+//   });
+
+
+// fetch(`http://localhost:3000/api/auctionvalues/${auctionId}`)
+//   .then(res => res.json())
+//   .then(response => {
+//     bChain.innerHTML = response.Nft.blockchain;
+//     cAddress.innerHTML = response.Nft.contractAddress;
+//     tID.innerHTML = response.Nft.tokenId;
+//     tStandard.innerHTML = response.Nft.tokenStandard;
+//     tDescription.innerHTML = response.Nft.description;
+//     nItem.innerHTML = response.Nft.nameOfItem;
+
+
+//     oID.innerHTML = response.Nft.owner;
+//     saEnd.innerHTML = response.Timer.saleEnd;
+
+
+
+//   });
+
+// fetch(`http://localhost:3000/api/biddervalues/${auctionId}`)
+//   .then(res => res.json())
+//   .then(response => {
+//     balance.innerHTML = response.Bidder.balanceWallet;
+//   });
+
+// fetch(`http://localhost:3000/api/offervalues/${auctionId}`)
+//   .then(res => res.json())
+//   .then(response => {
+//     pOffer.innerHTML = response.Offers.price;
+//     eOffer.innerHTML = response.Offers.expiration;
+//     fOffer.innerHTML = response.Offers.from;
+
+//     pTransfer.innerHTML = response.Transfers.price;
+//     eTransfer.innerHTML = response.Transfers.expiration;
+//     fTransfer.innerHTML = response.Transfers.from;
+//   });
+
+
+// // TEST DATABASE
+
+// fetch(`http://localhost:3000/api/auctions/`)
+//   .then(res => res.json())
+//   .then(response => {
+//     console.log(response);
+
+//   });
+
+
+
+//  RESTE DU SERVER SIDE COMMENTS --------------------------------------------------------------------------------------------------------
+
+
+// TEST Bellow
+// router.get('/auction', function (req, res, next) {
+//   res.json('200', { title: 'jason' });
+// });
+
+
+
+// 
+
+// router.get('/auction', (req, res) => {
+//   res.status(200).send('Hello from the server side!')
+// })
+
+// router.get('/api/auctionvalues/:auctionId', function (req, res, next) {
+//   res.json('200', { title: 'flambi', id: req.params.auctionId });
+// });
+
+// router.get('/api/saleends', function (req, res, next) {
+//   res.json('200', { title: 'jerome' });
+// });
+
+
+// router.get('/auction/id=')
+
+
+
+// number_view correspond to days hours min
+
+// LOCAL API
+// router.get('/api/auctionvalues/:auctionId', function (req, res, next) {
+//   res.status(200).json(articleInfoAPI);
+// });
+
+// router.get('/api/biddervalues/:auctionId', function (req, res, next) {
+//   res.status(200).json(bidderUserAPI);
+// });
+
+// router.get('/api/offervalues/:auctionId', function (req, res, next) {
+//   res.status(200).json(offerTransfertAPI);
+// });
+
+
+
+// router.get('/api/auctions/', function
+//   (req, res, next) {
+//   pool.query(`SELECT * FROM auction WHERE sale_starts < now() AND sale_ends > now()`, (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     res.status(200).json(results.rows)
+//   })
+// });
+
+
+
+
+// FIRST POST ------
+
+// router.post('/api/auction/:auctionId/offer', function (req, res, next) {
+//   const { auctionId } = req.params;
+//   const { walletId, createdOn, offerValue } = req.body;
+
+//   pool.query(`SELECT bidder_id FROM bidder WHERE wallet_id=${walletId} AND auction_id=${auctionId}`, (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+
+//     if (results.rows.length === 0) {
+
+//       res.status(400).json({ error: 'Invalid wallet address' });
+//     } else {
+//       const bidderId = results.rows[0].id;
+
+//       pool.query(`INSERT INTO offer (auction_id, bidder_id, created_on) VALUES (${auctionId}, ${bidderId}, ${createdOn}, ${offerValue}) RETURNING *`,
+//         (error, results) => {
+//           if (error) {
+//             throw error;
+//           }
+//           res.status(201).json(results.rows[0]);
+//         }
+//       );
+//     }
+//   });
+// });
+
+
+
+
+
+
+
+// LOCAL API
+
+
+const articleInfoAPI = {
+  'Nft': {
+    'blockchain': 'Ethereum',
+    'contractAddress': 'Data_from_anto-blockchain',
+    'tokenId': 'Data_from_anto-blockchain',
+    'tokenStandard': 'ERC-721',
+    'description': 'Here a description of item',
+    'nameOfItem': 'nameData',
+    'owner': 'WalletOwner',
+  },
+  'Timer': {
+    'saleEnd': 'data',
+  }
+};
+// Not sure we need numberTimeCount
+
+// changed articleInfoAPI to create bidderUserAPI
+const bidderUserAPI = {
+  'Bidder': {
+    'userId': 'publicKey',
+    'balanceWallet': 2,
+    'actualBid': 0.3
+  }
+};
+
+// Added ItemValue : basevValue & bidderUserAPI
+
+const offerTransfertAPI = {
+  'ItemValue': {
+    'baseValue': 0.5,
+    'actualValue': 2.3,
+  },
+  'Offers': {
+    'price': 'DataPrice',
+    'expiration': 'DataTime',
+    'from': 'WalletPublicKey'
+  },
+  'Transfers': {
+    'price': 'DataPrice',
+    'expiration': 'DataTime',
+    'from': 'WalletPublicKey'
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// router.get('/auction', (req, res) => {
+//   res.json('200', { title: 'fab' });
+
+// router.get('/api/auctionvalues', function (req, res, next) {
+//   res
+//     .status('200')
+//     .json(
+//       { bidValue: 80, bidId: 123, bidAuction: 890 }
+//     );
+// });
+
+
+// Before
+
+// router.get('/api/auctionvalues', function (req, res, next) {
+//   res.json('200', { title: 'francois' });
+// });
+
+
+
+// Version before 14 feb
+
+// const articleInfoAPI = {
+//   'Details': {
+//     'blockchain': 'Ethereum',
+//     'contractAddress': 'Data_from_anto-blockchain',
+//     'tokenId': 'Data_from_anto-blockchain',
+//     'tokenStandard': 'ERC-721',
+//   },
+//   'Description': {
+//     'text': 'Here a description of item'
+//   },
+//   'Identification': {
+//     'nameOfItem': 'nameData',
+//     'owner': 'WalletOwner'
+//   },
+//   'Timer': {
+//     'saleEnd': 'data',
+//     'numberDecompte': 'data'
+//   },
+//   'BidPopUp': {
+//     'balanceWallet': 'nbEtherData'
+//   }
+// };
+
+// -------------------------
+
+// NEEED TO OPTIMIE
+
+// POST ------------------------
+router.post('/api/auction/:auctionId/offer', function (req, res) {
+  if (req.body.walletId) {
+    pool.query(`SELECT bidder_id FROM bidder WHERE wallet_id='${req.body.walletId}'`, (error, results) => {
+      if (error) {
+        throw error;
+      }
+      if (results.rows.length === 0) {
+        // ---
+
+        pool.query(`INSERT INTO bidder (wallet_id, created_on) VALUES ('${req.body.walletId}', now())`, (error, results) => {
+          if (error) {
+            throw error;
+          }
+          res.status(201).json({ success: 'New wallet address' });
+        });
+        const newbidderId = results.rows[0].bidder_id;
+        pool.query(`INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${newbidderId}, now(), ${req.body.offerValue}) RETURNING *`, (error, results) => {
+          if (error) {
+            throw error;
+          }
+          res.status(201).json(results.rows[0]);
+        });
+
+      }
+      else {
+        const bidderId = results.rows[0].bidder_id;
+        pool.query(`INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${bidderId}, now(), ${req.body.offerValue}) RETURNING *`, (error, results) => {
+          if (error) {
+            throw error;
+          }
+          res.status(201).json(results.rows[0]);
+        });
+      }
+    });
+  }
+});
+
+
+// -----------------------
+
+
+// Graph (Futur project)
+
+
