@@ -56,29 +56,32 @@ module.exports = router;
 
 // number_view correspond to days hours min
 
-router.get('/api/auctionvalues/:auctionId', function (req, res, next) {
-  res.status(200).json(articleInfoAPI);
-});
+// LOCAL API
+// router.get('/api/auctionvalues/:auctionId', function (req, res, next) {
+//   res.status(200).json(articleInfoAPI);
+// });
 
-router.get('/api/biddervalues/:auctionId', function (req, res, next) {
-  res.status(200).json(bidderUserAPI);
-});
+// router.get('/api/biddervalues/:auctionId', function (req, res, next) {
+//   res.status(200).json(bidderUserAPI);
+// });
 
-router.get('/api/offervalues/:auctionId', function (req, res, next) {
-  res.status(200).json(offerTransfertAPI);
-});
+// router.get('/api/offervalues/:auctionId', function (req, res, next) {
+//   res.status(200).json(offerTransfertAPI);
+// });
 
 
 
-router.get('/api/auctions/', function
-  (req, res, next) {
-  pool.query(`SELECT * FROM auction WHERE sale_starts < now() AND sale_ends > now()`, (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).json(results.rows)
-  })
-});
+// router.get('/api/auctions/', function
+//   (req, res, next) {
+//   pool.query(`SELECT * FROM auction WHERE sale_starts < now() AND sale_ends > now()`, (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     res.status(200).json(results.rows)
+//   })
+// });
+
+
 
 router.get('/api/auction/:auctionId', function
   (req, res, next) {
@@ -110,41 +113,44 @@ router.get('/api/auction/:auctionId/offer', function
   }
 });
 
-// POST
-router.post('/api/auction/:auctionId/offer', function (req, res) {
-  console.log('---------1-');
-  console.log(req.body);
-  console.log('----------');
+// POST ------------------------
+// router.post('/api/auction/:auctionId/offer', function (req, res) {
+//   console.log('---------1-');
+//   console.log(req.body);
+//   console.log('----------');
 
-  console.log(req.params);
-  console.log('----------');
-  if (req.body.walletId) {
-    pool.query(`SELECT bidder_id FROM bidder WHERE wallet_id='${req.body.walletId}'`, (error, results) => {
-      if (error) {
-        throw error;
-      }
+//   console.log(req.params);
+//   console.log('----------');
+//   if (req.body.walletId) {
+//     pool.query(`SELECT bidder_id FROM bidder WHERE wallet_id='${req.body.walletId}'`, (error, results) => {
+//       if (error) {
+//         throw error;
+//       }
 
-      if (results.rows.length === 0) {
+//       if (results.rows.length === 0) {
 
-        res.status(400).json({ error: 'Invalid wallet address' });
-      } else {
-        const bidderId = results.rows[0].id;
+//         res.status(400).json({ error: 'Invalid wallet address' });
+//       } else {
+//         const bidderId = results.rows[0].bidder_id;
+//         console.log('INFO HERE');
 
-        pool.query(`INSERT INTO offer (auction_id, bidder_id, created_on) VALUES (${auctionId}, ${bidderId}, now(), ${offerValue}) RETURNING *`,
-          (error, results) => {
-            if (error) {
-              throw error;
-            }
-            res.status(201).json(results.rows[0]);
-          }
-        );
-      }
-    });
-  }
-});
+//         console.log(bidderId);
+
+//         pool.query(`INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${bidderId}, now(), ${req.body.offerValue}) RETURNING *`,
+//           (error, results) => {
+//             if (error) {
+//               throw error;
+//             }
+//             res.status(201).json(results.rows[0]);
+//           }
+//         );
+//       }
+//     });
+//   }
+// });
 
 
-
+// -----------------------
 
 
 // FIRST POST ------

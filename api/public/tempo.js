@@ -593,3 +593,9 @@
 
 // //     });
 // // }, false);
+str = '0xb1F60446003ff4165c0729f2B2A32A5505fc4FBe'
+
+newstr = str.slice(0, 4) + '...' + str.slice(-4);
+
+
+console.log(newstr);

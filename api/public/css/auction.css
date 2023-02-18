@@ -397,7 +397,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 25%;
-  height: 25%;
+  min-height: 25%;
   background-color: white;
   z-index: 1;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -416,7 +416,15 @@ body {
 .popup-content {
   padding: 20px;
   text-align: center;
+  color: white;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7), -1px -1px 0 rgba(0, 0, 0, 0.8);
 }
+
+.neon {
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
+}
+
+
 
 .close {
   position: absolute;
@@ -424,10 +432,4 @@ body {
   right: 20px;
   font-size: 30px;
   cursor: pointer;
-}
-
-#balance {
-  position: absolute;
-  bottom: 0.8px;
-  right: 90px;
 }

@@ -1,6 +1,8 @@
 const displayWallet = document.getElementById("connectWallet");
 
 const bidBtn = document.getElementById("bid");
+const balance = document.querySelector('#balance');
+const popDisplayWallet = document.getElementById('popDisplayWallet');
 const popup = document.getElementById("popup");
 const closeBtn = document.querySelector(".close");
 
@@ -27,11 +29,13 @@ const abi = [
 
 const address = '0xe062e42b04f85D3FE52eE6ac484745017eA8A8E0';
 let contract = null;
+let connectedAddress = null;
 
 async function getAccess() {
   if (contract) return;
   await provider.send('eth_requestAccounts', []);
   const signer = provider.getSigner();
+  connectedAddress = await signer.getAddress();
   contract = new ethers.Contract(address, abi, signer);
 
   const eventLog = document.getElementById('events');
@@ -41,34 +45,52 @@ async function getAccess() {
     );
   });
 
+  const balanceWeth = await provider.getBalance(connectedAddress);
+  const actualBalance = ethers.utils.formatEther(balanceWeth);
+  balance.textContent = actualBalance + ' WETH';
+
   displayWallet.style.display = "none";
   const walletConnected = function () {
-    alert('Wallet connected to D-Auction');
+    alert("Wallet connected to auction ");
+    popDisplayWallet.textContent = pKReduced(connectedAddress);
+
   }
   walletConnected();
-  setTimeout(() => {
-    walletConnected.removeEventListener('', walletConnected);
-  }, 3000);
+  // setTimeout(() => {
+  //   walletConnected.removeEventListener('', walletConnected);
+  // }, 3000);
+
+
 
 }
 
 
 // Front
 
+// Practical fn
+const pKReduced = publicKey => publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
 
+
+// ----
 
 document.addEventListener("DOMContentLoaded", function () {
   contract ? displayWallet.style.display = "none" : displayWallet.style.display = "block";
 }); // Doesn't work for now
 
-// Bid button
+// Bid button Pop up
 bidBtn.addEventListener("click", function () {
   popup.style.display = "block";
+  popDisplayWallet.textContent = pKReduced(connectedAddress);
+  popDisplayWallet.classList.add('neon');
+
 });
 
 closeBtn.addEventListener("click", function () {
   popup.style.display = "none";
 });
+
+
+
 
 
 // -Back
@@ -116,13 +138,15 @@ const tDescription = document.querySelector('#tokenDescription');
 const nItem = document.querySelector('#nameItem');
 const oID = document.querySelector('#ownerID');
 
-const saEnd = document.querySelector('#saleEnd');
+const saEndValue = document.querySelector('#saEndValue');
+// Not use for now
+
 // const saEndDay = document.querySelector('#endDay');
 const saEndHour = document.querySelector('#endHour');
 const saEndMin = document.querySelector('#endMin');
 const saEndSec = document.querySelector('#endSec');
 
-const balance = document.querySelector('#balance');
+
 
 const pOffer = document.querySelector('#priceOffer');
 const eOffer = document.querySelector('#expirationOffer');
@@ -161,7 +185,7 @@ const startAuctionTimer = function () {
     saEndHour.textContent = hours.toString().padStart(2, '0');
     saEndMin.textContent = minutes.toString().padStart(2, '0');
     saEndSec.textContent = seconds.toString().padStart(2, '0');
-    saEnd.textContent = '';
+    saEndValue.textContent = '';
   };
 
   const endTimeAuction = startTimeAuction.getTime() + auctionDuration;
@@ -201,8 +225,6 @@ labelDate.textContent = dateDisplay;
 
 //   });
 
-
-const auctionId = 123;
 
 // fetch(`http://localhost:3000/api/auctionvalues/${auctionId}`)
 //   .then(res => res.json())
@@ -249,7 +271,33 @@ const auctionId = 123;
 //     console.log(response);
 
 //   });
+// Base Information --
+fetch(`http://localhost:3000/api/auction/1`)
+  .then(res => res.json())
+  .then(response => {
+    console.log(response);
+    const { auction_id, token_id, token_contract, created_on, sale_starts, sale_ends, blockchain, token_standard, owner_id, auction_name, auction_desc } = response[0];
+    console.log(blockchain);
 
+
+    bChain.innerHTML = blockchain;
+    cAddress.innerHTML = pKReduced(token_contract);
+    tID.innerHTML = token_id;
+    tStandard.innerHTML = token_standard;
+    tDescription.innerHTML = auction_desc;
+    nItem.innerHTML = auction_name;
+    oID.innerHTML = pKReduced(owner_id);
+
+    // saEndValue.innerHTML = sale_ends;
+
+
+  });
+
+
+
+
+// 16 feb test
+// Generique GET -------
 // fetch(`http://localhost:3000/api/auction/4`)
 //   .then(res => res.json())
 //   .then(response => {
@@ -257,21 +305,22 @@ const auctionId = 123;
 
 //   });
 
-// 16 feb test
 
-fetch(`http://localhost:3000/api/auction/3/offer`, {
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  method: "post",
-  body: JSON.stringify({ auctionId: 3, walletId: '0x9e9b41c0f0d9886d1af194ae5b6f5b6f5d6c5aa6', offerValue: 0.77 })
-})
-  .then(res => res.json())
-  .then(response => {
-    console.log(response);
+// POST ---------------------
 
-  });
+// fetch(`http://localhost:3000/api/auction/3/offer`, {
+//   headers: {
+//     'Content-Type': 'application/json'
+//   },
+//   method: "post",
+//   body: JSON.stringify({ walletId: '0x9e9b41c0f0d9886d1af194ae5b6f5b6f5d6c5aa6', offerValue: 0.77 })
+// })
+//   .then(res => res.json())
+//   .then(response => {
+//     console.log(response);
 
+//   });
+// ---------------------
 
 // Might use later
 

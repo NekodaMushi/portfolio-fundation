@@ -9,10 +9,12 @@
   background: linear-gradient(90deg, #9909e7, #0b7cec);
   color: rgb(255, 255, 255);
   border: none;
+  border-radius: 0.5rem;
 }
 
 .btn-primary:hover {
   background: linear-gradient(90deg, #9909e7c8, #0b7becbb);
+
 }
 
 .btn-secondary {

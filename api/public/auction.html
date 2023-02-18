@@ -87,7 +87,7 @@
             <div class="auction__article__description__text" id="tokenDescription">Lorem ipsum dolor sit amet
               consectetur adipisicing elit.
               Quos tempore perferendis, expedita non officia ipsum laborum voluptatum nulla maxime voluptas quo, culpa
-              corporis! Magni minus aspernatur minima molestiae neque ea.
+              corporis! Magni minus aspernatur minima molestiae .
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@
               <div class="event__counter__top">
                 <div class="event__counter__top__wrapper">
                   <div>Sale ends</div>
-                  <div class="separator" id="saleEnd">$data</div>
+                  <div class="separator" id="saEndValue">$data</div>
                 </div>
               </div>
               <div class="event__counter__bot">
@@ -144,31 +144,37 @@
                   <span class="close">&times;</span>
                   <h2>Offer</h2>
                   <form action="#">
-                    <label for="price">Price:</label>
-                    <input type="text" id="price" name="price" required>
+                    <label for="number">Price:</label>
+                    <input type="number" id="price" name="price" step="0.01" required />
+
                     <br><br>
-                    <input type="submit" value="Submit">
+
+                    <button onclick="bid()" id="bid-submit">Bid now!</button>
+                    <button onclick="start()" id="start-auction">
+                      Start!
+                    </button>
+                    <p>Wallet address:</p>
+                    <span id="popDisplayWallet"></span>
+                    <p id="balance">balance</p>
                   </form>
-                  <p>Balance wallet:</p>
-                  <p id="balance">100</p>
                 </div>
               </div>
+            </div>
+          </div>
 
+
+          <div class="auction__history little__border-round border-dyn">
+            <div class="price__history ">
+              <span class="separator">Price history</span>
+              <span class="separator" id="dateHistory">$Time</span>
+            </div>
+            <div class="graph__container__wrapper ">
+              <div class="graph__container">
+                <div class="graph"><img src="img/graph_example.png" alt="Graph" class="graph"></div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="auction__history little__border-round border-dyn">
-          <div class="price__history ">
-            <span class="separator">Price history</span>
-            <span class="separator" id="dateHistory">$Time</span>
-          </div>
-          <div class="graph__container__wrapper ">
-            <div class="graph__container">
-              <div class="graph"><img src="img/graph_example.png" alt="Graph" class="graph"></div>
-            </div>
-          </div>
-        </div>
-        <div class="auction__desc"></div>
+          <div class="auction__desc"></div>
       </article>
     </section>
 
