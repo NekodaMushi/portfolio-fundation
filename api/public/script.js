@@ -5,6 +5,7 @@ const inputPrice = document.getElementById('price');
 const submitBid = document.getElementById("bid-submit");
 const balance = document.querySelector('#balance');
 const popDisplayWallet = document.getElementById('popDisplayWallet');
+const balanceAuction = document.getElementById('balanceAuction');
 const popup = document.getElementById("popup");
 const closeBtn = document.querySelector(".close");
 
@@ -14,6 +15,9 @@ const cAddress = document.querySelector('#contractAddress');
 const tID = document.querySelector('#tokenID');
 const tStandard = document.querySelector('#tokenStandard');
 const tDescription = document.querySelector('#tokenDescription');
+
+const hiBid = document.querySelector('#highestBid');
+const fPrice = document.querySelector('#floorPrice')
 
 const nItem = document.querySelector('#nameItem');
 const oID = document.querySelector('#ownerID');
@@ -89,6 +93,7 @@ async function getAccess() {
 
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
+    balanceAuction.textContent = actualBalance;
 
   }
   walletConnected();
@@ -98,10 +103,10 @@ async function getAccess() {
 
 };
 
-// WEB3 --------------- END
+// WEB3 --------------- END---------------
 
 
-// Front
+// Front---------------------------
 
 // Practical fn
 const pKReduced = publicKey => publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
@@ -119,7 +124,7 @@ bidBtn.addEventListener("click", function () {
   if (contract) {
     popup.style.display = "block";
     popDisplayWallet.textContent = pKReduced(connectedAddress);
-    popDisplayWallet.classList.add('neon');
+    balanceAuction.classList.add('neon');
 
   }
   else {
@@ -129,20 +134,19 @@ bidBtn.addEventListener("click", function () {
 
 // Submit bid - BID NOW --------
 
+let currentBalance = 100; // Replace with the actual current wallet balance of the user when the page loads
+
 submitBid.addEventListener("click", function () {
-  // NEED TO DO SOMETHING WITH THAT ------
-  // if (contract) {
-  //   alert('oook')
-  //   console.log('oook');
-
-  // }
-  // else {
-  //   alert("Please connect your wallet")
-  // }
-
   let priceInput = Number(inputPrice.value);
   let walletInput = String(connectedAddress);
-  fetch(`http://localhost:3000/api/auction/3/offer`, {
+  const currentBalanceNumber = parseFloat(currentBalance);
+  if (priceInput > currentBalanceNumber) {
+    alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
+    return;
+  }
+
+
+  fetch(`http://localhost:3000/api/auction/1/offer`, {
     headers: {
       'Content-Type': 'application/json'
     },
@@ -152,9 +156,14 @@ submitBid.addEventListener("click", function () {
     .then(res => res.json())
     .then(response => {
       console.log(response);
-
+      currentBalance = currentBalance - priceInput; // Update the current wallet balance after the bid is placed
+      alert(`${currentBalance}`)
     });
 });
+
+
+
+
 
 
 closeBtn.addEventListener("click", function () {
@@ -228,17 +237,41 @@ fetch(`http://localhost:3000/api/auction/1`)
     tDescription.innerHTML = auction_desc;
     nItem.innerHTML = auction_name;
     oID.innerHTML = pKReduced(owner_id);
+    // balanceAuction.textContent = 100;
 
     // saEndValue.innerHTML = sale_ends;
 
+  })
+  .catch(error => {
+    console.error(error);
+  });;
 
+// HIGHEST BID
+fetch(`http://localhost:3000/api/auction/1/highOffer`)
+  .then(res => res.json())
+  .then(response => {
+    console.log(response);
+    const { max_offer_value
+    } = response[0];
+    hiBid.innerHTML = max_offer_value;
+  })
+  .catch(error => {
+    console.error(error);
   });
 
 
 
-
-
-
+// FLOOR PRICE
+// fetch(`http://localhost:3000/api/auction/1/lowOffer`)
+//   .then(res => res.json())
+//   .then(response => {
+//     console.log(response);
+//     const { min_offer_value } = response[0];
+//     fPrice.innerHTML = min_offer_value;
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
 
 
 
