@@ -2,14 +2,15 @@ const { json } = require('express');
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+require('dotenv').config()
 
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: 'changeme',
-  port: 5432,
+  user: process.env.user,
+  host: process.env.host,
+  database: process.env.database,
+  password: process.env.password,
+  port: process.env.port,
 });
 
 /* GET home page. */
