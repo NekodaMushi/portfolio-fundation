@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.auction
     audtionid integer NOT NULL DEFAULT nextval('auction_audtionid_seq'::regclass),
     tokenid character varying COLLATE pg_catalog."default" NOT NULL,
     description character varying COLLATE pg_catalog."default",
-    CONSTRAINT auction_pkey PRIMARY KEY (audtionid)
+    CONSTRAINT auction_pkey PRIMARY KEY (auctionid)
 )
 
 TABLESPACE pg_default;

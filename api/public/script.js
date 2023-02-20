@@ -1,3 +1,5 @@
+const auctionId = 5;
+
 const displayWallet = document.getElementById("connectWallet");
 const bidBtn = document.getElementById("bid");
 
@@ -65,6 +67,7 @@ const abi = [
 const address = '0xe062e42b04f85D3FE52eE6ac484745017eA8A8E0';
 let contract = null;
 let connectedAddress = null;
+let actualBalance = null;
 
 async function getAccess() {
   if (contract) return;
@@ -93,7 +96,7 @@ async function getAccess() {
 
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
-    balanceAuction.textContent = actualBalance;
+    // balanceAuction.textContent = actualBalance;
 
   }
   walletConnected();
@@ -118,35 +121,79 @@ document.addEventListener("DOMContentLoaded", function () {
   contract ? displayWallet.style.display = "none" : displayWallet.style.display = "block";
 }); // Doesn't work for now
 
-// Bid button Pop up
 
+
+// TIMER
+fetch(`http://localhost:3000/api/auction/timer/${auctionId}`)
+  .then(res => res.json())
+  .then(auctionData => {
+    console.log(auctionData);
+
+
+    const endTimeAuction = new Date(auctionData.sale_ends);
+
+    const timeCount = function () {
+      const now = new Date().getTime();
+      const auctionTimer = endTimeAuction - now;
+
+      if (auctionTimer <= 0) {
+        clearInterval(timer);
+        bidBtn.classList.add('hidden');
+
+        return;
+      }
+
+      const hours = Math.floor((auctionTimer % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((auctionTimer % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((auctionTimer % (1000 * 60)) / 1000);
+
+      saEndHour.textContent = hours.toString().padStart(2, '0');
+      saEndMin.textContent = minutes.toString().padStart(2, '0');
+      saEndSec.textContent = seconds.toString().padStart(2, '0');
+      saEndValue.textContent = '';
+    };
+
+    const timer = setInterval(timeCount, 1000);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+// Bid button Pop up
 bidBtn.addEventListener("click", function () {
+
+
   if (contract) {
     popup.style.display = "block";
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
-
   }
   else {
     alert("Please connect your wallet")
   }
 });
 
-// Submit bid - BID NOW --------
 
-let currentBalance = 100; // Replace with the actual current wallet balance of the user when the page loads
+// Submit bid - BID NOW -------- POST
+
+console.log(typeof actualBalance);
+let currentBalance = Number(actualBalance);
+console.log(typeof currentBalance);
 
 submitBid.addEventListener("click", function () {
   let priceInput = Number(inputPrice.value);
   let walletInput = String(connectedAddress);
   const currentBalanceNumber = parseFloat(currentBalance);
+
+
+  console.log('coucou')
   if (priceInput > currentBalanceNumber) {
     alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
+    alert('2222222')
     return;
   }
-
-
-  fetch(`http://localhost:3000/api/auction/1/offer`, {
+  alert('HELOOOOO')
+  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
     headers: {
       'Content-Type': 'application/json'
     },
@@ -158,6 +205,8 @@ submitBid.addEventListener("click", function () {
       console.log(response);
       currentBalance = currentBalance - priceInput; // Update the current wallet balance after the bid is placed
       alert(`${currentBalance}`)
+      balanceAuction.innerHTML = currentBalanceNumber;
+
     });
 });
 
@@ -170,41 +219,6 @@ closeBtn.addEventListener("click", function () {
   popup.style.display = "none";
 });
 
-
-// TIMER
-
-
-const startAuctionTimer = function () {
-  const startTimeAuction = new Date(Date.now());
-  const expirationTime = 2; //WRITE HERE - Get from API
-  const auctionDuration = expirationTime * 60 * 60 * 1000; // 2h -> m sec
-
-  const timeCount = function () {
-    const now = new Date().getTime();
-    const auctionTimer = endTimeAuction - now;
-
-    if (auctionTimer <= 0) {
-      clearInterval(timer);
-      // End of auction - Futur Implementation
-      return;
-    }
-
-    const hours = Math.floor((auctionTimer % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((auctionTimer % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((auctionTimer % (1000 * 60)) / 1000);
-
-    saEndHour.textContent = hours.toString().padStart(2, '0');
-    saEndMin.textContent = minutes.toString().padStart(2, '0');
-    saEndSec.textContent = seconds.toString().padStart(2, '0');
-    saEndValue.textContent = '';
-  };
-
-  const endTimeAuction = startTimeAuction.getTime() + auctionDuration;
-  timeCount();
-  const timer = setInterval(timeCount, 1000);
-};
-
-startAuctionTimer();
 
 
 
@@ -222,7 +236,7 @@ const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
 labelDate.textContent = dateDisplay;
 
 // Base Information --
-fetch(`http://localhost:3000/api/auction/1`)
+fetch(`http://localhost:3000/api/auction/${auctionId}`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -246,8 +260,11 @@ fetch(`http://localhost:3000/api/auction/1`)
     console.error(error);
   });;
 
+
+
+
 // HIGHEST BID
-fetch(`http://localhost:3000/api/auction/1/highOffer`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -262,18 +279,16 @@ fetch(`http://localhost:3000/api/auction/1/highOffer`)
 
 
 // FLOOR PRICE
-// fetch(`http://localhost:3000/api/auction/1/lowOffer`)
-//   .then(res => res.json())
-//   .then(response => {
-//     console.log(response);
-//     const { min_offer_value } = response[0];
-//     fPrice.innerHTML = min_offer_value;
-//   })
-//   .catch(error => {
-//     console.error(error);
-//   });
-
-
+fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
+  .then(res => res.json())
+  .then(response => {
+    console.log(response);
+    const { min_offer_value } = response[0];
+    fPrice.innerHTML = min_offer_value;
+  })
+  .catch(error => {
+    console.error(error);
+  });
 
 
 

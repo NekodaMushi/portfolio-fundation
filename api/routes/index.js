@@ -22,7 +22,21 @@ router.get('/auction', (req, res) => {
 
 module.exports = router;
 
+// TIMER
 
+router.get('/api/auction/timer/:auctionId', function (req, res, next) {
+  if (req.params.auctionId) {
+    pool.query(`SELECT *, DATE_PART('epoch', sale_ends - NOW()) as time_left_seconds FROM auction WHERE auction_id=${req.params.auctionId}`, (error, results) => {
+      if (error) {
+        throw error
+      }
+
+      const auctionData = results.rows[0];
+
+      res.status(200).json(auctionData);
+    });
+  }
+});
 
 // Base Information ---
 router.get('/api/auction/:auctionId', function
@@ -38,11 +52,15 @@ router.get('/api/auction/:auctionId', function
   }
 });
 
+
+
+
+
 // Highest bid & Floor Price
 
 router.get('/api/auction/:auctionId/highOffer', function (req, res, next) {
   if (req.params.auctionId) {
-    pool.query(`SELECT auction_id, MAX(offer_value) as max_offer_value FROM offer GROUP BY auction_id`, (error, results) => {
+    pool.query(`SELECT auction_id, max(offer_value) as max_offer_value FROM offer WHERE auction_id=${req.params.auctionId} GROUP BY auction_id`, (error, results) => {
       if (error) {
         throw error;
       }
@@ -51,16 +69,17 @@ router.get('/api/auction/:auctionId/highOffer', function (req, res, next) {
   }
 });
 
-// router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
-//   if (req.params.auctionId) {
-//     pool.query(`SELECT auction_id, MIN(offer_value) as min_offer_value FROM offer WHERE auction_id=${req.params.auctionId} $1 GROUP BY auction_id`, (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       res.status(200).json(results.rows);
-//     });
-//   }
-// });
+
+router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
+  if (req.params.auctionId) {
+    pool.query(`SELECT auction_id, MIN(offer_value) as min_offer_value FROM offer WHERE auction_id=${req.params.auctionId} GROUP BY auction_id`, (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    });
+  }
+});
 
 
 router.get('/api/wallet/:walletId', function (req, res) {
@@ -129,5 +148,4 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
 
 
 // Graph (Futur project)
-
 

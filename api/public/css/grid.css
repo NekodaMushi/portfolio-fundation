@@ -31,6 +31,10 @@
   margin: 1em;
 }
 
+.hidden {
+  display: none;
+}
+
 footer {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
