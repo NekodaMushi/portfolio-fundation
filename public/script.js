@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // TIMER
-fetch(`http://localhost:3000/api/auction/timer/${auctionId}`)
+fetch(`/api/auction/timer/${auctionId}`)
   .then(res => res.json())
   .then(auctionData => {
     console.log(auctionData);
@@ -212,7 +212,7 @@ const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
 labelDate.textContent = dateDisplay;
 
 // Base Information --
-fetch(`http://localhost:3000/api/auction/${auctionId}`)
+fetch(`/api/auction/${auctionId}`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -240,7 +240,7 @@ fetch(`http://localhost:3000/api/auction/${auctionId}`)
 
 
 // HIGHEST BID
-fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
+fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -255,7 +255,7 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
 
 
 // FLOOR PRICE
-fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
+fetch(`/api/auction/${auctionId}/lowOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -285,7 +285,7 @@ submitBid.addEventListener("click", function () {
   //   return;
   // }
   // alert('HELOOOOO')
-  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
+  fetch(`/api/auction/${auctionId}/offer`, {
     headers: {
       'Content-Type': 'application/json'
     },
