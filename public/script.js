@@ -64,7 +64,8 @@ const abi = [
 const address = '0xCFE3441a10A3F956f30ca5A8EF928A42505f02A7';
 let contract = null;
 let connectedAddress = null;
-let actualBalance = null;
+let actualBalance = 0;
+let cheatedBalance = 0;
 
 async function getAccess() {
   if (contract) return;
@@ -84,6 +85,7 @@ async function getAccess() {
 
   const balanceWeth = await provider.getBalance(connectedAddress);
   actualBalance = ethers.utils.formatEther(balanceWeth);
+  cheatedBalance = actualBalance * 1000;
   balance.textContent = actualBalance + ' WETH';
 
   // displayWallet.style.display = 'none';
@@ -91,15 +93,17 @@ async function getAccess() {
     // PUT BACK LATER --------------
     // alert("Wallet connected to auction ");
     // });
+    displayWallet.textContent = 'Connected';
     displayWallet.value = pKReduced(connectedAddress);
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     // balanceAuction.textContent = actualBalance;
   };
-  displayWallet.style.display = 'none';
+  // displayWallet.style.display = 'none';
   walletConnected();
   // console.log(balanceWeth);
-  // console.log(actualBalance);
+  console.log(actualBalance);
+  console.log(cheatedBalance);
   // setTimeout(() => {
   //   walletConnected.removeEventListener('', walletConnected);
   // }, 3000);
@@ -160,30 +164,33 @@ fetch(`http://localhost:3000/api/auction/timer/${auctionId}`)
     console.error(error);
   });
 
+// Submit bid - BID NOW -------- POST
+
+// console.log(actualBalance);
+// let cheatedBalance = parseFloat(actualBalance * 1000);
+// console.log(cheatedBalance);
+// let currentBalance = Number(actualBalance);
+// console.log(typeof currentBalance);
+// console.log(currentBalance);
+
 // Bid button Pop up
 bidBtn.addEventListener('click', function () {
   if (contract) {
-    console.log(actualBalance);
+    // console.log(actualBalance);
     popup.style.display = 'block';
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
+    balanceAuction.innerHTML = cheatedBalance;
   } else {
     alert('Please connect your wallet');
   }
 });
 
-// Submit bid - BID NOW -------- POST
-
-console.log(actualBalance);
-let currentBalance = Number(actualBalance);
-// console.log(typeof currentBalance);
-// console.log(currentBalance);
-
 submitBid.addEventListener('click', function () {
   let priceInput = Number(inputPrice.value);
   let walletInput = String(connectedAddress);
-  let cheatedBalance = parseFloat(actualBalance * 1000);
-  console.log(cheatedBalance);
+  // balanceAuction.value = cheatedBalance;
+  // console.log(cheatedBalance);
 
   console.log('coucou');
   // console.log(currentBalanceNumber);
@@ -263,6 +270,14 @@ fetch(`http://localhost:3000/api/auction/${auctionId}`)
     console.error(error);
   });
 
+const winnerReveal = () => {
+  fetch(`http://localhost:3000/api/auction/${auctionId}?join=true`)
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+    });
+};
+
 // HIGHEST BID
 fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
@@ -286,3 +301,5 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
   .catch(error => {
     console.error(error);
   });
+
+winnerReveal();
