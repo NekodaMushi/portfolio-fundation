@@ -1,24 +1,23 @@
--- DROP TABLE IF EXISTS public."Offers";
+-- Table: public.auction
 
-CREATE TABLE IF NOT EXISTS public."Offers"
-(
-    bidderid integer NOT NULL,
-    CONSTRAINT "Offers_pkey" PRIMARY KEY (bidderid)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Offers"
-    OWNER to postgres;
-
-    -- DROP TABLE IF EXISTS public.auction;
+-- DROP TABLE IF EXISTS public.auction;
 
 CREATE TABLE IF NOT EXISTS public.auction
 (
-    audtionid integer NOT NULL DEFAULT nextval('auction_audtionid_seq'::regclass),
-    tokenid character varying COLLATE pg_catalog."default" NOT NULL,
-    description character varying COLLATE pg_catalog."default",
-    CONSTRAINT auction_pkey PRIMARY KEY (auctionid)
+    auction_id integer NOT NULL DEFAULT nextval('auction_auction_id_seq'::regclass),
+    token_id integer NOT NULL,
+    created_on timestamp without time zone NOT NULL,
+    sale_starts timestamp without time zone,
+    sale_ends timestamp without time zone,
+    blockchain character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    token_standard character varying(8) COLLATE pg_catalog."default" NOT NULL,
+    token_contract character varying(42) COLLATE pg_catalog."default" NOT NULL,
+    owner_id character varying(42) COLLATE pg_catalog."default" NOT NULL,
+    auction_name character varying(16) COLLATE pg_catalog."default" NOT NULL,
+    auction_desc character varying(256) COLLATE pg_catalog."default",
+    CONSTRAINT auction_pkey PRIMARY KEY (auction_id),
+    CONSTRAINT auction_auction_name_key UNIQUE (auction_name),
+    CONSTRAINT auction_token_id_key UNIQUE (token_id)
 )
 
 TABLESPACE pg_default;
@@ -28,46 +27,49 @@ ALTER TABLE IF EXISTS public.auction
 
 
 
+-- Table: public.bidder
+
+-- DROP TABLE IF EXISTS public.bidder;
+
+CREATE TABLE IF NOT EXISTS public.bidder
+(
+    bidder_id integer NOT NULL DEFAULT nextval('bidder_bidder_id_seq'::regclass),
+    wallet_id character varying(42) COLLATE pg_catalog."default" NOT NULL,
+    created_on timestamp without time zone NOT NULL,
+    CONSTRAINT bidder_pkey PRIMARY KEY (bidder_id),
+    CONSTRAINT bidder_wallet_id_key UNIQUE (wallet_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.bidder
+    OWNER to postgres;
 
 
 
-CREATE TABLE auction (
-  auction_id serial PRIMARY KEY,
-  token_id int UNIQUE NOT NULL,
-  token_contract VARCHAR(42) UNIQUE NOT NULL,
-  created_on TIMESTAMP NOT NULL,
-  sale_starts TIMESTAMP,
-  sale_ends TIMESTAMP,
-  blockchain VARCHAR(20) NOT NULL,
-  token_standard VARCHAR(8) NOT NULL
-);--1/n auction to offer
+-- Table: public.offer
 
+-- DROP TABLE IF EXISTS public.offer;
 
-CREATE TABLE bidder (
-  bidder_id serial PRIMARY KEY,
-  wallet_id VARCHAR(42) UNIQUE NOT NULL,
-  created_on TIMESTAMP NOT NULL
-);-- n/1 bidder to offer
+CREATE TABLE IF NOT EXISTS public.offer
+(
+    offer_id integer NOT NULL DEFAULT nextval('offer_offer_id_seq'::regclass),
+    created_on timestamp without time zone NOT NULL,
+    auction_id integer NOT NULL,
+    bidder_id integer NOT NULL,
+    offer_value real NOT NULL,
+    CONSTRAINT offer_pkey PRIMARY KEY (offer_id),
+    CONSTRAINT offer_auction_id_fkey FOREIGN KEY (auction_id)
+        REFERENCES public.auction (auction_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT offer_bidder_id_fkey FOREIGN KEY (bidder_id)
+        REFERENCES public.bidder (bidder_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
 
-CREATE TABLE offer (
-  offer_id serial PRIMARY KEY,
-  created_on TIMESTAMP NOT NULL,
-  auction_id int NOT NULL,
-  FOREIGN KEY (auction_id) REFERENCES auction (auction_id) ON DELETE CASCADE,
-  bidder_id int NOT NULL,
-  FOREIGN KEY (bidder_id) REFERENCES bidder (bidder_id) ON DELETE CASCADE
+TABLESPACE pg_default;
 
-);
-
--- NEXT PART HAS TO BE LOAD LATER ON
-
-CREATE TABLE transfer (
-  transfer_id serial PRIMARY KEY,
-  created_on TIMESTAMP NOT NULL,
-  auction_id int NOT NULL,
-  FOREIGN KEY (auction_id) REFERENCES auction (auction_id),
-  token_id int NOT NULL,
-  FOREIGN KEY (token_id) REFERENCES auction (token_id),
-  bidder_id int NOT NULL,
-  FOREIGN KEY (bidder_id) REFERENCES bidder (bidder_id)
-);
+ALTER TABLE IF EXISTS public.offer
+    OWNER to postgres;
