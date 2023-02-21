@@ -64,7 +64,7 @@ const abi = [
   'function withdraw() payable',
 ];
 
-const address = '0xe062e42b04f85D3FE52eE6ac484745017eA8A8E0';
+const address = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 let contract = null;
 let connectedAddress = null;
 let actualBalance = null;
@@ -180,35 +180,11 @@ console.log(typeof actualBalance);
 let currentBalance = Number(actualBalance);
 console.log(typeof currentBalance);
 
-submitBid.addEventListener("click", function () {
-  let priceInput = Number(inputPrice.value);
-  let walletInput = String(connectedAddress);
-  const currentBalanceNumber = parseFloat(currentBalance);
+let priceInput = Number(inputPrice.value);
+let walletInput = String(connectedAddress);
+const currentBalanceNumber = parseFloat(currentBalance);
 
 
-  console.log('coucou')
-  if (priceInput > currentBalanceNumber) {
-    alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
-    alert('2222222')
-    return;
-  }
-  alert('HELOOOOO')
-  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: "post",
-    body: JSON.stringify({ walletId: walletInput, offerValue: priceInput })
-  })
-    .then(res => res.json())
-    .then(response => {
-      console.log(response);
-      currentBalance = currentBalance - priceInput; // Update the current wallet balance after the bid is placed
-      alert(`${currentBalance}`)
-      balanceAuction.innerHTML = currentBalanceNumber;
-
-    });
-});
 
 
 
@@ -293,7 +269,38 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
 
 
 
+submitBid.addEventListener("click", function () {
 
+  // console.log('coucou')
+  // if (priceInput > currentBalanceNumber) {
+  //   alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
+  //   alert('2222222')
+  //   return;
+  // }
+  // alert('HELOOOOO')
+
+  // if (priceInput < min_offer_value) {
+  //   alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
+  //   alert('2222222')
+  //   return;
+  // }
+  // alert('HELOOOOO')
+  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: "post",
+    body: JSON.stringify({ walletId: walletInput, offerValue: priceInput })
+  })
+    .then(res => res.json())
+    .then(response => {
+      console.log(response);
+      currentBalance = currentBalance - priceInput; // Update the current wallet balance after the bid is placed
+      alert(`${currentBalance}`)
+      balanceAuction.innerHTML = currentBalanceNumber;
+
+    });
+});
 
 
 
