@@ -11,6 +11,7 @@ const pool = new Pool({
   database: process.env.database,
   password: process.env.password,
   port: process.env.port,
+  ssl: process.env.ssl
 });
 
 /* GET home page. */
