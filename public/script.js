@@ -1,16 +1,15 @@
 const auctionId = 5;
 
-const displayWallet = document.getElementById("connectWallet");
-const bidBtn = document.getElementById("bid");
+const displayWallet = document.getElementById('connectWallet');
+const bidBtn = document.getElementById('bid');
 
 const inputPrice = document.getElementById('price');
-const submitBid = document.getElementById("bid-submit");
+const submitBid = document.getElementById('bid-submit');
 const balance = document.querySelector('#balance');
 const popDisplayWallet = document.getElementById('popDisplayWallet');
 const balanceAuction = document.getElementById('balanceAuction');
-const popup = document.getElementById("popup");
-const closeBtn = document.querySelector(".close");
-
+const popup = document.getElementById('popup');
+const closeBtn = document.querySelector('.close');
 
 const bChain = document.querySelector('#blockchainName');
 const cAddress = document.querySelector('#contractAddress');
@@ -19,7 +18,7 @@ const tStandard = document.querySelector('#tokenStandard');
 const tDescription = document.querySelector('#tokenDescription');
 
 const hiBid = document.querySelector('#highestBid');
-const fPrice = document.querySelector('#floorPrice')
+const fPrice = document.querySelector('#floorPrice');
 
 const nItem = document.querySelector('#nameItem');
 const oID = document.querySelector('#ownerID');
@@ -32,7 +31,6 @@ const saEndHour = document.querySelector('#endHour');
 const saEndMin = document.querySelector('#endMin');
 const saEndSec = document.querySelector('#endSec');
 
-
 const pOffer = document.querySelector('#priceOffer');
 const eOffer = document.querySelector('#expirationOffer');
 const fOffer = document.querySelector('#fromOffer');
@@ -40,7 +38,6 @@ const fOffer = document.querySelector('#fromOffer');
 const pTransfer = document.querySelector('#priceTransfer');
 const eTransfer = document.querySelector('#expirationTransfer');
 const fTransfer = document.querySelector('#fromTransfer');
-
 
 // WEB3 ----------------- START
 
@@ -64,7 +61,7 @@ const abi = [
   'function withdraw() payable',
 ];
 
-const address = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const address = '0xCFE3441a10A3F956f30ca5A8EF928A42505f02A7';
 let contract = null;
 let connectedAddress = null;
 let actualBalance = null;
@@ -76,59 +73,60 @@ async function getAccess() {
   connectedAddress = await signer.getAddress();
   contract = new ethers.Contract(address, abi, signer);
 
-  const eventLog = document.getElementById('events');
-  contract.on('End', (highestBidder, highestBid) => {
-    eventLog.append(
-      `Auction ended with a winner: ${highestBidder} with an amount of ${highestBid}`
-    );
-  });
+  // const eventLog = document.getElementById('events');
+  // contract.on('End', (highestBidder, highestBid) => {
+  //   eventLog.append(
+  //     `Auction ended with a winner: ${highestBidder} with an amount of ${highestBid}`
+  //   );
+  // });
+
+  // console.log(connectedAddress);
 
   const balanceWeth = await provider.getBalance(connectedAddress);
-  const actualBalance = ethers.utils.formatEther(balanceWeth);
+  actualBalance = ethers.utils.formatEther(balanceWeth);
   balance.textContent = actualBalance + ' WETH';
 
-  displayWallet.style.display = "none";
+  // displayWallet.style.display = 'none';
   const walletConnected = function () {
-
-
     // PUT BACK LATER --------------
     // alert("Wallet connected to auction ");
-
+    // });
+    displayWallet.value = pKReduced(connectedAddress);
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     // balanceAuction.textContent = actualBalance;
-
-  }
+  };
+  // displayWallet.style.display = 'none';
   walletConnected();
+  // console.log(balanceWeth);
+  // console.log(actualBalance);
   // setTimeout(() => {
   //   walletConnected.removeEventListener('', walletConnected);
   // }, 3000);
-
-};
+}
 
 // WEB3 --------------- END---------------
 
-
 // Front---------------------------
 
-// Practical fn
-const pKReduced = publicKey => publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
 
+// Practical fn
+const pKReduced = publicKey =>
+  publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
 
 // ----
 
-document.addEventListener("DOMContentLoaded", function () {
-  contract ? displayWallet.style.display = "none" : displayWallet.style.display = "block";
+document.addEventListener('DOMContentLoaded', function () {
+  contract
+    ? (displayWallet.style.display = 'none')
+    : (displayWallet.style.display = 'block');
 }); // Doesn't work for now
 
-
-
 // TIMER
-fetch(`/api/auction/timer/${auctionId}`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/timer`)
   .then(res => res.json())
   .then(auctionData => {
     console.log(auctionData);
-
 
     const endTimeAuction = new Date(auctionData.sale_ends);
 
@@ -143,8 +141,12 @@ fetch(`/api/auction/timer/${auctionId}`)
         return;
       }
 
-      const hours = Math.floor((auctionTimer % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((auctionTimer % (1000 * 60 * 60)) / (1000 * 60));
+      const hours = Math.floor(
+        (auctionTimer % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor(
+        (auctionTimer % (1000 * 60 * 60)) / (1000 * 60)
+      );
       const seconds = Math.floor((auctionTimer % (1000 * 60)) / 1000);
 
       saEndHour.textContent = hours.toString().padStart(2, '0');
@@ -160,43 +162,58 @@ fetch(`/api/auction/timer/${auctionId}`)
   });
 
 // Bid button Pop up
-bidBtn.addEventListener("click", function () {
-
-
+bidBtn.addEventListener('click', function () {
   if (contract) {
-    popup.style.display = "block";
+    console.log(actualBalance);
+    popup.style.display = 'block';
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
-  }
-  else {
-    alert("Please connect your wallet")
+  } else {
+    alert('Please connect your wallet');
   }
 });
-
 
 // Submit bid - BID NOW -------- POST
 
-console.log(typeof actualBalance);
+console.log(actualBalance);
 let currentBalance = Number(actualBalance);
-console.log(typeof currentBalance);
+// console.log(typeof currentBalance);
+// console.log(currentBalance);
 
-let priceInput = Number(inputPrice.value);
-let walletInput = String(connectedAddress);
-const currentBalanceNumber = parseFloat(currentBalance);
+submitBid.addEventListener('click', function () {
+  let priceInput = Number(inputPrice.value);
+  let walletInput = String(connectedAddress);
+  let cheatedBalance = parseFloat(actualBalance * 1000);
+  console.log(cheatedBalance);
 
-
-
-
-
-
-
-
-closeBtn.addEventListener("click", function () {
-  popup.style.display = "none";
+  console.log('coucou');
+  // console.log(currentBalanceNumber);
+  if (priceInput > cheatedBalance) {
+    alert(`Your bid exceeds your current wallet balance: ${cheatedBalance}`);
+    alert('2222222');
+    return;
+  }
+  alert('Successfully registered your bid offer, thank You');
+  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'post',
+    body: JSON.stringify({ walletId: walletInput, offerValue: priceInput }),
+  })
+    .then(res => res.json())
+    .then(response => {
+      console.log(response);
+      updatedBalance = cheatedBalance - priceInput; // Update the current wallet balance after the bid is placed
+      alert(`${currentBalance}`);
+      balanceAuction.innerHTML = updatedBalance;
+      hiBid.innerHTML = max_offer_value;
+    });
 });
 
-
-
+closeBtn.addEventListener('click', function () {
+  popup.style.display = 'none';
+});
 
 // Date & Time
 const labelDate = document.querySelector('#dateHistory');
@@ -212,13 +229,24 @@ const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
 labelDate.textContent = dateDisplay;
 
 // Base Information --
-fetch(`/api/auction/${auctionId}`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/details`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
-    const { auction_id, token_id, token_contract, created_on, sale_starts, sale_ends, blockchain, token_standard, owner_id, auction_name, auction_desc } = response[0];
+    const {
+      auction_id,
+      token_id,
+      token_contract,
+      created_on,
+      sale_starts,
+      sale_ends,
+      blockchain,
+      token_standard,
+      owner_id,
+      auction_name,
+      auction_desc,
+    } = response[0];
     console.log(blockchain);
-
 
     bChain.innerHTML = blockchain;
     cAddress.innerHTML = pKReduced(token_contract);
@@ -230,32 +258,25 @@ fetch(`/api/auction/${auctionId}`)
     // balanceAuction.textContent = 100;
 
     // saEndValue.innerHTML = sale_ends;
-
   })
   .catch(error => {
     console.error(error);
-  });;
-
-
-
+  });
 
 // HIGHEST BID
-fetch(`/api/auction/${auctionId}/highOffer`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
-    const { max_offer_value
-    } = response[0];
+    const { max_offer_value } = response[0];
     hiBid.innerHTML = max_offer_value;
   })
   .catch(error => {
     console.error(error);
   });
 
-
-
 // FLOOR PRICE
-fetch(`/api/auction/${auctionId}/lowOffer`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -269,44 +290,17 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
 
 
 
-submitBid.addEventListener("click", function () {
+// // HomePage
 
-  // console.log('coucou')
-  // if (priceInput > currentBalanceNumber) {
-  //   alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
-  //   alert('2222222')
-  //   return;
-  // }
-  // alert('HELOOOOO')
+// const boxes = document.querySelectorAll('.box');
 
-  // if (priceInput < min_offer_value) {
-  //   alert(`Your bid exceeds your current wallet balance: ${currentBalanceNumber}`);
-  //   alert('2222222')
-  //   return;
-  // }
-  // alert('HELOOOOO')
-  fetch(`/api/auction/${auctionId}/offer`, {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: "post",
-    body: JSON.stringify({ walletId: walletInput, offerValue: priceInput })
-  })
-    .then(res => res.json())
-    .then(response => {
-      console.log(response);
-      currentBalance = currentBalance - priceInput; // Update the current wallet balance after the bid is placed
-      alert(`${currentBalance}`)
-      balanceAuction.innerHTML = currentBalanceNumber;
+// boxes.forEach(box => {
+//   const text = boxes[i].querySelector('.display_desc');
+//   boxes[i].addEventListener('mouseenter', () => {
+//     text.classList.add('hidden');
+//   });
+//   boxes[i].addEventListener('mouseleave', () => {
+//     text.classList.remove('hidden');
+//   });
 
-    });
-});
-
-
-
-
-
-
-
-
-
+// });
