@@ -40,6 +40,11 @@ const pTransfer = document.querySelector('#priceTransfer');
 const eTransfer = document.querySelector('#expirationTransfer');
 const fTransfer = document.querySelector('#fromTransfer');
 
+// array and stuff for update UI
+let bidArray = [];
+let walletArray = [];
+let timeArray = [];
+
 // WEB3 ----------------- START
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -115,7 +120,6 @@ async function getAccess() {
 
 // Front---------------------------
 
-
 // Practical fn
 const pKReduced = publicKey =>
   publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
@@ -167,11 +171,23 @@ fetch(`/api/auction/${auctionId}/timer`)
     console.error(error);
   });
 
+// Submit bid - BID NOW -------- POST
+
+// console.log(actualBalance);
+// let cheatedBalance = parseFloat(actualBalance * 1000);
+// console.log(cheatedBalance);
+// let currentBalance = Number(actualBalance);
+// console.log(typeof currentBalance);
+// console.log(currentBalance);
+
 // Bid button Pop up
 bidBtn.addEventListener('click', function () {
   if (contract) {
-    console.log(actualBalance);
+    // console.log(actualBalance);
     popup.style.display = 'block';
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
     balanceAuction.innerHTML = cheatedBalance;
@@ -179,13 +195,6 @@ bidBtn.addEventListener('click', function () {
     alert('Please connect your wallet');
   }
 });
-
-// Submit bid - BID NOW -------- POST
-
-console.log(actualBalance);
-let currentBalance = Number(actualBalance);
-// console.log(typeof currentBalance);
-// console.log(currentBalance);
 
 submitBid.addEventListener('click', function () {
   let priceInput = Number(inputPrice.value);
@@ -197,7 +206,7 @@ submitBid.addEventListener('click', function () {
   // console.log(currentBalanceNumber);
   if (priceInput > cheatedBalance) {
     alert(`Your bid exceeds your current wallet balance: ${cheatedBalance}`);
-    alert('2222222');
+    alert('warning you are too poor to surf on this website !');
     return;
   }
   alert('Successfully registered your bid offer, thank You');
@@ -216,12 +225,48 @@ submitBid.addEventListener('click', function () {
         `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
       );
       balanceAuction.innerHTML = updatedBalance;
+    })
+    .then(() => {
+      // updateUI();
     });
 
   closeBtn.addEventListener('click', function () {
     popup.style.display = 'none';
   });
 });
+
+// ********************************* ///
+// ############# JONAS STUFF AND MINE ############
+/////////////////////////////////////////
+// const parentRow = document.querySelector('.of__tr__row');
+// const html = `<i class="fa-brands fa-ethereum price__eth"></i>
+//       <div class="of__tr__type of__tr__price price__eth">${priceInput}</div>
+//       <div class="of__tr__time" id="offerTime">${priceInput}</div>
+//       <div class="of__tr__from" id="fromOffer">${walletInput}</div>
+//     </div>`;
+// parentRow.insertAdjacentHTML('beforeend', html);
+
+// const displayMovements = function (movements, sort = false) {
+//   containerMovements.innerHTML = '';
+
+//   const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+//   movs.forEach(function (mov, i) {
+//     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+//     const html = `
+//       <div class="movements__row">
+//         <div class="movements__type movements__type--${type}">${
+//       i + 1
+//     } ${type}</div>
+//         <div class="movements__value">${mov}€</div>
+//       </div>
+//     `;
+
+//     containerMovements.insertAdjacentHTML('afterbegin', html);
+//   });
+// };
+
 // Date & Time
 const labelDate = document.querySelector('#dateHistory');
 const now = new Date();
@@ -282,6 +327,23 @@ if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
     });
 }
 
+// FETCHING for feeding updateUI function
+// *** all offers ***
+fetch(`/api/auction/${auctionId}/allOffers`)
+  .then(res => res.json())
+  .then(response => {
+    // const values = arr.map(obj => Object.values(obj)[0]);
+    bidArray = response.map(obj => Object.values(obj)[0]);
+    console.log(bidArray);
+  });
+
+// *** all bidders ***
+fetch(`/api/auction/${auctionId}/allBidders`).then(res => res.json());
+// .then(response => console.log(response));
+
+// *** time history ***
+fetch(`/api/auction/${auctionId}/timestamp`).then(res => res.json());
+// .then(response => console.log(response));
 // HIGHEST BID
 fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
@@ -306,6 +368,4 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
     console.error(error);
   });
 
-
-
-
+const updateUI = () => {};
