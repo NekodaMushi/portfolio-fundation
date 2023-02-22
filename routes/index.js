@@ -5,10 +5,15 @@ const path = require('path');
 require('dotenv').config()
 
 const Pool = require('pg').Pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
 
+const config = {
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+}
+
+const pool = new Pool(config)
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
