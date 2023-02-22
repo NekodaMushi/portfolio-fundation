@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }); // Doesn't work for now
 
 // TIMER
-fetch(`http://localhost:3000/api/auction/${auctionId}/timer`)
+fetch(`/api/auction/${auctionId}/timer`)
   .then(res => res.json())
   .then(auctionData => {
     console.log(auctionData);
@@ -194,7 +194,7 @@ submitBid.addEventListener('click', function () {
     return;
   }
   alert('Successfully registered your bid offer, thank You');
-  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
+  fetch(`/api/auction/${auctionId}/offer`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -229,7 +229,7 @@ const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
 labelDate.textContent = dateDisplay;
 
 // Base Information --
-fetch(`http://localhost:3000/api/auction/${auctionId}/details`)
+fetch(`/api/auction/${auctionId}/details`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -264,7 +264,7 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/details`)
   });
 
 // HIGHEST BID
-fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
+fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -276,7 +276,7 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
   });
 
 // FLOOR PRICE
-fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
+fetch(`/api/auction/${auctionId}/lowOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
