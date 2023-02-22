@@ -111,30 +111,59 @@ router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
   );
 });
 
-// Highest bid && corresponding bidder for displaying winner
-router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
-  pool.query(
-    `SELECT wallet_id AS winner FROM bidder
-                WHERE bidder_id = (
-                  SELECT bidder_id
-                  FROM offer
-                  WHERE offer_value = (SELECT MAX(offer_value) FROM offer)
-                )`,
-    (error, results) => {
-      if (error) {
-        throw error;
+// ---------------
+// all offers according to auction_id
+router.get('/api/auction/:auctionId/allOffers', function (req, res, next) {
+  if (req.params.auctionId) {
+    pool.query(
+      `SELECT offer_value FROM offer WHERE auction_id=${req.params.auctionId} GROUP BY offer_value`,
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(200).json(results.rows);
       }
-      res.status(200).json(results.rows);
-    }
-  );
+    );
+  }
 });
-// SELECT bidder_address
-// FROM bidder
-// WHERE bidder_id = (
-//   SELECT bidder_id
-//   FROM offer
-//   WHERE bid_amount = (SELECT MAX(bid_amount) FROM offer)
-// );
+
+// SELECT o.bidder_id, b.address
+// FROM offer o
+// JOIN bidder b ON o.bidder_id = b.id
+// WHERE o.auction_id = <auction_id>;
+
+// all bidders for that auction
+router.get('/api/auction/:auctionId/allBidders', function (req, res, next) {
+  if (req.params.auctionId) {
+    pool.query(
+      `SELECT b.wallet_id, b.bidder_id 
+      FROM bidder b
+      JOIN offer o on b.bidder_id = o.bidder_id
+      WHERE auction_id=${req.params.auctionId}`,
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(200).json(results.rows);
+      }
+    );
+  }
+});
+
+// bid creation timestamp
+router.get('/api/auction/:auctionId/timestamp', function (req, res, next) {
+  if (req.params.auctionId) {
+    pool.query(
+      `SELECT created_on FROM offer WHERE auction_id=${req.params.auctionId}`,
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(200).json(results.rows);
+      }
+    );
+  }
+});
 
 // POST ------------------------ Need to optimize
 router.post('/api/auction/:auctionId/offer', function (req, res) {

@@ -1,4 +1,4 @@
-const auctionId = 2;
+const auctionId = 5;
 
 const displayWallet = document.getElementById('connectWallet');
 const bidBtn = document.getElementById('bid');
@@ -39,6 +39,11 @@ const fOffer = document.querySelector('#fromOffer');
 const pTransfer = document.querySelector('#priceTransfer');
 const eTransfer = document.querySelector('#expirationTransfer');
 const fTransfer = document.querySelector('#fromTransfer');
+
+// array and stuff for update UI
+let bidArray = [];
+let walletArray = [];
+let timeArray = [];
 
 // WEB3 ----------------- START
 
@@ -180,6 +185,9 @@ bidBtn.addEventListener('click', function () {
   if (contract) {
     // console.log(actualBalance);
     popup.style.display = 'block';
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
     balanceAuction.innerHTML = cheatedBalance;
@@ -219,14 +227,46 @@ submitBid.addEventListener('click', function () {
       balanceAuction.innerHTML = updatedBalance;
     })
     .then(() => {
-      const parentRow = document.querySelector('of__tr__row');
-      const newdiv = '<div>';
+      // updateUI();
     });
 
   closeBtn.addEventListener('click', function () {
     popup.style.display = 'none';
   });
 });
+
+// ********************************* ///
+// ############# JONAS STUFF AND MINE ############
+/////////////////////////////////////////
+// const parentRow = document.querySelector('.of__tr__row');
+// const html = `<i class="fa-brands fa-ethereum price__eth"></i>
+//       <div class="of__tr__type of__tr__price price__eth">${priceInput}</div>
+//       <div class="of__tr__time" id="offerTime">${priceInput}</div>
+//       <div class="of__tr__from" id="fromOffer">${walletInput}</div>
+//     </div>`;
+// parentRow.insertAdjacentHTML('beforeend', html);
+
+// const displayMovements = function (movements, sort = false) {
+//   containerMovements.innerHTML = '';
+
+//   const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+//   movs.forEach(function (mov, i) {
+//     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+//     const html = `
+//       <div class="movements__row">
+//         <div class="movements__type movements__type--${type}">${
+//       i + 1
+//     } ${type}</div>
+//         <div class="movements__value">${mov}€</div>
+//       </div>
+//     `;
+
+//     containerMovements.insertAdjacentHTML('afterbegin', html);
+//   });
+// };
+
 // Date & Time
 const labelDate = document.querySelector('#dateHistory');
 const now = new Date();
@@ -287,6 +327,23 @@ if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
     });
 }
 
+// FETCHING for feeding updateUI function
+// *** all offers ***
+fetch(`/api/auction/${auctionId}/allOffers`)
+  .then(res => res.json())
+  .then(response => {
+    // const values = arr.map(obj => Object.values(obj)[0]);
+    bidArray = response.map(obj => Object.values(obj)[0]);
+    console.log(bidArray);
+  });
+
+// *** all bidders ***
+fetch(`/api/auction/${auctionId}/allBidders`).then(res => res.json());
+// .then(response => console.log(response));
+
+// *** time history ***
+fetch(`/api/auction/${auctionId}/timestamp`).then(res => res.json());
+// .then(response => console.log(response));
 // HIGHEST BID
 fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
@@ -310,3 +367,5 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
   .catch(error => {
     console.error(error);
   });
+
+const updateUI = () => {};
