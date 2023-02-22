@@ -1,4 +1,4 @@
-const auctionId = 5;
+const auctionId = 2;
 
 const displayWallet = document.getElementById('connectWallet');
 const bidBtn = document.getElementById('bid');
@@ -21,6 +21,7 @@ const hiBid = document.querySelector('#highestBid');
 const fPrice = document.querySelector('#floorPrice');
 
 const nItem = document.querySelector('#nameItem');
+const oInfo = document.querySelector('#ownerInfo');
 const oID = document.querySelector('#ownerID');
 
 const saEndValue = document.querySelector('#saEndValue');
@@ -196,7 +197,7 @@ submitBid.addEventListener('click', function () {
   // console.log(currentBalanceNumber);
   if (priceInput > cheatedBalance) {
     alert(`Your bid exceeds your current wallet balance: ${cheatedBalance}`);
-    alert('2222222');
+    alert('warning you are too poor to surf on this website !');
     return;
   }
   alert('Successfully registered your bid offer, thank You');
@@ -215,6 +216,10 @@ submitBid.addEventListener('click', function () {
         `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
       );
       balanceAuction.innerHTML = updatedBalance;
+    })
+    .then(() => {
+      const parentRow = document.querySelector('of__tr__row');
+      const newdiv = '<div>';
     });
 });
 
@@ -270,13 +275,17 @@ fetch(`http://localhost:3000/api/auction/${auctionId}`)
     console.error(error);
   });
 
-const winnerReveal = () => {
-  fetch(`http://localhost:3000/api/auction/${auctionId}?join=true`)
+// ***HIGHEST BIDDER WHO ARE YOU***
+if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
+  fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
     .then(res => res.json())
-    .then(res => {
-      console.log(res);
+    .then(response => {
+      console.log(response[0]);
+      const winner = response[0];
+      oID.innerHTML = winner.wallet_id;
+      oInfo.innerHTML = 'New happy Owner is ==>';
     });
-};
+}
 
 // HIGHEST BID
 fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
@@ -301,5 +310,3 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
   .catch(error => {
     console.error(error);
   });
-
-winnerReveal();
