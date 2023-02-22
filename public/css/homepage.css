@@ -1,6 +1,12 @@
-/* body {
+.central {
+  /* background-color: rgb(59, 52, 52); */
+  font-family: 'Prompt', sans-serif;
+  font-size: 18px;
   color: white;
-} */
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
+
 
 p {
   font-size: 16px;
@@ -15,12 +21,12 @@ p {
 }
 
 .top_container_item {
-  max-width: 350px;
-  max-height: 800px;
+  max-width: 20%;
+  max-height: 30%;
 }
 
 #welcome {
-  margin-top: 55px;
+  margin-top: 3%;
 }
 
 
@@ -46,7 +52,6 @@ p {
 .mid_container_item_bot {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 
 }
 
@@ -58,7 +63,7 @@ a {
 .box {
   width: 10%;
   height: 10%;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 2%;
   display: flex;
   justify-content: center;
@@ -67,27 +72,32 @@ a {
 .text_left {
   width: 30%;
   height: auto;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 2%;
 }
 
 .text_right {
   width: 30%;
   height: auto;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 2%;
 }
 
-#box4 {
-  margin-left: 20%;
+p {
+  margin-inline: auto;
 }
 
-#box5 {
-  margin-left: 50%;
+.bot_box {
+  margin-top: 2%;
 }
 
-#box6 {
-  margin-left: 80%;
+.text_bot {
+  width: 60%;
+  height: 10%;
+  /* border: 1px solid black; */
+  padding: 2%;
+  display: flex;
+  justify-content: center;
 }
 
 #last_container {
@@ -96,4 +106,10 @@ a {
 
 .hidden {
   display: none;
+}
+
+.round_img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
 }
