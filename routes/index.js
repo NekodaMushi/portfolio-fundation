@@ -6,11 +6,7 @@ require('dotenv').config()
 
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: process.env.user,
-  host: process.env.host,
-  database: process.env.database,
-  password: process.env.password,
-  port: process.env.port,
+  connectionString: process.env.DATABASE_URL
 });
 
 /* GET home page. */
@@ -25,7 +21,7 @@ module.exports = router;
 
 // TIMER
 
-router.get('/api/auction/timer/:auctionId', function (req, res, next) {
+router.get('/api/auction/:auctionId/timer', function (req, res, next) {
   if (req.params.auctionId) {
     pool.query(`SELECT *, DATE_PART('epoch', sale_ends - NOW()) as time_left_seconds FROM auction WHERE auction_id=${req.params.auctionId}`, (error, results) => {
       if (error) {
@@ -40,7 +36,7 @@ router.get('/api/auction/timer/:auctionId', function (req, res, next) {
 });
 
 // Base Information ---
-router.get('/api/auction/:auctionId', function
+router.get('/api/auction/:auctionId/details', function
   (req, res, next) {
 
   if (req.params.auctionId) {
@@ -144,10 +140,3 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
     }
   });
 });
-
-
-
-
-
-// Graph (Futur project)
-

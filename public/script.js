@@ -96,7 +96,7 @@ async function getAccess() {
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     // balanceAuction.textContent = actualBalance;
   };
-  displayWallet.style.display = 'none';
+  // displayWallet.style.display = 'none';
   walletConnected();
   // console.log(balanceWeth);
   // console.log(actualBalance);
@@ -108,6 +108,7 @@ async function getAccess() {
 // WEB3 --------------- END---------------
 
 // Front---------------------------
+
 
 // Practical fn
 const pKReduced = publicKey =>
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }); // Doesn't work for now
 
 // TIMER
-fetch(`http://localhost:3000/api/auction/timer/${auctionId}`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/timer`)
   .then(res => res.json())
   .then(auctionData => {
     console.log(auctionData);
@@ -203,11 +204,10 @@ submitBid.addEventListener('click', function () {
     .then(res => res.json())
     .then(response => {
       console.log(response);
-      const updatedBalance = cheatedBalance - priceInput; // Update the current wallet balance after the bid is placed
-      alert(
-        `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
-      );
+      updatedBalance = cheatedBalance - priceInput; // Update the current wallet balance after the bid is placed
+      alert(`${currentBalance}`);
       balanceAuction.innerHTML = updatedBalance;
+      hiBid.innerHTML = max_offer_value;
     });
 });
 
@@ -229,7 +229,7 @@ const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
 labelDate.textContent = dateDisplay;
 
 // Base Information --
-fetch(`http://localhost:3000/api/auction/${auctionId}`)
+fetch(`http://localhost:3000/api/auction/${auctionId}/details`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -286,3 +286,21 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
   .catch(error => {
     console.error(error);
   });
+
+
+
+
+// // HomePage
+
+// const boxes = document.querySelectorAll('.box');
+
+// boxes.forEach(box => {
+//   const text = boxes[i].querySelector('.display_desc');
+//   boxes[i].addEventListener('mouseenter', () => {
+//     text.classList.add('hidden');
+//   });
+//   boxes[i].addEventListener('mouseleave', () => {
+//     text.classList.remove('hidden');
+//   });
+
+// });
