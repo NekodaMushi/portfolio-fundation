@@ -103,8 +103,9 @@ async function getAccess() {
   // displayWallet.style.display = 'none';
   walletConnected();
   // console.log(balanceWeth);
-  console.log(actualBalance);
+  // console.log(actualBalance)
   console.log(cheatedBalance);
+
   // setTimeout(() => {
   //   walletConnected.removeEventListener('', walletConnected);
   // }, 3000);
@@ -127,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }); // Doesn't work for now
 
 // TIMER
-fetch(`http://localhost:3000/api/auction/timer/${auctionId}`)
+fetch(`/api/auction/${auctionId}/timer`)
   .then(res => res.json())
   .then(auctionData => {
     console.log(auctionData);
@@ -201,7 +202,7 @@ submitBid.addEventListener('click', function () {
     return;
   }
   alert('Successfully registered your bid offer, thank You');
-  fetch(`http://localhost:3000/api/auction/${auctionId}/offer`, {
+  fetch(`/api/auction/${auctionId}/offer`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -211,7 +212,7 @@ submitBid.addEventListener('click', function () {
     .then(res => res.json())
     .then(response => {
       console.log(response);
-      const updatedBalance = cheatedBalance - priceInput; // Update the current wallet balance after the bid is placed
+      const updatedBalance = cheatedBalance - priceInput;
       alert(
         `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
       );
@@ -221,12 +222,11 @@ submitBid.addEventListener('click', function () {
       const parentRow = document.querySelector('of__tr__row');
       const newdiv = '<div>';
     });
-});
 
-closeBtn.addEventListener('click', function () {
-  popup.style.display = 'none';
+  closeBtn.addEventListener('click', function () {
+    popup.style.display = 'none';
+  });
 });
-
 // Date & Time
 const labelDate = document.querySelector('#dateHistory');
 const now = new Date();
@@ -241,7 +241,7 @@ const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
 labelDate.textContent = dateDisplay;
 
 // Base Information --
-fetch(`http://localhost:3000/api/auction/${auctionId}`)
+fetch(`/api/auction/${auctionId}/details`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -288,7 +288,7 @@ if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
 }
 
 // HIGHEST BID
-fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
+fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);
@@ -300,7 +300,7 @@ fetch(`http://localhost:3000/api/auction/${auctionId}/highOffer`)
   });
 
 // FLOOR PRICE
-fetch(`http://localhost:3000/api/auction/${auctionId}/lowOffer`)
+fetch(`/api/auction/${auctionId}/lowOffer`)
   .then(res => res.json())
   .then(response => {
     console.log(response);

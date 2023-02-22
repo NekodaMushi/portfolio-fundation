@@ -1,13 +1,18 @@
+.central {
+  /* background-color: rgb(59, 52, 52); */
+  font-family: 'Prompt', sans-serif;
+  font-size: 18px;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
 
 
-/* section {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 400px;
-  padding: 100px 20vx;
-} */
+p {
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 1%;
+}
 
 .top_container {
   display: flex;
@@ -16,63 +21,95 @@
 }
 
 .top_container_item {
-  max-width: 350px;
-  max-height: 800px;
+  max-width: 20%;
+  max-height: 30%;
 }
 
 #welcome {
-  margin-top: 55px;
+  margin-top: 3%;
 }
+
 
 .mid_container {
   display: flex;
   flex-direction: column;
-  justify-content:space-between;
-  padding: 20px;
+  justify-content: space-between;
+  padding: 2%;
+}
+
+.mid {
+  display: flex;
+  justify-items: center;
 }
 
 .mid_container_item {
   display: flex;
-  flex-direction: column;
-  justify-content:space-between;
-  padding-left: 25px;
-  padding: 20px;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1%;
+}
+
+.mid_container_item_bot {
+  display: flex;
+  flex-direction: row;
+
+}
+
+
+a {
+  padding-bottom: 0%;
 }
 
 .box {
-  max-width: 10%;
-  max-height: 10%;
-  border: 1px solid black;
-  padding: 20px
+  width: 10%;
+  height: 10%;
+  /* border: 1px solid black; */
+  padding: 2%;
+  display: flex;
+  justify-content: center;
 }
 
-#box1 {
-  margin-left: 15%;
+.text_left {
+  width: 30%;
+  height: auto;
+  /* border: 1px solid black; */
+  padding: 2%;
 }
 
-#box2 {
-  margin-left: 40%;
-
+.text_right {
+  width: 30%;
+  height: auto;
+  /* border: 1px solid black; */
+  padding: 2%;
 }
 
-#box3 {
-  margin-left: 15%;
-
+p {
+  margin-inline: auto;
 }
 
-#box4 {
-  margin-left: 15%;
-
+.bot_box {
+  margin-top: 2%;
 }
-#box5 {
-  margin-left: 65%;
 
-}
-#box6 {
-  margin-left: 25%;
-
+.text_bot {
+  width: 60%;
+  height: 10%;
+  /* border: 1px solid black; */
+  padding: 2%;
+  display: flex;
+  justify-content: center;
 }
 
 #last_container {
-  padding-bottom: 60px;
+  padding-bottom: 2%;
+}
+
+.hidden {
+  display: none;
+}
+
+.round_img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
 }

@@ -5,14 +5,15 @@ const path = require('path');
 require('dotenv').config();
 
 const Pool = require('pg').Pool;
-const pool = new Pool({
-  user: process.env.user,
-  host: process.env.host,
-  database: process.env.database,
-  password: process.env.password,
-  port: process.env.port,
-});
 
+const config = {
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+};
+
+const pool = new Pool(config);
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
@@ -25,7 +26,7 @@ module.exports = router;
 
 // TIMER
 
-router.get('/api/auction/timer/:auctionId', function (req, res, next) {
+router.get('/api/auction/:auctionId/timer', function (req, res, next) {
   if (req.params.auctionId) {
     pool.query(
       `SELECT *, DATE_PART('epoch', sale_ends - NOW()) as time_left_seconds FROM auction WHERE auction_id=${req.params.auctionId}`,
@@ -43,7 +44,7 @@ router.get('/api/auction/timer/:auctionId', function (req, res, next) {
 });
 
 // Base Information ---
-router.get('/api/auction/:auctionId', function (req, res, next) {
+router.get('/api/auction/:auctionId/details', function (req, res, next) {
   if (req.params.auctionId) {
     pool.query(
       `SELECT * FROM auction WHERE auction_id=${req.params.auctionId}`,
@@ -110,6 +111,23 @@ router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
   );
 });
 
+// Highest bid && corresponding bidder for displaying winner
+router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
+  pool.query(
+    `SELECT wallet_id AS winner FROM bidder
+                WHERE bidder_id = (
+                  SELECT bidder_id
+                  FROM offer
+                  WHERE offer_value = (SELECT MAX(offer_value) FROM offer)
+                )`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+});
 // SELECT bidder_address
 // FROM bidder
 // WHERE bidder_id = (
@@ -184,5 +202,3 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
     }
   );
 });
-
-// Graph (Futur project)
