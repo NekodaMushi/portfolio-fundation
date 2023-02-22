@@ -69,3 +69,5 @@
     filter: blur(5px);
   }
 }
+
+@media (max-width: 1550px) {}

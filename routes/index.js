@@ -91,6 +91,30 @@ router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
 
 // -----------------------
 
+// Highest bid && corresponding bidder for displaying winner
+router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
+  pool.query(
+    `SELECT wallet_id AS winner FROM bidder
+                WHERE bidder_id = (
+                  SELECT bidder_id
+                  FROM offer
+                  WHERE offer_value = (SELECT MAX(offer_value) FROM offer)
+                )`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+});
+// SELECT bidder_address
+// FROM bidder
+// WHERE bidder_id = (
+//   SELECT bidder_id
+//   FROM offer
+//   WHERE bid_amount = (SELECT MAX(bid_amount) FROM offer)
+// );
 
 // POST ------------------------ Need to optimize
 router.post('/api/auction/:auctionId/offer', function (req, res) {

@@ -21,6 +21,7 @@ const hiBid = document.querySelector('#highestBid');
 const fPrice = document.querySelector('#floorPrice');
 
 const nItem = document.querySelector('#nameItem');
+const oInfo = document.querySelector('#ownerInfo');
 const oID = document.querySelector('#ownerID');
 
 const saEndValue = document.querySelector('#saEndValue');
@@ -64,7 +65,8 @@ const abi = [
 const address = '0xCFE3441a10A3F956f30ca5A8EF928A42505f02A7';
 let contract = null;
 let connectedAddress = null;
-let actualBalance = null;
+let actualBalance = 0;
+let cheatedBalance = 0;
 
 async function getAccess() {
   if (contract) return;
@@ -84,6 +86,7 @@ async function getAccess() {
 
   const balanceWeth = await provider.getBalance(connectedAddress);
   actualBalance = ethers.utils.formatEther(balanceWeth);
+  cheatedBalance = actualBalance * 1000;
   balance.textContent = actualBalance + ' WETH';
 
   // displayWallet.style.display = 'none';
@@ -91,6 +94,7 @@ async function getAccess() {
     // PUT BACK LATER --------------
     // alert("Wallet connected to auction ");
     // });
+    displayWallet.textContent = 'Connected';
     displayWallet.value = pKReduced(connectedAddress);
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
@@ -99,7 +103,9 @@ async function getAccess() {
   // displayWallet.style.display = 'none';
   walletConnected();
   // console.log(balanceWeth);
-  // console.log(actualBalance);
+  // console.log(actualBalance)
+  console.log(cheatedBalance);
+
   // setTimeout(() => {
   //   walletConnected.removeEventListener('', walletConnected);
   // }, 3000);
@@ -168,6 +174,7 @@ bidBtn.addEventListener('click', function () {
     popup.style.display = 'block';
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
+    balanceAuction.innerHTML = cheatedBalance;
   } else {
     alert('Please connect your wallet');
   }
@@ -183,8 +190,8 @@ let currentBalance = Number(actualBalance);
 submitBid.addEventListener('click', function () {
   let priceInput = Number(inputPrice.value);
   let walletInput = String(connectedAddress);
-  let cheatedBalance = parseFloat(actualBalance * 1000);
-  console.log(cheatedBalance);
+  // balanceAuction.value = cheatedBalance;
+  // console.log(cheatedBalance);
 
   console.log('coucou');
   // console.log(currentBalanceNumber);
@@ -204,17 +211,17 @@ submitBid.addEventListener('click', function () {
     .then(res => res.json())
     .then(response => {
       console.log(response);
-      updatedBalance = cheatedBalance - priceInput; // Update the current wallet balance after the bid is placed
-      alert(`${currentBalance}`);
+      const updatedBalance = cheatedBalance - priceInput;
+      alert(
+        `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
+      );
       balanceAuction.innerHTML = updatedBalance;
-      hiBid.innerHTML = max_offer_value;
     });
-});
 
-closeBtn.addEventListener('click', function () {
-  popup.style.display = 'none';
+  closeBtn.addEventListener('click', function () {
+    popup.style.display = 'none';
+  });
 });
-
 // Date & Time
 const labelDate = document.querySelector('#dateHistory');
 const now = new Date();
@@ -263,6 +270,18 @@ fetch(`/api/auction/${auctionId}/details`)
     console.error(error);
   });
 
+// ***HIGHEST BIDDER WHO ARE YOU***
+if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
+  fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
+    .then(res => res.json())
+    .then(response => {
+      console.log(response[0]);
+      const winner = response[0];
+      oID.innerHTML = winner.wallet_id;
+      oInfo.innerHTML = 'New happy Owner is ==>';
+    });
+}
+
 // HIGHEST BID
 fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
@@ -290,17 +309,3 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
 
 
 
-// // HomePage
-
-// const boxes = document.querySelectorAll('.box');
-
-// boxes.forEach(box => {
-//   const text = boxes[i].querySelector('.display_desc');
-//   boxes[i].addEventListener('mouseenter', () => {
-//     text.classList.add('hidden');
-//   });
-//   boxes[i].addEventListener('mouseleave', () => {
-//     text.classList.remove('hidden');
-//   });
-
-// });
