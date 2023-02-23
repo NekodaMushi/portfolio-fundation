@@ -191,6 +191,9 @@ bidBtn.addEventListener('click', function () {
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     balanceAuction.classList.add('neon');
     balanceAuction.innerHTML = cheatedBalance;
+    closeBtn.addEventListener('click', function () {
+      popup.style.display = 'none';
+    });
   } else {
     alert('Please connect your wallet');
   }
@@ -230,9 +233,7 @@ submitBid.addEventListener('click', function () {
       // updateUI();
     });
 
-  closeBtn.addEventListener('click', function () {
-    popup.style.display = 'none';
-  });
+
 });
 
 // ********************************* ///
