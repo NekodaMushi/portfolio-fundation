@@ -63,11 +63,51 @@
 }
 
 @media (min-width: 768px) {
-
   /* apply a blur filter to the body when the popup is open */
   body.popup-open {
     filter: blur(5px);
   }
 }
 
-@media (max-width: 1550px) {}
+@media (max-width: 1052px) {
+  .navbar-nav {
+    flex-direction: column;
+  }
+
+  .nav-item {
+    margin-bottom: 10px;
+  }
+
+  .navbar-btn {
+    margin-top: 10px;
+  }
+
+  .auction__big__section {
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .auction__pic__details,
+  .auction__name__history__descr {
+    width: 100%;
+  }
+
+  .auction__pic__details {
+    width: 100%;
+  }
+
+  .auction__pic__article__details__container {
+    width: 100%;
+  }
+
+  .auction__big__section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price__eth {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

@@ -14,13 +14,11 @@
 .auction__pic__details {
   display: flex;
   width: 30%;
-
 }
 
 .auction__name__history__descr {
   width: 70%;
 }
-
 
 /* LEFT PART */
 
@@ -39,7 +37,11 @@
 }
 
 .auction__picture {
-  --box-border--border: linear-gradient(105deg, rgb(255 46 144) 0%, rgb(61 35 185) 100%);
+  --box-border--border: linear-gradient(
+    105deg,
+    rgb(255 46 144) 0%,
+    rgb(61 35 185) 100%
+  );
   padding: 2%;
 }
 
@@ -51,7 +53,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 420px;
   height: 210px;
   color: white;
   font-family: 'Raleway';
@@ -59,12 +60,9 @@
 }
 
 #imgNFT {
-  max-width: 400px;
-  max-height: 200px;
+  max-height: 100%;
   object-fit: contain;
 }
-
-
 
 .auction__picture {
   --borderWidth: 2px;
@@ -79,13 +77,22 @@
   left: calc(-1 * var(--borderWidth));
   height: calc(100% + var(--borderWidth) * 2);
   width: calc(100% + var(--borderWidth) * 2);
-  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  background: linear-gradient(
+    60deg,
+    #f79533,
+    #f37055,
+    #ef4e7b,
+    #a166ab,
+    #5073b8,
+    #1098ad,
+    #07b39b,
+    #6fba82
+  );
   border-radius: calc(2 * var(--borderWidth));
   z-index: -1;
   animation: animatedgradient 3s ease alternate infinite;
   background-size: 300% 300%;
 }
-
 
 @keyframes animatedgradient {
   0% {
@@ -100,21 +107,6 @@
     background-position: 0% 50%;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*  */
 
@@ -138,8 +130,6 @@
   display: flex;
   padding: 2%;
 }
-
-
 
 /* RIGHT PART */
 
@@ -179,12 +169,9 @@
   flex-direction: column;
 }
 
-
-
 .auction__offers {
   display: flex;
 }
-
 
 /* Event Counter */
 
@@ -216,7 +203,6 @@
   width: 100%;
   flex-direction: column;
 }
-
 
 .event__counter__container {
   width: 100%;
@@ -251,7 +237,7 @@
 }
 
 .event__hours_min_sec__data {
-  color: rgb(240, 81, 81)
+  color: rgb(240, 81, 81);
 }
 
 .event__hours_min_sec__text {
@@ -259,7 +245,6 @@
   font-size: 15px;
   color: rgb(53, 56, 64);
 }
-
 
 /* BOTTOM Part - Offers - Transfer */
 
@@ -272,7 +257,6 @@
   grid-row: 2 / span 3;
   border-radius: 1rem;
   overflow: scroll;
-
 }
 
 .of__tr::-webkit-scrollbar {
@@ -289,10 +273,8 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-
-
-
-.of__tr__row {
+.of__tr__row,
+#trRow {
   padding: 2.25rem 4rem;
   display: flex;
   align-items: center;
@@ -304,7 +286,6 @@
   color: rgb(74, 16, 16);
   padding: 0.1rem 1rem;
   margin-right: 0;
-  ;
 }
 
 .details {
@@ -349,13 +330,16 @@
 .border-round {
   padding: 1rem;
   margin: 0.5rem;
-  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
-    0 5px 15px 0 rgba(0, 0, 0, 0.08);
 
   border-radius: 0.5rem;
 
   border-left: 0 solid #333131;
   transition: border-left 300ms ease-in-out, padding-left 300ms ease-in-out;
+}
+
+.bot_border {
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
+    0 5px 15px 0 rgba(0, 0, 0, 0.08);
 }
 
 .little__border-round {
@@ -369,17 +353,16 @@
   transition: border-left 300ms ease-in-out, padding-left 300ms ease-in-out;
 }
 
-
 .border-dyn:hover {
   padding-left: 0.5rem;
   border-left: 0.5rem solid #3b37372f;
 }
 
-.border-dyn> :first-child {
+.border-dyn > :first-child {
   margin-top: 0;
 }
 
-.border-dyn> :last-child {
+.border-dyn > :last-child {
   margin-bottom: 0;
 }
 
@@ -404,28 +387,25 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-color: #666;
   border-radius: 0.5rem;
-  background-image: url("../img/purple-blue5.png");
-
+  background-image: url('../img/purple-blue5.png');
 
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-
 }
-
 
 .popup-content {
   padding: 20px;
   text-align: center;
   color: white;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7), -1px -1px 0 rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7),
+    -1px -1px 0 rgba(0, 0, 0, 0.8);
 }
 
 .neon {
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de,
+    0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
 }
-
-
 
 .close {
   position: absolute;

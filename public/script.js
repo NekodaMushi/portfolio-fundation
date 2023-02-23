@@ -41,9 +41,8 @@ const eTransfer = document.querySelector('#expirationTransfer');
 const fTransfer = document.querySelector('#fromTransfer');
 
 // select element for update UI
-let parentDiv = document.getElementById('trRow');
-console.log(typeof parentDiv);
-const parentRowDate = document.querySelector('.of__tr__expir');
+let parentRow = document.querySelector('.of__tr__row');
+let parentRowDate = document.querySelector('.of__tr__expir');
 
 // array and stuff for update UI
 let bidArray = [];
@@ -403,36 +402,68 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
   });
 
 const updateUI = () => {
-  // console.log(bidArray);
+  const bidAr = bidArray;
+  const timeAr = timeDisplay;
+  const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
+
+  bidAr.forEach((elm, idx) => {
+    const html = `<div class="of__tr__row" id="trRow">
+       <i class="fa-brands fa-ethereum price__eth"></i>
+       <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
+       <div class="of__tr__expir" id="TimeOffer">${timeAr[idx]}</div>
+       <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
+    </div>`;
+    parentRow.insertAdjacentHTML('afterend', html);
+  });
+
+  // *************************** //
   // bidArray.forEach(b => {
-  //   const html = `<div class="of__tr__type">${b} ETH</div>`;
-  //   parentRowPrice.insertAdjacentHTML('beforeend', html);
+  //   const html = `<div class="of__tr__row" id="trRow">
+  //   <i class="fa-brands fa-ethereum price__eth"></i>
+  //   <div class="of__tr__type of__tr__price price__eth">${b}</div>
+  //   <div class="of__tr__expir" id="TimeOffer"></div>
+  //   <div class="of__tr__from" id="fromOffer"></div>
+  // </div>`;
+  //   parentRow.insertAdjacentHTML('afterend', html);
   // });
-  // timeDisplay.forEach(t => {
-  //   const html = `<div class="of__tr__expir">${t} hours </div>`;
-  //   parentRowDate.insertAdjacentHTML('beforeend', html);
+
+  // timeArray.forEach(t => {
+  //   const html = `<div class="of__tr__row" id="trRow">
+  //   <i class="fa-brands fa-ethereum price__eth"></i>
+  //   <div class="of__tr__type of__tr__price price__eth"></div>
+  //   <div class="of__tr__expir" id="TimeOffer">${t}</div>
+  //   <div class="of__tr__from" id="fromOffer"></div>
+  // </div>`;
+  //   parentRow.insertAdjacentHTML('afterend', html);
   // });
-  for (let i = 0; i < bidArray.length; i++) {
-    let bidElement = document.createElement('div');
-    let timeElement = document.createElement('div');
-    let walletElement = document.createElement('div');
 
-    // set class names
-    bidElement.classList.add('of__tr__type', 'of__tr__price', 'price__eth');
-    timeElement.classList.add('of__tr__expir');
-    walletElement.classList.add('of__tr__from');
+  // ****************************** //
+  //   timeDisplay.forEach(t => {
+  //     const html = `<div class="of__tr__expir">${t} hours </div>`;
+  //     parentRowDate.insertAdjacentHTML('beforeend', html);
+  //   });
 
-    // set content
-    bidElement.textContent = `${bidArray[i]} eth`;
-    timeElement.textContent = timeDisplay[i];
-    walletElement = walletArray[i];
+  // for (let i = 0; i < bidArray.length; i++) {
+  //   let bidElement = document.createElement('div');
+  //   let timeElement = document.createElement('div');
+  //   let walletElement = document.createElement('div');
 
-    console.log(typeof bidElement);
+  //   // set class names
+  //   bidElement.classList.add('of__tr__type', 'of__tr__price', 'price__eth');
+  //   timeElement.classList.add('of__tr__expir');
+  //   walletElement.classList.add('of__tr__from');
 
-    // append element to parent
+  //   // set content
+  //   bidElement.textContent = `${bidArray[i]} eth`;
+  //   timeElement.textContent = timeDisplay[i];
+  //   walletElement = walletArray[i];
 
-    parentDiv.append(bidElement);
-    parentDiv.append(timeElement);
-    parentDiv.append(walletElement);
-  }
+  //   console.log(typeof bidElement);
+
+  //   // append element to parent
+
+  //   parentDiv.append(bidElement);
+  //   parentDiv.append(timeElement);
+  //   parentDiv.append(walletElement);
+  // }
 };
