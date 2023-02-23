@@ -18,8 +18,67 @@ const pool = new Pool(config)
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.get('/auction', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'auction.html'));
+
+
+
+router.get('/auction/:auctionId', (req, res) => {
+  if (req.params.auctionId) {
+    res.sendFile(path.join(__dirname, '../public', 'auction.html'));
+  }
+});
+
+router.get('/api/auction/:auctionId', function (req, res, next) {
+  const auctionId = req.params.auctionId;
+  pool.query(
+    `SELECT 
+      a.auction_id, 
+      a.item_name, 
+      a.item_description, 
+      a.starting_price, 
+      a.sale_ends, 
+      DATE_PART('epoch', a.sale_ends - NOW()) as time_left_seconds, 
+      b.bidder_id, 
+      b.bidder_address, 
+      b.wallet_id, 
+      o.offer_id, 
+      o.offer_value 
+    FROM auction a 
+      LEFT JOIN offer o ON a.auction_id = o.auction_id 
+      LEFT JOIN bidder b ON o.bidder_id = b.bidder_id 
+    WHERE a.auction_id = $1`,
+    [auctionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+
+      const auction = {
+        id: results.rows[0].auction_id,
+        itemName: results.rows[0].item_name,
+        itemDescription: results.rows[0].item_description,
+        startingPrice: results.rows[0].starting_price,
+        saleEnds: results.rows[0].sale_ends,
+        timeLeftSeconds: results.rows[0].time_left_seconds,
+        highestOffer: results.rows[0].offer_value,
+        bidderId: results.rows[0].bidder_id,
+        bidderAddress: results.rows[0].bidder_address,
+        walletId: results.rows[0].wallet_id,
+        offers: []
+      };
+
+      for (let i = 0; i < results.rows.length; i++) {
+        if (results.rows[i].offer_id) {
+          auction.offers.push({
+            id: results.rows[i].offer_id,
+            value: results.rows[i].offer_value,
+            bidderId: results.rows[i].bidder_id
+          });
+        }
+      }
+
+      res.status(200).json(auction);
+    }
+  );
 });
 
 module.exports = router;
