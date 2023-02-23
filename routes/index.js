@@ -233,36 +233,3 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
 });
 
 
-
-router.get('/chart', async function (req, res, next) {
-  try {
-    const { rows } = await pool.query('SELECT created_on, offer_value FROM offer');
-    const dataPoints = rows.map((row) => ({
-      x: new Date(row.created_on).getTime(),
-      y: row.offer_value,
-    }));
-
-    const chart = new CanvasJS.Chart('chartContainer', {
-      title: {
-        text: 'Dynamic StockChart',
-      },
-      theme: 'dark1',
-      charts: [
-        {
-          data: [
-            {
-              type: 'line',
-              dataPoints,
-            },
-          ],
-        },
-      ],
-    });
-
-    chart.render();
-    res.send(chart);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
