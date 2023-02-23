@@ -63,6 +63,7 @@
 }
 
 @media (min-width: 768px) {
+
   /* apply a blur filter to the body when the popup is open */
   body.popup-open {
     filter: blur(5px);
