@@ -369,4 +369,10 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
     console.error(error);
   });
 
-const updateUI = () => {};
+const updateUI = () => { };
+
+
+
+// CHART
+
+
