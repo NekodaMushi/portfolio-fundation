@@ -40,10 +40,16 @@ const pTransfer = document.querySelector('#priceTransfer');
 const eTransfer = document.querySelector('#expirationTransfer');
 const fTransfer = document.querySelector('#fromTransfer');
 
+// select element for update UI
+let parentDiv = document.getElementById('trRow');
+console.log(typeof parentDiv);
+const parentRowDate = document.querySelector('.of__tr__expir');
+
 // array and stuff for update UI
 let bidArray = [];
 let walletArray = [];
 let timeArray = [];
+let timeDisplay = [];
 
 // WEB3 ----------------- START
 
@@ -110,6 +116,7 @@ async function getAccess() {
   // console.log(balanceWeth);
   // console.log(actualBalance)
   console.log(cheatedBalance);
+  updateUI();
 
   // setTimeout(() => {
   //   walletConnected.removeEventListener('', walletConnected);
@@ -334,16 +341,43 @@ fetch(`/api/auction/${auctionId}/allOffers`)
   .then(response => {
     // const values = arr.map(obj => Object.values(obj)[0]);
     bidArray = response.map(obj => Object.values(obj)[0]);
-    console.log(bidArray);
+    // console.log(bidArray);
   });
 
 // *** all bidders ***
-fetch(`/api/auction/${auctionId}/allBidders`).then(res => res.json());
-// .then(response => console.log(response));
+fetch(`/api/auction/${auctionId}/allBidders`)
+  .then(res => res.json())
+  .then(response => {
+    walletArray = response.map(obj => Object.values(obj)[0]);
+    console.log(walletArray);
+  });
 
 // *** time history ***
-fetch(`/api/auction/${auctionId}/timestamp`).then(res => res.json());
-// .then(response => console.log(response));
+fetch(`/api/auction/${auctionId}/timestamp`)
+  .then(res => res.json())
+  .then(response => {
+    timeArray = response.map(obj => Object.values(obj)[0]);
+    const dateNow = new Date();
+    let differences = timeArray.map(time => {
+      const dateArray = new Date(time);
+      let diff = dateArray - dateNow;
+      return diff;
+    });
+    console.log(differences);
+
+    let timeBidded = differences.map(t => {
+      const hours = Math.floor(Math.abs(t / 3600000));
+      const min = Math.floor((Math.abs(t) % 3600000) / 60000);
+      return { hours, min };
+    });
+
+    for (let i = 0; i < timeBidded.length; i++) {
+      let timeString = timeBidded[i].hours + ':' + timeBidded[i].min;
+      timeDisplay.push(timeString);
+    }
+    console.log(timeDisplay);
+  });
+
 // HIGHEST BID
 fetch(`/api/auction/${auctionId}/highOffer`)
   .then(res => res.json())
@@ -368,4 +402,37 @@ fetch(`/api/auction/${auctionId}/lowOffer`)
     console.error(error);
   });
 
-const updateUI = () => {};
+const updateUI = () => {
+  // console.log(bidArray);
+  // bidArray.forEach(b => {
+  //   const html = `<div class="of__tr__type">${b} ETH</div>`;
+  //   parentRowPrice.insertAdjacentHTML('beforeend', html);
+  // });
+  // timeDisplay.forEach(t => {
+  //   const html = `<div class="of__tr__expir">${t} hours </div>`;
+  //   parentRowDate.insertAdjacentHTML('beforeend', html);
+  // });
+  for (let i = 0; i < bidArray.length; i++) {
+    let bidElement = document.createElement('div');
+    let timeElement = document.createElement('div');
+    let walletElement = document.createElement('div');
+
+    // set class names
+    bidElement.classList.add('of__tr__type', 'of__tr__price', 'price__eth');
+    timeElement.classList.add('of__tr__expir');
+    walletElement.classList.add('of__tr__from');
+
+    // set content
+    bidElement.textContent = `${bidArray[i]} eth`;
+    timeElement.textContent = timeDisplay[i];
+    walletElement = walletArray[i];
+
+    console.log(typeof bidElement);
+
+    // append element to parent
+
+    parentDiv.append(bidElement);
+    parentDiv.append(timeElement);
+    parentDiv.append(walletElement);
+  }
+};
