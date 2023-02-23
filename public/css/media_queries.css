@@ -110,4 +110,96 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
+  #boxNFT {
+    height: 440px;
+    width: 700px;
+  }
+
+  #imgNFT {
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+/*  */
+@media (max-width: 700px) {
+  #boxNFT {
+    height: 303px;
+  }
+
+  #imgNFT {
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+/*  */
+@media (max-width: 480px) {
+  .navbar-nav {
+    flex-direction: column;
+  }
+
+  .nav-item {
+    margin-bottom: 10px;
+  }
+
+  .navbar-btn {
+    margin-top: 10px;
+  }
+
+  .auction__big__section {
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .auction__pic__details,
+  .auction__name__history__descr {
+    width: 100%;
+  }
+
+  .auction__pic__details {
+    width: 100%;
+  }
+
+  .auction__pic__article__details__container {
+    width: 100%;
+  }
+
+  .auction__big__section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price__eth {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  #boxNFT {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 210px;
+    color: white;
+    font-family: 'Raleway';
+    font-size: 2.5rem;
+  }
+
+  #imgNFT {
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 350px) {
+  #boxNFT {
+    height: 140px;
+  }
+
+  #imgNFT {
+    max-height: 100%;
+    object-fit: contain;
+  }
 }
