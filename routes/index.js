@@ -231,5 +231,3 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
     }
   );
 });
-
-
