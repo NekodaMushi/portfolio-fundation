@@ -63,7 +63,6 @@
 }
 
 @media (min-width: 768px) {
-
   /* apply a blur filter to the body when the popup is open */
   body.popup-open {
     filter: blur(5px);
@@ -121,15 +120,10 @@
     max-height: 100%;
     object-fit: contain;
   }
-
-
 }
 
 /*  */
 @media (max-width: 700px) {
-
-
-
   #boxNFT {
     height: 303px;
   }
@@ -140,10 +134,8 @@
   }
 }
 
-
 /*  */
 @media (max-width: 480px) {
-
   .navbar-nav {
     flex-direction: column;
   }
@@ -184,8 +176,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-
-
 
   #boxNFT {
     display: flex;
