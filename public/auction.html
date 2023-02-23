@@ -16,8 +16,10 @@
     integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- TEST -->
-
+  <!-- TEST  CHART-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"
+    integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -25,7 +27,7 @@
 
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container">
-      <a href='https://dauction-test1.herokuapp.com/frontend/index.html' class="navbar-brand">D-Auction</a>
+      <a href='https://dauction-test1.herokuapp.com/' class="navbar-brand">D-Auction</a>
       <button class="navbar-toggler" type="button" onclick="toggleNav()">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -42,7 +44,9 @@
               class="nav-link active" target="_blank"> Etherscan</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link"> Docs</a>
+
+            <a href="https://metamask.io/download/" class="nav-link"> Docs</a>
+
           </li>
         </ul>
       </div>
@@ -58,7 +62,9 @@
       <aside class="auction__pic__details border-round">
         <div class="auction__pic__article__details__container">
           <div class="auction__article__picture">
-            <div class="auction__picture" id="boxNFT"><img src="img/car.jpg" alt="NFT img" id="imgNFT">
+            <div class="auction__picture" id="boxNFT"><img
+                src="https://i.seadn.io/gcs/files/cf1bb51e2d697b11f97d09ce5abafe87.jpg?auto=format&w=750" alt="NFT img"
+                id="imgNFT">
             </div>
           </div>
           <div class="auction__article__details little__border-round border-dyn">
@@ -185,7 +191,7 @@
             </div>
             <div class="graph__container__wrapper ">
               <div class="graph__container">
-                <div class="graph"><img src="img/graph_example.png" alt="Graph" class="graph"></div>
+                <canvas id="chart" class="graph"></canvas>
               </div>
             </div>
           </div>
@@ -204,14 +210,16 @@
           
           <div class="of__tr__type of__tr__price details">Price</div>
 
-          <div class="of__tr__expir adj__left">Time's offer</div>
+
+          <div class="of__tr__expir adj__left">Offer's time</div>
           <div class="of__tr__from">From</div>
         </div>
         <div class="of__tr__row" id="trRow">
           <!-- <i class="fa-brands fa-ethereum price__eth"></i>
           <div class="of__tr__type of__tr__price price__eth"> 1 eth</div>
-          <div class="of__tr__expir" id="TimeOffer">in 2 days</div>
-          <div class="of__tr__from" id="fromOffer">0x534534..</div> -->
+
+          <div class="of__tr__expir" id="timeOffer">in 2 days</div>
+          <div class="of__tr__from" id="fromOffer">0x534534..</div>
         </div>
         <!-- <div class="of__tr__row">
           <div class="of__tr__type of__tr__price price__eth"><i class="fa-brands fa-ethereum"></i> 0.5 eth TEMPO</div>
@@ -220,7 +228,7 @@
         </div> -->
       </div>
 
-      <!-- TRANSFERS -->
+      <!-- TRANSFERS
 
       <!-- <div class="of__tr border-round">
         <div class="of__tr__title  separator">Transfers</div>
@@ -240,7 +248,8 @@
           <div class="of__tr__expir ">in 5 days TEMPO</div>
           <div class="of__tr__from">0x8923da.. TEMPO</div>
         </div>
-      </div>  -->
+
+      </div> -->
 
 
     </section>
@@ -251,6 +260,30 @@
 
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
   <script type="text/javascript" src="./script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const ctx = document.getElementById('chart');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
 
 </body>
 
