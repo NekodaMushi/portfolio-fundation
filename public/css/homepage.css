@@ -113,3 +113,14 @@ p {
   height: 120px;
   border-radius: 50%;
 }
+
+
+/* Block/Allowing people to get in if metamask */
+
+.link_to_auction {
+  pointer-events: none;
+}
+
+/* .link_to_auction-clickable {
+  pointer-events: auto;
+} */

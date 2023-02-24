@@ -116,7 +116,7 @@ router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
 router.get('/api/auction/:auctionId/allOffers', function (req, res, next) {
   if (req.params.auctionId) {
     pool.query(
-      `SELECT offer_value FROM offer WHERE auction_id=${req.params.auctionId} GROUP BY offer_value`,
+      `SELECT offer_value FROM offer WHERE auction_id=${req.params.auctionId} GROUP BY offer_value ORDER BY offer_value DESC`,
       (error, results) => {
         if (error) {
           throw error;
