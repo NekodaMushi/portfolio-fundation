@@ -1,4 +1,9 @@
-const auctionId = 5;
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const auctionId = urlParams.get('auctionId')
+console.log("the auction id is", auctionId)
+
+const auctionPage = document.querySelector('#auctionPage')
 
 const displayWallet = document.getElementById('connectWallet');
 const bidBtn = document.getElementById('bid');
@@ -24,9 +29,10 @@ const nItem = document.querySelector('#nameItem');
 const oInfo = document.querySelector('#ownerInfo');
 const oID = document.querySelector('#ownerID');
 
+// const saEndContain = document.querySelector('#sale_end_container')
 const saEndValue = document.querySelector('#saEndValue');
 // Not use for now
-
+// console.log(saEndContain.value)
 // const saEndDay = document.querySelector('#endDay');
 const saEndHour = document.querySelector('#endHour');
 const saEndMin = document.querySelector('#endMin');
@@ -141,288 +147,296 @@ const pKReduced = publicKey =>
 // }); // Doesn't work for now
 
 // TIMER
-fetch(`/api/auction/${auctionId}/timer`)
-  .then(res => res.json())
-  .then(auctionData => {
-    console.log(auctionData);
+if (auctionPage) {
+  fetch(`/api/auction/${auctionId}/timer`)
+    .then(res => res.json())
+    .then(auctionData => {
+      console.log(auctionData);
 
-    const endTimeAuction = new Date(auctionData.sale_ends);
+      const endTimeAuction = new Date(auctionData.sale_ends);
 
-    const timeCount = function () {
-      const now = new Date().getTime();
-      const auctionTimer = endTimeAuction - now;
+      const timeCount = function () {
+        const now = new Date().getTime();
+        const auctionTimer = endTimeAuction - now;
 
-      if (auctionTimer <= 0) {
-        clearInterval(timer);
-        bidBtn.classList.add('hidden');
+        if (auctionTimer <= 0) {
+          clearInterval(timer);
+          bidBtn.classList.add('hidden');
 
+          return;
+        }
+
+        const hours = Math.floor(
+          (auctionTimer % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (auctionTimer % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((auctionTimer % (1000 * 60)) / 1000);
+
+        saEndHour.textContent = hours.toString().padStart(2, '0');
+        saEndMin.textContent = minutes.toString().padStart(2, '0');
+        saEndSec.textContent = seconds.toString().padStart(2, '0');
+        saEndValue.textContent = '';
+      };
+
+      const timer = setInterval(timeCount, 1000);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  // Submit bid - BID NOW -------- POST
+
+  // console.log(actualBalance);
+  // let cheatedBalance = parseFloat(actualBalance * 1000);
+  // console.log(cheatedBalance);
+  // let currentBalance = Number(actualBalance);
+  // console.log(typeof currentBalance);
+  // console.log(currentBalance);
+
+
+  if (bidBtn) {
+    // Bid button Pop up
+    bidBtn.addEventListener('click', function () {
+      if (contract) {
+        // console.log(actualBalance);
+        popup.style.display = 'block';
+        closeBtn.addEventListener('click', () => {
+          popup.style.display = 'none';
+        });
+        popDisplayWallet.textContent = pKReduced(connectedAddress);
+        balanceAuction.classList.add('neon');
+        balanceAuction.innerHTML = cheatedBalance;
+        closeBtn.addEventListener('click', function () {
+          popup.style.display = 'none';
+        });
+      } else {
+        alert('Please connect your wallet');
+      }
+    });
+  }
+  if (submitBid) {
+    submitBid.addEventListener('click', function () {
+      let priceInput = Number(inputPrice.value);
+      let walletInput = String(connectedAddress);
+
+      if (priceInput > cheatedBalance) {
+        alert(`Your bid exceeds your current wallet balance: ${cheatedBalance}`);
+        alert('warning you are too poor to surf on this website !');
         return;
       }
 
-      const hours = Math.floor(
-        (auctionTimer % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor(
-        (auctionTimer % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      const seconds = Math.floor((auctionTimer % (1000 * 60)) / 1000);
-
-      saEndHour.textContent = hours.toString().padStart(2, '0');
-      saEndMin.textContent = minutes.toString().padStart(2, '0');
-      saEndSec.textContent = seconds.toString().padStart(2, '0');
-      saEndValue.textContent = '';
-    };
-
-    const timer = setInterval(timeCount, 1000);
-  })
-  .catch(error => {
-    console.error(error);
-  });
-
-// Submit bid - BID NOW -------- POST
-
-// console.log(actualBalance);
-// let cheatedBalance = parseFloat(actualBalance * 1000);
-// console.log(cheatedBalance);
-// let currentBalance = Number(actualBalance);
-// console.log(typeof currentBalance);
-// console.log(currentBalance);
-console.log();
-
-// Bid button Pop up
-bidBtn.addEventListener('click', function () {
-  if (contract) {
-    // console.log(actualBalance);
-    popup.style.display = 'block';
-    closeBtn.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-    popDisplayWallet.textContent = pKReduced(connectedAddress);
-    balanceAuction.classList.add('neon');
-    balanceAuction.innerHTML = cheatedBalance;
-    closeBtn.addEventListener('click', function () {
-      popup.style.display = 'none';
-    });
-  } else {
-    alert('Please connect your wallet');
-  }
-});
-
-submitBid.addEventListener('click', function () {
-  let priceInput = Number(inputPrice.value);
-  let walletInput = String(connectedAddress);
-
-  if (priceInput > cheatedBalance) {
-    alert(`Your bid exceeds your current wallet balance: ${cheatedBalance}`);
-    alert('warning you are too poor to surf on this website !');
-    return;
-  }
-
-  if (priceInput < Number(highestBid.textContent)) {
-    alert('BID REFUSED : You need to bid higher!')
-    return
-  }
-  alert('Successfully registered your bid offer, thank You');
-  fetch(`/api/auction/${auctionId}/offer`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'post',
-    body: JSON.stringify({ walletId: walletInput, offerValue: priceInput }),
-  })
-    .then(res => res.json())
-    .then(response => {
-      console.log(response);
-      const updatedBalance = cheatedBalance - priceInput;
-      alert(
-        `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
-      );
-      balanceAuction.innerHTML = updatedBalance;
-    })
-    .then(() => {
-      // updateOffer();
-    });
-});
-
-// ********************************* ///
-// ############# JONAS STUFF AND MINE ############
-/////////////////////////////////////////
-// const parentRow = document.querySelector('.of__tr__row');
-// const html = `<i class="fa-brands fa-ethereum price__eth"></i>
-//       <div class="of__tr__type of__tr__price price__eth">${priceInput}</div>
-//       <div class="of__tr__time" id="offerTime">${priceInput}</div>
-//       <div class="of__tr__from" id="fromOffer">${walletInput}</div>
-//     </div>`;
-// parentRow.insertAdjacentHTML('beforeend', html);
-
-// const displayMovements = function (movements, sort = false) {
-//   containerMovements.innerHTML = '';
-
-//   const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
-
-//   movs.forEach(function (mov, i) {
-//     const type = mov > 0 ? 'deposit' : 'withdrawal';
-
-//     const html = `
-//       <div class="movements__row">
-//         <div class="movements__type movements__type--${type}">${
-//       i + 1
-//     } ${type}</div>
-//         <div class="movements__value">${mov}€</div>
-//       </div>
-//     `;
-
-//     containerMovements.insertAdjacentHTML('afterbegin', html);
-//   });
-// };
-
-// Date & Time
-const labelDate = document.querySelector('#dateHistory');
-const now = new Date();
-const options = {
-  day: 'numeric',
-  month: 'long',
-  hour: 'numeric',
-  minute: 'numeric',
-};
-const locale = navigator.language;
-const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
-labelDate.textContent = dateDisplay;
-
-// Base Information --
-fetch(`/api/auction/${auctionId}/details`)
-  .then(res => res.json())
-  .then(response => {
-    console.log(response);
-    const {
-      auction_id,
-      token_id,
-      token_contract,
-      created_on,
-      sale_starts,
-      sale_ends,
-      blockchain,
-      token_standard,
-      owner_id,
-      auction_name,
-      auction_desc,
-    } = response[0];
-    console.log(blockchain);
-
-    bChain.innerHTML = blockchain;
-    cAddress.innerHTML = pKReduced(token_contract);
-    tID.innerHTML = token_id;
-    tStandard.innerHTML = token_standard;
-    tDescription.innerHTML = auction_desc;
-    nItem.innerHTML = auction_name;
-    oID.innerHTML = pKReduced(owner_id);
-    // balanceAuction.textContent = 100;
-
-    // saEndValue.innerHTML = sale_ends;
-  })
-  .catch(error => {
-    console.error(error);
-  });
-
-// ***HIGHEST BIDDER WHO ARE YOU***
-if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
-  fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
-    .then(res => res.json())
-    .then(response => {
-      console.log(response[0]);
-      const winner = response[0];
-      oID.innerHTML = winner.wallet_id;
-      oInfo.innerHTML = 'New happy Owner is ==>';
-    });
-}
-
-
-function updateUI() {
-  // FETCHING for feeding updateOffer function
-  // *** all offers ***
-  fetch(`/api/auction/${auctionId}/allOffers`)
-    .then(res => res.json())
-    .then(response => {
-      // const values = arr.map(obj => Object.values(obj)[0]);
-      bidArray = response.map(obj => Object.values(obj)[0]);
-      // console.log(bidArray);
-    });
-
-  // *** all bidders ***
-  fetch(`/api/auction/${auctionId}/allBidders`)
-    .then(res => res.json())
-    .then(response => {
-      walletArray = response.map(obj => Object.values(obj)[0]);
-      console.log(walletArray);
-    });
-
-  // *** time history ***
-  fetch(`/api/auction/${auctionId}/timestamp`)
-    .then(res => res.json())
-    .then(response => {
-      timeArray = response.map(obj => Object.values(obj)[0]);
-      const dateNow = new Date();
-      let differences = timeArray.map(time => {
-        const dateArray = new Date(time);
-        let diff = dateArray - dateNow;
-        return diff;
-      });
-      console.log(differences);
-
-      let timeBidded = differences.map(t => {
-        const hours = Math.floor(Math.abs(t / 3600000));
-        const min = Math.floor((Math.abs(t) % 3600000) / 60000);
-        return { hours, min };
-      });
-
-      for (let i = 0; i < timeBidded.length; i++) {
-        let timeString = timeBidded[i].hours + ':' + timeBidded[i].min;
-        timeDisplay.push(timeString);
+      if (priceInput < Number(highestBid.textContent)) {
+        alert('BID REFUSED : You need to bid higher!')
+        return
       }
-      console.log(timeDisplay);
+      alert('Successfully registered your bid offer, thank You');
+      fetch(`/api/auction/${auctionId}/offer`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'post',
+        body: JSON.stringify({ walletId: walletInput, offerValue: priceInput }),
+      })
+        .then(res => res.json())
+        .then(response => {
+          console.log(response);
+          const updatedBalance = cheatedBalance - priceInput;
+          alert(
+            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
+          );
+          balanceAuction.innerHTML = updatedBalance;
+        })
+        .then(() => {
+          // updateOffer();
+        });
     });
+  }
+  // ********************************* ///
+  // ############# JONAS STUFF AND MINE ############
+  /////////////////////////////////////////
+  // const parentRow = document.querySelector('.of__tr__row');
+  // const html = `<i class="fa-brands fa-ethereum price__eth"></i>
+  //       <div class="of__tr__type of__tr__price price__eth">${priceInput}</div>
+  //       <div class="of__tr__time" id="offerTime">${priceInput}</div>
+  //       <div class="of__tr__from" id="fromOffer">${walletInput}</div>
+  //     </div>`;
+  // parentRow.insertAdjacentHTML('beforeend', html);
 
+  // const displayMovements = function (movements, sort = false) {
+  //   containerMovements.innerHTML = '';
 
-  // HIGHEST BID
-  fetch(`/api/auction/${auctionId}/highOffer`)
+  //   const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  //   movs.forEach(function (mov, i) {
+  //     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+  //     const html = `
+  //       <div class="movements__row">
+  //         <div class="movements__type movements__type--${type}">${
+  //       i + 1
+  //     } ${type}</div>
+  //         <div class="movements__value">${mov}€</div>
+  //       </div>
+  //     `;
+
+  //     containerMovements.insertAdjacentHTML('afterbegin', html);
+  //   });
+  // };
+
+  // Date & Time
+  const labelDate = document.querySelector('#dateHistory');
+  const now = new Date();
+  const options = {
+    day: 'numeric',
+    month: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+  const locale = navigator.language;
+  const dateDisplay = new Intl.DateTimeFormat(locale, options).format(now);
+  if (labelDate) labelDate.textContent = dateDisplay;
+
+  // Base Information --
+  fetch(`/api/auction/${auctionId}/details`)
     .then(res => res.json())
     .then(response => {
       console.log(response);
-      var { max_offer_value } = response[0];
-      hiBid.innerHTML = max_offer_value;
+      const {
+        auction_id,
+        token_id,
+        token_contract,
+        created_on,
+        sale_starts,
+        sale_ends,
+        blockchain,
+        token_standard,
+        owner_id,
+        auction_name,
+        auction_desc,
+      } = response[0];
+      console.log(blockchain);
+
+      bChain.innerHTML = blockchain;
+      cAddress.innerHTML = pKReduced(token_contract);
+      tID.innerHTML = token_id;
+      tStandard.innerHTML = token_standard;
+      tDescription.innerHTML = auction_desc;
+      nItem.innerHTML = auction_name;
+      oID.innerHTML = pKReduced(owner_id);
+      // balanceAuction.textContent = 100;
+
+      // saEndValue.innerHTML = sale_ends;
     })
     .catch(error => {
       console.error(error);
     });
 
-  // FLOOR PRICE
-  fetch(`/api/auction/${auctionId}/lowOffer`)
-    .then(res => res.json())
-    .then(response => {
-      console.log(response);
-      const { min_offer_value } = response[0];
-      fPrice.innerHTML = min_offer_value;
-    })
-    .catch(error => {
-      console.error(error);
-    });
-}
-function updateOffer() {
-  const bidAr = bidArray;
-  const timeAr = timeDisplay;
-  const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
+  // ***HIGHEST BIDDER WHO ARE YOU***
+  if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
+    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
+      .then(res => res.json())
+      .then(response => {
+        console.log(response[0]);
+        const winner = response[0];
+        oID.innerHTML = winner.wallet_id;
+        oInfo.innerHTML = 'New happy Owner is ==>';
+      });
+  }
 
-  bidAr.forEach((elm, idx) => {
-    const html = `<div class="of__tr__row" id="trRow">
+
+  function updateUI() {
+    // FETCHING for feeding updateOffer function
+    // *** all offers ***
+    fetch(`/api/auction/${auctionId}/allOffers`)
+      .then(res => res.json())
+      .then(response => {
+        // const values = arr.map(obj => Object.values(obj)[0]);
+        bidArray = response.map(obj => Object.values(obj)[0]);
+        // console.log(bidArray);
+      });
+
+    // *** all bidders ***
+    fetch(`/api/auction/${auctionId}/allBidders`)
+      .then(res => res.json())
+      .then(response => {
+        walletArray = response.map(obj => Object.values(obj)[0]);
+        console.log(walletArray);
+      });
+
+    // *** time history ***
+    fetch(`/api/auction/${auctionId}/timestamp`)
+      .then(res => res.json())
+      .then(response => {
+        timeArray = response.map(obj => Object.values(obj)[0]);
+        const dateNow = new Date();
+        let differences = timeArray.map(time => {
+          const dateArray = new Date(time);
+          let diff = dateArray - dateNow;
+          return diff;
+        });
+        console.log(differences);
+
+        let timeBidded = differences.map(t => {
+          const hours = Math.floor(Math.abs(t / 3600000));
+          const min = Math.floor((Math.abs(t) % 3600000) / 60000);
+          return { hours, min };
+        });
+
+        for (let i = 0; i < timeBidded.length; i++) {
+          let timeString = timeBidded[i].hours + ':' + timeBidded[i].min;
+          timeDisplay.push(timeString);
+        }
+        console.log(timeDisplay);
+      });
+
+
+    // HIGHEST BID
+    fetch(`/api/auction/${auctionId}/highOffer`)
+      .then(res => res.json())
+      .then(response => {
+        console.log(response);
+        var { max_offer_value } = response[0];
+        hiBid.innerHTML = max_offer_value;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    // FLOOR PRICE
+    fetch(`/api/auction/${auctionId}/lowOffer`)
+      .then(res => res.json())
+      .then(response => {
+        console.log(response);
+        const { min_offer_value } = response[0];
+        fPrice.innerHTML = min_offer_value;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+  function updateOffer() {
+    const bidAr = bidArray;
+    const timeAr = timeDisplay;
+    const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
+
+    bidAr.forEach((elm, idx) => {
+      const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
          <div class="of__tr__expir" id="TimeOffer">${timeAr[idx]} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
-    parentRow.insertAdjacentHTML('afterend', html);
-    console.log('UPDATE UI');
-  });
+      parentRow.insertAdjacentHTML('afterend', html);
+      console.log('UPDATE UI');
+    });
+  }
+
+  updateOffer();
+  updateUI();
 }
 
-updateOffer();
-updateUI();
+
+var templ =
+  '<div class="box" id="auction6"><a href="/auction?auctionId=6"><img class="round_img" src="https://i.seadn.io/gcs/files/b3447ddf06ce3b01bc315cc9d143396b.jpg?auto=format&w=750" alt="Auction 6"></a></div>';
