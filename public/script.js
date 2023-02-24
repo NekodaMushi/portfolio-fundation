@@ -1,10 +1,9 @@
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const auctionId = urlParams.get('auctionId')
-console.log("the auction id is", auctionId)
+const auctionId = urlParams.get('auctionId');
+console.log('the auction id is', auctionId);
 
-
-const auctionPage = document.querySelector('#auctionPage')
+const auctionPage = document.querySelector('#auctionPage');
 
 const displayWallet = document.getElementById('connectWallet');
 const bidBtn = document.getElementById('bid');
@@ -50,7 +49,6 @@ const fTransfer = document.querySelector('#fromTransfer');
 
 // select element for update UI
 let parentRow = document.querySelector('.of__tr__row');
-let parentRowDate = document.querySelector('.of__tr__expir');
 
 // array and stuff for update UI
 let bidArray = [];
@@ -94,7 +92,7 @@ let cheatedBalance = 0;
 //   displayWallet.textContent = 'Connected';
 // }
 async function getAccess() {
-  if (location.pathname === 'public/index.html') {
+  if (location.pathname === './index.html') {
     if (contract) return;
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
@@ -108,13 +106,16 @@ async function getAccess() {
     connectedAddress = await signer.getAddress();
     contract = new ethers.Contract(address, abi, signer);
     displayWallet.textContent = 'Connected';
+
     // const eventLog = document.getElementById('events');
     // contract.on('End', (highestBidder, highestBid) => {
     //   eventLog.append(
     //     `Auction ended with a winner: ${highestBidder} with an amount of ${highestBid}`
     //   );
     // });
+
     // console.log(connectedAddress);
+
     const balanceWeth = await provider.getBalance(connectedAddress);
     actualBalance = ethers.utils.formatEther(balanceWeth);
     cheatedBalance = actualBalance * 1000;
@@ -143,7 +144,7 @@ async function getAccess() {
   // setTimeout(() => {
   //   walletConnected.removeEventListener('', walletConnected);
   // }, 3000);
-};
+}
 // setInterval(updateOffer, 5000);
 // setInterval(updateUI, 20000);
 // WEB3 --------------- END---------------
@@ -211,7 +212,6 @@ if (auctionPage) {
   // console.log(typeof currentBalance);
   // console.log(currentBalance);
 
-
   if (bidBtn) {
     // Bid button Pop up
     bidBtn.addEventListener('click', function () {
@@ -238,6 +238,7 @@ if (auctionPage) {
       let priceInput = Number(inputPrice.value);
       let walletInput = String(connectedAddress);
       let updatedBalance = 0;
+
       if (priceInput > cheatedBalance) {
         alert(
           `Your bid exceeds your current wallet balance: ${cheatedBalance}`
@@ -276,7 +277,6 @@ if (auctionPage) {
         });
     });
   }
-
 
   // Date & Time
   const labelDate = document.querySelector('#dateHistory');
@@ -340,7 +340,6 @@ if (auctionPage) {
       });
   }
 
-
   function updateUI() {
     // FETCHING for feeding updateOffer function
     // *** all offers ***
@@ -349,7 +348,7 @@ if (auctionPage) {
       .then(response => {
         // const values = arr.map(obj => Object.values(obj)[0]);
         bidArray = response.map(obj => Object.values(obj)[0]);
-        // console.log(bidArray);
+        console.log(bidArray);
       });
 
     // *** all bidders ***
@@ -383,9 +382,8 @@ if (auctionPage) {
           let timeString = timeBidded[i].hours + ':' + timeBidded[i].min;
           timeDisplay.push(timeString);
         }
-        console.log(timeDisplay);
+        // console.log(timeDisplay);
       });
-
 
     // HIGHEST BID
     fetch(`/api/auction/${auctionId}/highOffer`)
@@ -411,11 +409,15 @@ if (auctionPage) {
         console.error(error);
       });
   }
+
   function updateOffer() {
     updateUI(); // for having food for updateOffer()
-    const bidAr = bidArray;
+    const bidAr = bidArray.reverse();
     const timeAr = timeDisplay;
     const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
+
+    parentRow.innerHTML = '';
+
     bidAr.forEach((elm, idx) => {
       const [hours, min] = timeAr[idx].split(':').map(str => parseInt(str));
       const html = `<div class="of__tr__row" id="trRow">
@@ -428,11 +430,7 @@ if (auctionPage) {
       console.log('UPDATE UI');
     });
   }
-  updateOffer();
 }
-var templ =
-  '<div class="box" id="auction6"><a href="/auction?auctionId=6"><img class="round_img" src="https://i.seadn.io/gcs/files/b3447ddf06ce3b01bc315cc9d143396b.jpg?auto=format&w=750" alt="Auction 6"></a></div>';
-
 
 var templ =
   '<div class="box" id="auction6"><a href="/auction?auctionId=6"><img class="round_img" src="https://i.seadn.io/gcs/files/b3447ddf06ce3b01bc315cc9d143396b.jpg?auto=format&w=750" alt="Auction 6"></a></div>';

@@ -1,0 +1,10 @@
+<i class="fa-brands fa-ethereum price__eth"></i>
+          <div class="of__tr__type of__tr__price price__eth"> 1 eth</div>
+          <!-- <div class="of__tr__expir" id="expirationOffer">in 2 days</div> -->
+          <div class="of__tr__from" id="fromOffer">0x534534..</div>
+        </div>
+        <div class="of__tr__row">
+          <div class="of__tr__type of__tr__price price__eth"><i class="fa-brands fa-ethereum"></i> 0.5 eth TEMPO</div>
+          <div class="of__tr__expir">in 5 days TEMPO</div>
+          <div class="of__tr__from">0x8923da.. TEMPO</div>
+        </div>
