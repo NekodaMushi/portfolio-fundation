@@ -3,6 +3,7 @@ const urlParams = new URLSearchParams(queryString);
 const auctionId = urlParams.get('auctionId')
 console.log("the auction id is", auctionId)
 
+
 const auctionPage = document.querySelector('#auctionPage')
 
 const displayWallet = document.getElementById('connectWallet');
