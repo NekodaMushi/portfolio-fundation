@@ -16,6 +16,7 @@ const balanceAuction = document.getElementById('balanceAuction');
 const popup = document.getElementById('popup');
 const closeBtn = document.querySelector('.close');
 
+const imgNFT = document.getElementById('imgNFT');
 const bChain = document.querySelector('#blockchainName');
 const cAddress = document.querySelector('#contractAddress');
 const tID = document.querySelector('#tokenID');
@@ -82,7 +83,6 @@ let contract = null;
 let connectedAddress = null;
 let actualBalance = 0;
 let cheatedBalance = 0;
-
 // async function accessSimple() {
 //   if (contract) return;
 //   await provider.send('eth_requestAccounts', []);
@@ -91,7 +91,6 @@ let cheatedBalance = 0;
 //   contract = new ethers.Contract(address, abi, signer);
 //   displayWallet.textContent = 'Connected';
 // }
-
 async function getAccess() {
   if (location.pathname === './index.html') {
     if (contract) return;
@@ -247,7 +246,6 @@ if (auctionPage) {
         alert('warning you are too poor to surf on this website !');
         return;
       }
-
       if (priceInput < Number(highestBid.textContent)) {
         alert('BID REFUSED : You need to bid higher!');
         return;
@@ -273,45 +271,12 @@ if (auctionPage) {
         .then(() => {
           popup.style.display = 'none';
           parentRow.innerHTML = '';
-          console.log(parentRow);
         })
         .then(() => {
           updateOffer();
         });
     });
   }
-
-  // ********************************* ///
-  // ############# JONAS STUFF AND MINE ############
-  /////////////////////////////////////////
-  // const parentRow = document.querySelector('.of__tr__row');
-  // const html = `<i class="fa-brands fa-ethereum price__eth"></i>
-  //       <div class="of__tr__type of__tr__price price__eth">${priceInput}</div>
-  //       <div class="of__tr__time" id="offerTime">${priceInput}</div>
-  //       <div class="of__tr__from" id="fromOffer">${walletInput}</div>
-  //     </div>`;
-  // parentRow.insertAdjacentHTML('beforeend', html);
-
-  // const displayMovements = function (movements, sort = false) {
-  //   containerMovements.innerHTML = '';
-
-  //   const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
-
-  //   movs.forEach(function (mov, i) {
-  //     const type = mov > 0 ? 'deposit' : 'withdrawal';
-
-  //     const html = `
-  //       <div class="movements__row">
-  //         <div class="movements__type movements__type--${type}">${
-  //       i + 1
-  //     } ${type}</div>
-  //         <div class="movements__value">${mov}€</div>
-  //       </div>
-  //     `;
-
-  //     containerMovements.insertAdjacentHTML('afterbegin', html);
-  //   });
-  // };
 
   // Date & Time
   const labelDate = document.querySelector('#dateHistory');
@@ -343,6 +308,7 @@ if (auctionPage) {
         owner_id,
         auction_name,
         auction_desc,
+        auction_img_link,
       } = response[0];
       console.log(blockchain);
 
@@ -353,6 +319,7 @@ if (auctionPage) {
       tDescription.innerHTML = auction_desc;
       nItem.innerHTML = auction_name;
       oID.innerHTML = pKReduced(owner_id);
+      imgNFT.src = auction_img_link;
       // balanceAuction.textContent = 100;
 
       // saEndValue.innerHTML = sale_ends;
