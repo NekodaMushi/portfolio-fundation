@@ -165,25 +165,83 @@ router.get('/api/auction/:auctionId/timestamp', function (req, res, next) {
   }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+// --------------------- HERE
+
+
+router.get('/api/auction/:walletAddress/currentBalance', function (req, res) {
+  const walletAddress = req.params.walletAddress;
+  pool.query(
+    `SELECT max(offer_value) as highest_bid,auction_id
+    FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id 
+    WHERE b.wallet_id='${walletAddress}' group by auction_id`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
+      res
+        .status(200)
+        .json({ currentTotalBids: totalBids });
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // POST ------------------------ Need to optimize
 router.post('/api/auction/:auctionId/offer', function (req, res) {
   const walletId = req.body.walletId;
   const offerValue = req.body.offerValue;
+  const currentBalance = req.body.currentBalance;
 
-  // Sum of bid from this user
+  // Sum of bid from this user---------
   pool.query(
-    `SELECT SUM(offer_value) AS total_bids FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id WHERE b.wallet_id='${walletId}'`,
+    `SELECT max(offer_value) as highest_bid,auction_id
+    FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id 
+    WHERE b.wallet_id='${walletId}' group by auction_id`,
     (error, results) => {
       if (error) {
         throw error;
       }
 
-      const totalBids = results.rows[0].total_bids || 0;
-      let currentBalance;
+      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
+      const newBalance = currentBalance - totalBids;
+      console.log('totalBids  is', totalBids)
+      console.log('currentBalance  is', currentBalance)
+      console.log('newbalance   is', newBalance)
 
-      if (offerValue > currentBalance - totalBids) {
+      if (offerValue > newBalance) {
         res
-          .status(400)
+          .status(200)
           .json({ error: 'Your bid exceeds your current wallet balance' });
       } else {
         pool.query(
@@ -221,7 +279,11 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
                   if (error) {
                     throw error;
                   }
-                  res.status(201).json(results.rows[0]);
+
+                  let finalResponse = results.rows[0];
+                  finalResponse.newBalance = newBalance
+
+                  res.status(201).json(finalResponse);
                 }
               );
             }
