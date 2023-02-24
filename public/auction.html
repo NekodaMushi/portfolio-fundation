@@ -20,10 +20,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"
     integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
 
 </head>
 
-<body class="central_auction">
+<body class="central_auction" onload="updateOffer()">
 
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container">
@@ -118,7 +119,7 @@
       <article class="auction__name__history__descr border-round">
         <div class="auction__name__owner__makeoffer">
           <div class="auction__name__owner__makeoffer__container little__border-round border-dyn">
-            <div class="name__item" id="nameItem">$NameData</div>
+            <div class="name__item" id="nameItem">$NameData</div>  
           </div>
           <div class="auction__name__owner__makeoffer__container little__border-round border-dyn">
             <div class="auction__name__info" id="ownerInfo">Owned by</div>
@@ -259,6 +260,7 @@
 
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
   <script type="text/javascript" src="/script.js"></script>
+
 
 
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
