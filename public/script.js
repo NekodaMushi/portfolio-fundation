@@ -16,6 +16,7 @@ const balanceAuction = document.getElementById('balanceAuction');
 const popup = document.getElementById('popup');
 const closeBtn = document.querySelector('.close');
 
+const imgNFT = document.getElementById('imgNFT');
 const bChain = document.querySelector('#blockchainName');
 const cAddress = document.querySelector('#contractAddress');
 const tID = document.querySelector('#tokenID');
@@ -315,6 +316,7 @@ if (auctionPage) {
         owner_id,
         auction_name,
         auction_desc,
+        auction_img_link,
       } = response[0];
       console.log(blockchain);
 
@@ -325,6 +327,7 @@ if (auctionPage) {
       tDescription.innerHTML = auction_desc;
       nItem.innerHTML = auction_name;
       oID.innerHTML = pKReduced(owner_id);
+      imgNFT.src = auction_img_link;
       // balanceAuction.textContent = 100;
 
       // saEndValue.innerHTML = sale_ends;
