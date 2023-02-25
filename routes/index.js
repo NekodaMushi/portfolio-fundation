@@ -231,3 +231,17 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
     }
   );
 });
+
+// router.get('/api/auction/:auctionId/sumBids', function (req, res, next) {
+//   const walletId = req.body.walletId;
+//   pool.query(
+//     `SELECT SUM(offer_value) AS total_bids FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id WHERE b.wallet_id='${req.params.walletId}'`,
+//     (error, results) => {
+//       if (error) {
+//         throw error;
+//       } else {
+//       }
+//       res.status(200).json(results.rows);
+//     }
+//   );
+// });

@@ -132,6 +132,15 @@ async function getAccess() {
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
     // balanceAuction.textContent = actualBalance;
+
+    // fetch(`/api/auction/${auctionId}/sumBids`)
+    //   .then(res => res.json())
+    //   .then(response => {
+    //     console.log(response);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
   };
   // displayWallet.style.display = 'none';
   walletConnected();
@@ -270,7 +279,7 @@ if (auctionPage) {
         })
         .then(() => {
           popup.style.display = 'none';
-          parentRow.innerHTML = '';
+          // parentRow.insertAdjacentHTML('beforeend', '');
         })
         .then(() => {
           updateOffer();
@@ -415,8 +424,6 @@ if (auctionPage) {
     const bidAr = bidArray.reverse();
     const timeAr = timeDisplay;
     const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
-
-    parentRow.innerHTML = '';
 
     bidAr.forEach((elm, idx) => {
       const [hours, min] = timeAr[idx].split(':').map(str => parseInt(str));
