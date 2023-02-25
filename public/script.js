@@ -148,6 +148,7 @@ async function getAccess() {
   // console.log(actualBalance)
   console.log(cheatedBalance);
   updateOffer();
+  balanceUpdate(connectedAddress);
   // updateUI();
 
   // setTimeout(() => {
@@ -174,6 +175,7 @@ const pKReduced = publicKey =>
 
 // TIMER
 if (auctionPage) {
+
   fetch(`/api/auction/${auctionId}/timer`)
     .then(res => res.json())
     .then(auctionData => {
@@ -212,6 +214,55 @@ if (auctionPage) {
       console.error(error);
     });
 
+
+
+
+
+
+  // -------------------------------
+
+  // ----------------
+
+
+
+
+
+
+
+
+  let sumOfBids;
+
+  function balanceUpdate(walletAddress) {
+    fetch(`/api/auction/${walletAddress}/totalBidPerWallet`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(response => {
+        console.log(`-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`);
+        sumOfBids = response.currentTotalBids;
+        console.log(sumOfBids);
+
+
+
+      })
+      .catch(err => console.error(err));
+  }
+
+
+  // balanceUpdate(connectedAddress);
+
+
+  // -------------------\
+  // -------------------------------------
+
+
+
+  // GET CURRENT BALANCE
+
+
   // Submit bid - BID NOW -------- POST
 
   // console.log(actualBalance);
@@ -220,7 +271,7 @@ if (auctionPage) {
   // let currentBalance = Number(actualBalance);
   // console.log(typeof currentBalance);
   // console.log(currentBalance);
-
+  // ----------------------------------------------------------------
   if (bidBtn) {
     // Bid button Pop up
     bidBtn.addEventListener('click', function () {
@@ -232,7 +283,7 @@ if (auctionPage) {
         });
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
-        balanceAuction.innerHTML = cheatedBalance;
+        balanceAuction.innerHTML = cheatedBalance - sumOfBids;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
         });
@@ -246,7 +297,8 @@ if (auctionPage) {
       e.preventDefault();
       let priceInput = Number(inputPrice.value);
       let walletInput = String(connectedAddress);
-      let updatedBalance = 0;
+      let updatedBalance;
+
 
       if (priceInput > cheatedBalance) {
         alert(
@@ -260,7 +312,10 @@ if (auctionPage) {
         return;
       }
       inputPrice.value = '';
-      updatedBalance = cheatedBalance - priceInput;
+      updatedBalance = cheatedBalance - priceInput - sumOfBids;
+      console.log('chosen price is', priceInput)
+      console.log('upDated bal is', updatedBalance)
+      console.log('cheated Bal is', cheatedBalance)
       balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
@@ -268,13 +323,13 @@ if (auctionPage) {
           'Content-Type': 'application/json',
         },
         method: 'post',
-        body: JSON.stringify({ walletId: walletInput, offerValue: priceInput }),
+        body: JSON.stringify({ walletId: walletInput, offerValue: priceInput, currentBalance: cheatedBalance }),
       })
         .then(res => res.json())
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
+            `Your new actual balance is ${sumOfBids} be careful Macron won't save you!`
           );
         })
         .then(() => {
@@ -439,5 +494,5 @@ if (auctionPage) {
   }
 }
 
-var templ =
-  '<div class="box" id="auction6"><a href="/auction?auctionId=6"><img class="round_img" src="https://i.seadn.io/gcs/files/b3447ddf06ce3b01bc315cc9d143396b.jpg?auto=format&w=750" alt="Auction 6"></a></div>';
+// var templ =
+//   '<div class="box" id="auction6"><a href="/auction?auctionId=6"><img class="round_img" src="https://i.seadn.io/gcs/files/b3447ddf06ce3b01bc315cc9d143396b.jpg?auto=format&w=750" alt="Auction 6"></a></div>';
