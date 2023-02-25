@@ -175,7 +175,6 @@ const pKReduced = publicKey =>
 
 // TIMER
 if (auctionPage) {
-
   fetch(`/api/auction/${auctionId}/timer`)
     .then(res => res.json())
     .then(auctionData => {
@@ -214,21 +213,9 @@ if (auctionPage) {
       console.error(error);
     });
 
-
-
-
-
-
   // -------------------------------
 
   // ----------------
-
-
-
-
-
-
-
 
   let sumOfBids;
 
@@ -241,27 +228,21 @@ if (auctionPage) {
     })
       .then(res => res.json())
       .then(response => {
-        console.log(`-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`);
+        console.log(
+          `-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`
+        );
         sumOfBids = response.currentTotalBids;
         console.log(sumOfBids);
-
-
-
       })
       .catch(err => console.error(err));
   }
 
-
   // balanceUpdate(connectedAddress);
-
 
   // -------------------\
   // -------------------------------------
 
-
-
   // GET CURRENT BALANCE
-
 
   // Submit bid - BID NOW -------- POST
 
@@ -299,7 +280,6 @@ if (auctionPage) {
       let walletInput = String(connectedAddress);
       let updatedBalance;
 
-
       if (priceInput > cheatedBalance) {
         alert(
           `Your bid exceeds your current wallet balance: ${cheatedBalance}`
@@ -313,9 +293,9 @@ if (auctionPage) {
       }
       inputPrice.value = '';
       updatedBalance = cheatedBalance - priceInput - sumOfBids;
-      console.log('chosen price is', priceInput)
-      console.log('upDated bal is', updatedBalance)
-      console.log('cheated Bal is', cheatedBalance)
+      console.log('chosen price is', priceInput);
+      console.log('upDated bal is', updatedBalance);
+      console.log('cheated Bal is', cheatedBalance);
       balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
@@ -323,13 +303,19 @@ if (auctionPage) {
           'Content-Type': 'application/json',
         },
         method: 'post',
-        body: JSON.stringify({ walletId: walletInput, offerValue: priceInput, currentBalance: cheatedBalance }),
+        body: JSON.stringify({
+          walletId: walletInput,
+          offerValue: priceInput,
+          currentBalance: cheatedBalance,
+        }),
       })
         .then(res => res.json())
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${sumOfBids} be careful Macron won't save you!`
+            `Your new actual balance is ${
+              updatedBalance - sumOfBids
+            } be careful Macron won't save you!`
           );
         })
         .then(() => {
@@ -412,7 +398,7 @@ if (auctionPage) {
       .then(response => {
         // const values = arr.map(obj => Object.values(obj)[0]);
         bidArray = response.map(obj => Object.values(obj)[0]);
-        console.log(bidArray);
+        // console.log(bidArray);
       });
 
     // *** all bidders ***
@@ -420,7 +406,7 @@ if (auctionPage) {
       .then(res => res.json())
       .then(response => {
         walletArray = response.map(obj => Object.values(obj)[0]);
-        console.log(walletArray);
+        // console.log(walletArray);
       });
 
     // *** time history ***
