@@ -195,7 +195,6 @@ router.get('/api/auction/:walletAddress/totalBidPerWallet', function (req, res) 
         .json({ currentTotalBids: totalBids });
       console.log('total bid', totalBids);
 
-
     });
 
 });
@@ -227,21 +226,28 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
   const currentBalance = req.body.currentBalance;
 
   // Sum of bid from this user---------
+  // function getMaxBid(){
   pool.query(
-    `SELECT max(offer_value) as highest_bid,auction_id
-    FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id 
-    WHERE b.wallet_id='${walletId}' group by auction_id`,
+    `SELECT COALESCE(SUM(o.max_bid), 0) as total_bids
+    FROM (
+      SELECT MAX(offer_value) as max_bid
+      FROM offer o
+      JOIN bidder b ON o.bidder_id = b.bidder_id
+      WHERE b.wallet_id = '${walletId}'
+      GROUP BY auction_id
+    ) o`,
     (error, results) => {
       if (error) {
         throw error;
       }
 
-      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
-      let balanceAuction = currentBalance - totalBids;
-      let total = totalBids;
+      const totalBids = results.rows[0].total_bids;
+      const newBalance = currentBalance - totalBids;
+      console.log('totalBids  is', totalBids)
+      console.log('currentBalance  is', currentBalance)
+      console.log('newbalance   is', newBalance)
 
-
-      if (offerValue > balanceAuction) {
+      if (offerValue > newBalance) {
         res
           .status(200)
           .json({ error: 'Your bid exceeds your current wallet balance' });
@@ -282,22 +288,8 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
                     throw error;
                   }
 
-                  console.log('-------');
-                  console.log(total);
-                  console.log('-------');
-                  total += offerValue;
-                  console.log('-------');
-                  console.log(total);
-                  console.log('-------');
-
-
                   let finalResponse = results.rows[0];
-                  finalResponse.totalBid = total;
-                  console.log('finalREsponse here -> ', finalResponse);
-                  console.log('attribut of final', finalResponse.balanceAuction);
-
-
-
+                  finalResponse.newBalance = newBalance
 
                   res.status(201).json(finalResponse);
                 }

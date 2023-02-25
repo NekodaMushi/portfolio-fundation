@@ -221,10 +221,10 @@ if (auctionPage) {
 
 
 
-
+  let sumOfBids;
 
   function balanceUpdate(walletAddress) {
-    fetch(`/api/auction/${walletAddress}/currentBalance`, {
+    fetch(`/api/auction/${walletAddress}/totalBidPerWallet`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -232,7 +232,11 @@ if (auctionPage) {
     })
       .then(res => res.json())
       .then(response => {
-        console.log(`-----Current balance for ${walletAddress}: ${response.currentTotalBids}`);
+        console.log(`-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`);
+        sumOfBids = response.currentTotalBids;
+        console.log(sumOfBids);
+
+
 
       })
       .catch(err => console.error(err));
@@ -270,7 +274,7 @@ if (auctionPage) {
         });
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
-        balanceAuction.innerHTML = cheatedBalance;
+        balanceAuction.innerHTML = cheatedBalance - sumOfBids;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
         });
@@ -299,7 +303,7 @@ if (auctionPage) {
         return;
       }
       inputPrice.value = '';
-      updatedBalance = cheatedBalance - priceInput;
+      updatedBalance = cheatedBalance - priceInput - sumOfBids;
       console.log('chosen price is', priceInput)
       console.log('upDated bal is', updatedBalance)
       console.log('cheated Bal is', cheatedBalance)
@@ -316,7 +320,7 @@ if (auctionPage) {
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
+            `Your new actual balance is ${sumOfBids} be careful Macron won't save you!`
           );
         })
         .then(() => {
