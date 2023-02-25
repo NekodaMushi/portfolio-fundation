@@ -165,60 +165,57 @@ router.get('/api/auction/:auctionId/timestamp', function (req, res, next) {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
 // --------------------- HERE
 
-
-router.get('/api/auction/:walletAddress/totalBidPerWallet', function (req, res) {
-  const walletAddress = req.params.walletAddress;
-  pool.query(
-    `SELECT max(offer_value) as highest_bid,auction_id
-    FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id 
-    WHERE b.wallet_id='${walletAddress}' group by auction_id`,
-    (error, results) => {
-      if (error) {
-        throw error;
+router.get(
+  '/api/auction/:walletAddress/totalBidPerWallet',
+  function (req, res) {
+    const walletAddress = req.params.walletAddress;
+    pool.query(
+      `SELECT COALESCE(SUM(o.max_bid), 0) as total_bids
+      FROM (
+        SELECT MAX(offer_value) as max_bid
+        FROM offer o
+        JOIN bidder b ON o.bidder_id = b.bidder_id
+        WHERE b.wallet_id = '0x9166202FD48BAD039B2914B52D443E74Cc38Fa24'
+        GROUP BY auction_id
+      ) o`,
+      (error, results) => {
+        if (error) {
+          throw error;
+        } else {
+          let totalBids = results.rows[0].total_bids;
+          res.status(200).json({ total: totalBids });
+        }
       }
-      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
-      res
-        .status(200)
-        .json({ currentTotalBids: totalBids });
-      console.log('total bid', totalBids);
+    );
+  }
+);
 
-
-    });
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// router.get(
+//   '/api/auction/:walletAddress/totalBidPerWallet',
+//   function (req, res) {
+//     const walletAddress = req.params.walletAddress;
+//     pool.query(
+//       `SELECT max(offer_value) as highest_bid,auction_id
+//     FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id
+//     WHERE b.wallet_id='${walletAddress}' group by auction_id`,
+//       (error, results) => {
+//         if (error) {
+//           throw error;
+//         }
+//         // const totalBids =
+//         //   results.rows.reduce(
+//         //     (partialSum, a) => partialSum + a.highest_bid,
+//         //     0
+//         //   ) || 0;
+//         // res.status(200).json({ currentTotalBids: totalBids });
+//         // console.log('total bid', totalBids);
+//         res.status(200).json(results.rows);
+//       }
+//     );
+//   }
+// );
 
 // POST ------------------------ Need to optimize
 router.post('/api/auction/:auctionId/offer', function (req, res) {
@@ -236,10 +233,11 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
         throw error;
       }
 
-      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
+      const totalBids =
+        results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) ||
+        0;
       let balanceAuction = currentBalance - totalBids;
       let total = totalBids;
-
 
       if (offerValue > balanceAuction) {
         res
@@ -290,14 +288,13 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
                   console.log(total);
                   console.log('-------');
 
-
                   let finalResponse = results.rows[0];
                   finalResponse.totalBid = total;
                   console.log('finalREsponse here -> ', finalResponse);
-                  console.log('attribut of final', finalResponse.balanceAuction);
-
-
-
+                  console.log(
+                    'attribut of final',
+                    finalResponse.balanceAuction
+                  );
 
                   res.status(201).json(finalResponse);
                 }

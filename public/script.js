@@ -228,11 +228,12 @@ if (auctionPage) {
     })
       .then(res => res.json())
       .then(response => {
-        console.log(
-          `-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`
-        );
-        sumOfBids = response.currentTotalBids;
-        console.log(sumOfBids);
+        console.log(response);
+        // console.log(
+        //   `-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`
+        // );
+        sumOfBids = response.total;
+        // console.log(sumOfBids);
       })
       .catch(err => console.error(err));
   }
@@ -265,8 +266,9 @@ if (auctionPage) {
         });
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
-        transitBalance = cheatedBalance - sumOfBids;
-        balanceAuction.innerHTML = transitBalance;
+        cheatedBalance -= sumOfBids;
+        // transitBalance = cheatedBalance - sumOfBids;
+        balanceAuction.innerHTML = cheatedBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
         });
@@ -280,7 +282,6 @@ if (auctionPage) {
       e.preventDefault();
       let priceInput = Number(inputPrice.value);
       let walletInput = String(connectedAddress);
-      let updatedBalance = 0;
 
       if (priceInput > cheatedBalance) {
         alert(
@@ -294,17 +295,20 @@ if (auctionPage) {
         return;
       }
       inputPrice.value = '';
-      updatedBalance = cheatedBalance - priceInput - sumOfBids;
-      console.log('chosen price is', priceInput);
-      console.log('upDated bal is', updatedBalance);
-      console.log('cheated Bal is', cheatedBalance);
-      transitBalance = transitBalance - (transitBalance - priceInput);
-      console.log('DIF is transite', transitBalance);
-      let beforeSub = cheatedBalance - sumOfBids;
-      updatedBalance = beforeSub - transitBalance;
-      console.log('HERE THE UPDATED BALANCE', updatedBalance);
+      cheatedBalance -= priceInput;
+      balanceAuction.innerHTML = cheatedBalance;
 
-      balanceAuction.innerHTML = updatedBalance;
+      // updatedBalance = cheatedBalance - priceInput;
+      // console.log('chosen price is', priceInput);
+      // console.log('upDated bal is', updatedBalance);
+      // console.log('cheated Bal is', cheatedBalance);
+      // transitBalance = transitBalance - (transitBalance - priceInput);
+      // console.log('DIF is transite', transitBalance);
+      // let beforeSub = cheatedBalance - sumOfBids;
+      // updatedBalance = beforeSub - transitBalance;
+      // console.log('HERE THE UPDATED BALANCE', updatedBalance);
+
+      // balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
         headers: {
@@ -321,9 +325,7 @@ if (auctionPage) {
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${
-              updatedBalance - sumOfBids
-            } be careful Macron won't save you!`
+            `Your new actual balance is ${cheatedBalance} be careful Macron won't save you!`
           );
         })
         .then(() => {
