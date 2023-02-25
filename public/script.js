@@ -262,6 +262,7 @@ if (auctionPage) {
   // let currentBalance = Number(actualBalance);
   // console.log(typeof currentBalance);
   // console.log(currentBalance);
+  let transitBalance;
   // ----------------------------------------------------------------
   if (bidBtn) {
     // Bid button Pop up
@@ -274,7 +275,8 @@ if (auctionPage) {
         });
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
-        balanceAuction.innerHTML = cheatedBalance - sumOfBids;
+        transitBalance = cheatedBalance - sumOfBids;
+        balanceAuction.innerHTML = transitBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
         });
@@ -288,7 +290,7 @@ if (auctionPage) {
       e.preventDefault();
       let priceInput = Number(inputPrice.value);
       let walletInput = String(connectedAddress);
-      let updatedBalance;
+      let updatedBalance = 0;
 
 
       if (priceInput > cheatedBalance) {
@@ -303,10 +305,13 @@ if (auctionPage) {
         return;
       }
       inputPrice.value = '';
-      updatedBalance = cheatedBalance - priceInput - sumOfBids;
-      console.log('chosen price is', priceInput)
-      console.log('upDated bal is', updatedBalance)
-      console.log('cheated Bal is', cheatedBalance)
+      transitBalance = transitBalance - (transitBalance - priceInput);
+      console.log('DIF is transite', transitBalance);
+      let beforeSub = cheatedBalance - sumOfBids;
+      updatedBalance = beforeSub - transitBalance;
+      console.log('HERE THE UPDATED BALANCE', updatedBalance);
+
+
       balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
