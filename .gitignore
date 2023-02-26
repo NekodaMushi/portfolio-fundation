@@ -60,11 +60,11 @@ typings/
 # next.js build output
 .next
 
-tempo.js
+
 
 clean_fn.js
 
-temp_routes.js
+
 
 queries.js
 

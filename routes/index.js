@@ -87,13 +87,17 @@ router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
   }
 });
 
-// Highest bid && Display Winner
+
+
+
+
+// Display Winner *** FINAL
 
 router.get(
-  '/api/auction/:auctionId/highestBidderFinal',
+  '/api/auction/:auctionId/highestBidder',
   function (req, res, next) {
     pool.query(
-      `SELECT wallet_id AS winner FROM bidder
+      `SELECT wallet_id AS topBidder FROM bidder
                 WHERE bidder_id = (
                   SELECT bidder_id
                   FROM offer
@@ -103,6 +107,8 @@ router.get(
         if (error) {
           throw error;
         }
+        console.log('Here the ONE WE WANT', results.rows);
+
         res.status(200).json(results.rows);
       }
     );
