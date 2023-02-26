@@ -237,6 +237,7 @@ if (auctionPage) {
         sumOfBids = response.currentTotalBids;
         console.log(sumOfBids);
 
+        console.log(`----- Total refunds for user {}`);
 
 
       })
