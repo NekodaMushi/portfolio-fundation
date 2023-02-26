@@ -144,6 +144,12 @@ async function getAccess() {
 
 // Check for changes in the connected account
 window.ethereum.on('accountsChanged', accounts => {
+  displayWallet.textContent = 'Connect';
+  displayWallet.addEventListener('click', function () {
+    getAccess()
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  });
   // Handle the new accounts array
   console.log('New accounts:', accounts);
 });

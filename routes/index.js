@@ -240,9 +240,12 @@ router.get(
               (acc, cur) => acc + cur.highest_bid,
               0
             );
-            console.log('totalExpense: ', totalExpense);
+            console.log('totalExpense: ', typeof totalExpense);
 
-            res.status(200).json({ userGetBalanceBack: totalRefund });
+            res.status(200).json({
+              userGetBalanceBack: totalRefund,
+              userExpense: totalExpense,
+            });
           }
         );
       }
