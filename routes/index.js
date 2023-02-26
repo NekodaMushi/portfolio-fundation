@@ -94,22 +94,25 @@ router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
 // -----------------------
 // Highest bid && corresponding bidder for displaying winner
 
-router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
-  pool.query(
-    `SELECT wallet_id AS winner FROM bidder
+router.get(
+  '/api/auction/:auctionId/highestBidderFinal',
+  function (req, res, next) {
+    pool.query(
+      `SELECT wallet_id AS winner FROM bidder
                 WHERE bidder_id = (
                   SELECT bidder_id
                   FROM offer
                   WHERE offer_value = (SELECT MAX(offer_value) FROM offer)
                 )`,
-    (error, results) => {
-      if (error) {
-        throw error;
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(200).json(results.rows);
       }
-      res.status(200).json(results.rows);
-    }
-  );
-});
+    );
+  }
+);
 
 // ---------------
 // all offers according to auction_id
@@ -165,60 +168,90 @@ router.get('/api/auction/:auctionId/timestamp', function (req, res, next) {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
 // --------------------- HERE
 
+router.get(
+  '/api/auction/:walletAddress/totalBidPerWallet',
+  function (req, res) {
+    const walletAddress = req.params.walletAddress;
+    pool.query(
+      `SELECT o.offer_id, max(o.offer_value) as highest_bid, o.auction_id
+    FROM offer o 
+    JOIN bidder b ON o.bidder_id = b.bidder_id 
+    WHERE b.wallet_id='${walletAddress}' 
+    GROUP BY o.offer_id, o.auction_id
+    ORDER BY o.offer_value DESC
+    `,
+      (error, results1) => {
+        if (error) {
+          throw error;
+        }
+        console.log('first result is: ', results1.rows);
 
-router.get('/api/auction/:walletAddress/totalBidPerWallet', function (req, res) {
-  const walletAddress = req.params.walletAddress;
-  pool.query(
-    `SELECT max(offer_value) as highest_bid,auction_id
-    FROM offer o JOIN bidder b ON o.bidder_id = b.bidder_id 
-    WHERE b.wallet_id='${walletAddress}' group by auction_id`,
-    (error, results) => {
-      if (error) {
-        throw error;
+        pool.query(
+          `SELECT o.offer_id, o.auction_id
+      FROM offer o 
+      JOIN (
+          SELECT auction_id, MAX(offer_value) AS highest_bid
+          FROM offer
+          GROUP BY auction_id
+      ) t ON o.auction_id = t.auction_id AND o.offer_value = t.highest_bid
+      ORDER BY o.auction_id ASC`,
+          (error, results2) => {
+            if (error) {
+              throw error;
+            }
+            console.log('second result is: ', results2.rows);
+
+            // const expense = results1.filter(dep => results2.find(deps => deps.offer_id === results2.offer_id))
+            // .map(results1 => ({offer_id: offer.offer_id, highest_bid: results1.highest_bid}))
+
+            // const refund = offer
+
+            const refundBalanceArr = [];
+            const expanseBalanceArr = [];
+
+            for (const row1 of results1.rows) {
+              const row2 = results2.rows.find(
+                row => row.offer_id === row1.offer_id
+              );
+              if (!row2) {
+                refundBalanceArr.push({
+                  auction_id: row1.auction_id,
+                  highest_bid: row1.highest_bid,
+                });
+              } else {
+                expanseBalanceArr.push({
+                  auction_id: row1.auction_id,
+                  highest_bid: row1.highest_bid,
+                });
+              }
+            }
+
+            console.log('refundBalanceArr: ', refundBalanceArr);
+            const totalRefund = refundBalanceArr.reduce(
+              (acc, cur) => acc + cur.highest_bid,
+              0
+            );
+            console.log('totalRefund: ', totalRefund);
+
+            console.log('expanseBalanceArr: ', expanseBalanceArr);
+            const totalExpense = expanseBalanceArr.reduce(
+              (acc, cur) => acc + cur.highest_bid,
+              0
+            );
+            console.log('totalExpense: ', typeof totalExpense);
+
+            res.status(200).json({
+              userGetBalanceBack: totalRefund,
+              userExpense: totalExpense,
+            });
+          }
+        );
       }
-      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
-      res
-        .status(200)
-        .json({ currentTotalBids: totalBids });
-      console.log('total bid', totalBids);
-
-
-    });
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    );
+  }
+);
 
 // POST ------------------------ Need to optimize
 router.post('/api/auction/:auctionId/offer', function (req, res) {
@@ -236,10 +269,11 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
         throw error;
       }
 
-      const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
+      const totalBids =
+        results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) ||
+        0;
       let balanceAuction = currentBalance - totalBids;
       let total = totalBids;
-
 
       if (offerValue > balanceAuction) {
         res
@@ -290,14 +324,13 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
                   console.log(total);
                   console.log('-------');
 
-
                   let finalResponse = results.rows[0];
                   finalResponse.totalBid = total;
                   console.log('finalREsponse here -> ', finalResponse);
-                  console.log('attribut of final', finalResponse.balanceAuction);
-
-
-
+                  console.log(
+                    'attribut of final',
+                    finalResponse.balanceAuction
+                  );
 
                   res.status(201).json(finalResponse);
                 }

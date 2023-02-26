@@ -24,6 +24,7 @@ const tStandard = document.querySelector('#tokenStandard');
 const tDescription = document.querySelector('#tokenDescription');
 
 const hiBid = document.querySelector('#highestBid');
+const hiBidder = document.querySelector('#highestBidder');
 const fPrice = document.querySelector('#floorPrice');
 
 const nItem = document.querySelector('#nameItem');
@@ -82,7 +83,7 @@ const address = '0xCFE3441a10A3F956f30ca5A8EF928A42505f02A7';
 let contract = null;
 let connectedAddress = null;
 let actualBalance = 0;
-let cheatedBalance = 0;
+let thousandBalance = 0;
 // async function accessSimple() {
 //   if (contract) return;
 //   await provider.send('eth_requestAccounts', []);
@@ -104,21 +105,13 @@ async function getAccess() {
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
     connectedAddress = await signer.getAddress();
+    console.log(connectedAddress);
     contract = new ethers.Contract(address, abi, signer);
     displayWallet.textContent = 'Connected';
 
-    // const eventLog = document.getElementById('events');
-    // contract.on('End', (highestBidder, highestBid) => {
-    //   eventLog.append(
-    //     `Auction ended with a winner: ${highestBidder} with an amount of ${highestBid}`
-    //   );
-    // });
-
-    // console.log(connectedAddress);
-
     const balanceWeth = await provider.getBalance(connectedAddress);
     actualBalance = ethers.utils.formatEther(balanceWeth);
-    cheatedBalance = actualBalance * 1000;
+    thousandBalance = actualBalance * 1000;
     balance.textContent = actualBalance + ' WETH';
   }
 
@@ -137,7 +130,7 @@ async function getAccess() {
   walletConnected();
   // console.log(balanceWeth);
   // console.log(actualBalance)
-  console.log(cheatedBalance);
+  console.log(thousandBalance);
   updateOffer();
   balanceUpdate(connectedAddress);
   // updateUI();
@@ -146,6 +139,21 @@ async function getAccess() {
   //   walletConnected.removeEventListener('', walletConnected);
   // }, 3000);
 }
+
+// ******* CHECK IF LITTLE MALIN CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
+
+// Check for changes in the connected account
+window.ethereum.on('accountsChanged', accounts => {
+  displayWallet.textContent = 'Connect';
+  displayWallet.addEventListener('click', function () {
+    getAccess()
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  });
+  // Handle the new accounts array
+  console.log('New accounts:', accounts);
+});
+
 // setInterval(updateOffer, 5000);
 // setInterval(updateUI, 20000);
 // WEB3 --------------- END---------------
@@ -166,7 +174,6 @@ const pKReduced = publicKey =>
 
 // TIMER
 if (auctionPage) {
-
   fetch(`/api/auction/${auctionId}/timer`)
     .then(res => res.json())
     .then(auctionData => {
@@ -205,23 +212,14 @@ if (auctionPage) {
       console.error(error);
     });
 
-
-
-
-
-
   // -------------------------------
 
   // ----------------
 
+  // -------REFUND
 
-
-
-
-
-
-
-  let sumOfBids;
+  let userBalanceRefund;
+  let userTotalExpense;
 
   function balanceUpdate(walletAddress) {
     fetch(`/api/auction/${walletAddress}/totalBidPerWallet`, {
@@ -232,37 +230,37 @@ if (auctionPage) {
     })
       .then(res => res.json())
       .then(response => {
-        console.log(`-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`);
-        sumOfBids = response.currentTotalBids;
-        console.log(sumOfBids);
+        console.log(
+          `-----Current Total refunds for ${walletAddress}: ${response.userGetBalanceBack}`
+        );
+        console.log(
+          `-----Current Total Expense for ${walletAddress}: ${response.userExpense}`
+        );
 
-
-
+        userBalanceRefund = response.userGetBalanceBack;
+        userTotalExpense = response.userExpense;
+        console.log(userBalanceRefund);
+        console.log(userTotalExpense);
       })
       .catch(err => console.error(err));
   }
 
-
   // balanceUpdate(connectedAddress);
-
 
   // -------------------\
   // -------------------------------------
 
-
-
   // GET CURRENT BALANCE
-
 
   // Submit bid - BID NOW -------- POST
 
   // console.log(actualBalance);
-  // let cheatedBalance = parseFloat(actualBalance * 1000);
-  // console.log(cheatedBalance);
+  // let thousandBalance = parseFloat(actualBalance * 1000);
+  // console.log(thousandBalance);
   // let currentBalance = Number(actualBalance);
   // console.log(typeof currentBalance);
   // console.log(currentBalance);
-  let transitBalance;
+  let popInBalance = 0;
   // ----------------------------------------------------------------
   if (bidBtn) {
     // Bid button Pop up
@@ -275,8 +273,13 @@ if (auctionPage) {
         });
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
-        transitBalance = cheatedBalance - sumOfBids;
-        balanceAuction.innerHTML = transitBalance;
+
+        userTotalExpense === 0
+          ? (popInBalance = thousandBalance)
+          : (popInBalance =
+              thousandBalance - userTotalExpense + userBalanceRefund);
+        // popInBalance = thousandBalance;
+        balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
         });
@@ -291,12 +294,10 @@ if (auctionPage) {
       let priceInput = Number(inputPrice.value);
       let walletInput = String(connectedAddress);
       let updatedBalance = 0;
+      console.log(popInBalance);
 
-
-      if (priceInput > cheatedBalance) {
-        alert(
-          `Your bid exceeds your current wallet balance: ${cheatedBalance}`
-        );
+      if (priceInput > popInBalance) {
+        alert(`Your bid exceeds your current wallet balance: ${popInBalance}`);
         alert('warning you are too poor to surf on this website !');
         return;
       }
@@ -304,14 +305,9 @@ if (auctionPage) {
         alert('BID REFUSED : You need to bid higher!');
         return;
       }
+      // if (Number(highestBid.textContent) + )
       inputPrice.value = '';
-      transitBalance = transitBalance - (transitBalance - priceInput);
-      console.log('DIF is transite', transitBalance);
-      let beforeSub = cheatedBalance - sumOfBids;
-      updatedBalance = beforeSub - transitBalance;
-      console.log('HERE THE UPDATED BALANCE', updatedBalance);
-
-
+      updatedBalance = popInBalance - priceInput;
       balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
@@ -319,20 +315,22 @@ if (auctionPage) {
           'Content-Type': 'application/json',
         },
         method: 'post',
-        body: JSON.stringify({ walletId: walletInput, offerValue: priceInput, currentBalance: cheatedBalance }),
+        body: JSON.stringify({
+          walletId: walletInput,
+          offerValue: priceInput,
+          currentBalance: thousandBalance,
+        }),
       })
         .then(res => res.json())
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${sumOfBids} be careful Macron won't save you!`
+            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
           );
         })
         .then(() => {
           popup.style.display = 'none';
           parentRow.innerHTML = '';
-        })
-        .then(() => {
           updateOffer();
         });
     });
@@ -369,6 +367,7 @@ if (auctionPage) {
         auction_name,
         auction_desc,
         auction_img_link,
+        highest_bidder,
       } = response[0];
       console.log(blockchain);
 
@@ -377,6 +376,7 @@ if (auctionPage) {
       tID.innerHTML = token_id;
       tStandard.innerHTML = token_standard;
       tDescription.innerHTML = auction_desc;
+      hiBidder.innerHTML = highest_bidder;
       nItem.innerHTML = auction_name;
       oID.innerHTML = pKReduced(owner_id);
       imgNFT.src = auction_img_link;
@@ -388,9 +388,9 @@ if (auctionPage) {
       console.error(error);
     });
 
-  // ***HIGHEST BIDDER WHO ARE YOU***
+  // FINAL ***HIGHEST BIDDER WHO ARE YOU*** FINAL
   if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
-    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
+    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
       .then(res => res.json())
       .then(response => {
         console.log(response[0]);
@@ -483,7 +483,9 @@ if (auctionPage) {
       const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
-         <div class="of__tr__expir" id="TimeOffer">${hours} hour and ${min} min ago</div>
+         <div class="of__tr__expir" id="TimeOffer">${
+           hours - 1
+         } hour and ${min} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
       parentRow.insertAdjacentHTML('afterend', html);
