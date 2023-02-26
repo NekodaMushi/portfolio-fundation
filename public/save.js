@@ -189,11 +189,14 @@ router.get('/api/auction/:walletAddress/totalBidPerWallet', function (req, res) 
     GROUP BY o.offer_id, o.auction_id
     ORDER BY o.offer_value DESC
     `,
-    (error, results1) => {
+    (error, results) => {
       if (error) {
         throw error;
       }
-      console.log('first result is: ', results1.rows);
+      console.log('first result is: ', results.rows);
+
+      // const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
+
 
       pool.query(`SELECT o.offer_id, o.auction_id
       FROM offer o 
@@ -203,30 +206,22 @@ router.get('/api/auction/:walletAddress/totalBidPerWallet', function (req, res) 
           GROUP BY auction_id
       ) t ON o.auction_id = t.auction_id AND o.offer_value = t.highest_bid
       ORDER BY o.auction_id ASC`,
-        (error, results2) => {
+        (error, results) => {
           if (error) {
             throw error;
           }
-          console.log('second result is: ', results2.rows);
+          console.log('second result is: ', results.rows);
+          // const totalBids = results.rows.reduce((partialSum, a) => partialSum + a.highest_bid, 0) || 0;
+          res.status(200).json(results.rows);
+          // res
+          //   .status(200)
+          //   .json({ currentTotalBids: totalBids });
+          // console.log('total bid', totalBids);
 
-          const refundBalanceArr = [];
-
-          for (const row1 of results1.rows) {
-            const row2 = results2.rows.find(row => row.offer_id === row1.offer_id);
-            if (!row2) {
-              refundBalanceArr.push({ auction_id: row1.auction_id, highest_bid: row1.highest_bid });
-            }
-          }
-
-          console.log('refundBalanceArr: ', refundBalanceArr);
-          const totalRefund = refundBalanceArr.reduce((acc, cur) => acc + cur.highest_bid, 0);
-          console.log('totalRefund: ', totalRefund);
-          res.status(200).json(totalRefund);
         })
     });
 
 });
-
 
 
 

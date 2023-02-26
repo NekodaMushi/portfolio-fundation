@@ -24,6 +24,7 @@ const tStandard = document.querySelector('#tokenStandard');
 const tDescription = document.querySelector('#tokenDescription');
 
 const hiBid = document.querySelector('#highestBid');
+const hiBidder = document.querySelector('#highestBidder');
 const fPrice = document.querySelector('#floorPrice');
 
 const nItem = document.querySelector('#nameItem');
@@ -304,12 +305,12 @@ if (auctionPage) {
         alert('BID REFUSED : You need to bid higher!');
         return;
       }
+      // if (Number(highestBid.textContent) + )
       inputPrice.value = '';
+
       transitBalance = transitBalance - (transitBalance - priceInput);
-      console.log('DIF is transite', transitBalance);
       let beforeSub = cheatedBalance - sumOfBids;
       updatedBalance = beforeSub - transitBalance;
-      console.log('HERE THE UPDATED BALANCE', updatedBalance);
 
 
       balanceAuction.innerHTML = updatedBalance;
@@ -369,6 +370,7 @@ if (auctionPage) {
         auction_name,
         auction_desc,
         auction_img_link,
+        highest_bidder,
       } = response[0];
       console.log(blockchain);
 
@@ -377,6 +379,7 @@ if (auctionPage) {
       tID.innerHTML = token_id;
       tStandard.innerHTML = token_standard;
       tDescription.innerHTML = auction_desc;
+      hiBidder.innerHTML = highest_bidder;
       nItem.innerHTML = auction_name;
       oID.innerHTML = pKReduced(owner_id);
       imgNFT.src = auction_img_link;
@@ -388,9 +391,9 @@ if (auctionPage) {
       console.error(error);
     });
 
-  // ***HIGHEST BIDDER WHO ARE YOU***
+  // FINAL ***HIGHEST BIDDER WHO ARE YOU*** FINAL
   if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
-    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
+    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
       .then(res => res.json())
       .then(response => {
         console.log(response[0]);
