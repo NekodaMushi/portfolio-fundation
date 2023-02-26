@@ -59,7 +59,6 @@ router.get('/api/auction/:auctionId/details', function (req, res, next) {
 });
 
 // Highest bid & Floor Price
-
 router.get('/api/auction/:auctionId/highOffer', function (req, res, next) {
   if (req.params.auctionId) {
     pool.query(
@@ -87,12 +86,8 @@ router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
     );
   }
 });
-// router.get('/api/wallet/:walletId', function (req, res) {
-//   res.json({ currentBalance: 1000 });
-// });
 
-// -----------------------
-// Highest bid && corresponding bidder for displaying winner
+// Highest bid && Display Winner
 
 router.get(
   '/api/auction/:auctionId/highestBidderFinal',
@@ -114,7 +109,6 @@ router.get(
   }
 );
 
-// ---------------
 // all offers according to auction_id
 router.get('/api/auction/:auctionId/allOffers', function (req, res, next) {
   if (req.params.auctionId) {
@@ -130,10 +124,6 @@ router.get('/api/auction/:auctionId/allOffers', function (req, res, next) {
   }
 });
 
-// SELECT o.bidder_id, b.address
-// FROM offer o
-// JOIN bidder b ON o.bidder_id = b.id
-// WHERE o.auction_id = <auction_id>;
 
 // all bidders for that auction
 router.get('/api/auction/:auctionId/allBidders', function (req, res, next) {
@@ -203,11 +193,6 @@ router.get(
             }
             console.log('second result is: ', results2.rows);
 
-            // const expense = results1.filter(dep => results2.find(deps => deps.offer_id === results2.offer_id))
-            // .map(results1 => ({offer_id: offer.offer_id, highest_bid: results1.highest_bid}))
-
-            // const refund = offer
-
             const refundBalanceArr = [];
             const expanseBalanceArr = [];
 
@@ -253,7 +238,10 @@ router.get(
   }
 );
 
-// POST ------------------------ Need to optimize
+
+
+
+// POST ----
 router.post('/api/auction/:auctionId/offer', function (req, res) {
   const walletId = req.body.walletId;
   const offerValue = req.body.offerValue;
@@ -315,23 +303,10 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
                   if (error) {
                     throw error;
                   }
-
-                  console.log('-------');
-                  console.log(total);
-                  console.log('-------');
                   total += offerValue;
-                  console.log('-------');
-                  console.log(total);
-                  console.log('-------');
 
                   let finalResponse = results.rows[0];
                   finalResponse.totalBid = total;
-                  console.log('finalREsponse here -> ', finalResponse);
-                  console.log(
-                    'attribut of final',
-                    finalResponse.balanceAuction
-                  );
-
                   res.status(201).json(finalResponse);
                 }
               );
