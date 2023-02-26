@@ -115,29 +115,17 @@ async function getAccess() {
     balance.textContent = actualBalance + ' WETH';
   }
 
-  // displayWallet.style.display = 'none';
   const walletConnected = function () {
-    // PUT BACK LATER --------------
-    // alert("Wallet connected to auction ");
-    // });
+
     displayWallet.textContent = 'Connected';
     displayWallet.value = pKReduced(connectedAddress);
 
     popDisplayWallet.textContent = pKReduced(connectedAddress);
-    // balanceAuction.textContent = actualBalance;
   };
-  // displayWallet.style.display = 'none';
   walletConnected();
-  // console.log(balanceWeth);
-  // console.log(actualBalance)
-  console.log(thousandBalance);
   updateOffer();
   balanceUpdate(connectedAddress);
-  // updateUI();
 
-  // setTimeout(() => {
-  //   walletConnected.removeEventListener('', walletConnected);
-  // }, 3000);
 }
 
 // ******* CHECK IF LITTLE MALIN CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
@@ -163,14 +151,6 @@ window.ethereum.on('accountsChanged', accounts => {
 // Practical fn
 const pKReduced = publicKey =>
   publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
-
-// ----
-
-// document.addEventListener('DOMContentLoaded', function () {
-//   contract
-//     ? (displayWallet.style.display = 'none')
-//     : (displayWallet.style.display = 'block');
-// }); // Doesn't work for now
 
 // TIMER
 if (auctionPage) {
@@ -212,11 +192,8 @@ if (auctionPage) {
       console.error(error);
     });
 
-  // -------------------------------
 
-  // ----------------
-
-  // -------REFUND
+  // -------REFUND & EXPENSE
 
   let userBalanceRefund;
   let userTotalExpense;
@@ -245,23 +222,8 @@ if (auctionPage) {
       .catch(err => console.error(err));
   }
 
-  // balanceUpdate(connectedAddress);
 
-  // -------------------\
-  // -------------------------------------
-
-  // GET CURRENT BALANCE
-
-  // Submit bid - BID NOW -------- POST
-
-  // console.log(actualBalance);
-  // let thousandBalance = parseFloat(actualBalance * 1000);
-  // console.log(thousandBalance);
-  // let currentBalance = Number(actualBalance);
-  // console.log(typeof currentBalance);
-  // console.log(currentBalance);
   let popInBalance = 0;
-  // ----------------------------------------------------------------
   if (bidBtn) {
     // Bid button Pop up
     bidBtn.addEventListener('click', function () {
@@ -277,8 +239,7 @@ if (auctionPage) {
         userTotalExpense === 0
           ? (popInBalance = thousandBalance)
           : (popInBalance =
-              thousandBalance - userTotalExpense + userBalanceRefund);
-        // popInBalance = thousandBalance;
+            thousandBalance - userTotalExpense + userBalanceRefund);
         balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
@@ -305,7 +266,6 @@ if (auctionPage) {
         alert('BID REFUSED : You need to bid higher!');
         return;
       }
-      // if (Number(highestBid.textContent) + )
       inputPrice.value = '';
       updatedBalance = popInBalance - priceInput;
       balanceAuction.innerHTML = updatedBalance;
@@ -380,9 +340,6 @@ if (auctionPage) {
       nItem.innerHTML = auction_name;
       oID.innerHTML = pKReduced(owner_id);
       imgNFT.src = auction_img_link;
-      // balanceAuction.textContent = 100;
-
-      // saEndValue.innerHTML = sale_ends;
     })
     .catch(error => {
       console.error(error);
@@ -397,6 +354,7 @@ if (auctionPage) {
         const winner = response[0];
         oID.innerHTML = winner.wallet_id;
         oInfo.innerHTML = 'New happy Owner is ==>';
+        alert('AUCTIONS ARE OVER')
       });
   }
 
@@ -406,7 +364,6 @@ if (auctionPage) {
     fetch(`/api/auction/${auctionId}/allOffers`)
       .then(res => res.json())
       .then(response => {
-        // const values = arr.map(obj => Object.values(obj)[0]);
         bidArray = response.map(obj => Object.values(obj)[0]);
         console.log(bidArray);
       });
@@ -442,7 +399,6 @@ if (auctionPage) {
           let timeString = timeBidded[i].hours + ':' + timeBidded[i].min;
           timeDisplay.push(timeString);
         }
-        // console.log(timeDisplay);
       });
 
     // HIGHEST BID
@@ -483,16 +439,11 @@ if (auctionPage) {
       const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
-         <div class="of__tr__expir" id="TimeOffer">${
-           hours - 1
-         } hour and ${min} min ago</div>
+         <div class="of__tr__expir" id="TimeOffer">${hours - 1
+        } hour and ${min} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
       parentRow.insertAdjacentHTML('afterend', html);
-      console.log('UPDATE UI');
     });
   }
 }
-
-// var templ =
-//   '<div class="box" id="auction6"><a href="/auction?auctionId=6"><img class="round_img" src="https://i.seadn.io/gcs/files/b3447ddf06ce3b01bc315cc9d143396b.jpg?auto=format&w=750" alt="Auction 6"></a></div>';
