@@ -221,7 +221,8 @@ router.get('/api/auction/:walletAddress/totalBidPerWallet', function (req, res) 
           console.log('refundBalanceArr: ', refundBalanceArr);
           const totalRefund = refundBalanceArr.reduce((acc, cur) => acc + cur.highest_bid, 0);
           console.log('totalRefund: ', totalRefund);
-          res.status(200).json(totalRefund);
+
+          res.status(200).json({ userGetBalanceBack: totalRefund });
         })
     });
 

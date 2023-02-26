@@ -211,6 +211,16 @@ if (auctionPage) {
 
 
 
+
+
+
+
+
+
+
+
+
+
   // -------------------------------
 
   // ----------------
@@ -220,9 +230,9 @@ if (auctionPage) {
 
 
 
+  // -------REFUND
 
-
-  let sumOfBids;
+  let userBalanceRefund;
 
   function balanceUpdate(walletAddress) {
     fetch(`/api/auction/${walletAddress}/totalBidPerWallet`, {
@@ -233,9 +243,9 @@ if (auctionPage) {
     })
       .then(res => res.json())
       .then(response => {
-        console.log(`-----Current total bids for ${walletAddress}: ${response.currentTotalBids}`);
-        sumOfBids = response.currentTotalBids;
-        console.log(sumOfBids);
+        console.log(`-----Current total bids for ${walletAddress}: ${response.userGetBalanceBack}`);
+        userBalanceRefund = response.userGetBalanceBack;
+        console.log(userBalanceRefund);
 
         console.log(`----- Total refunds for user {}`);
 
@@ -243,6 +253,18 @@ if (auctionPage) {
       })
       .catch(err => console.error(err));
   }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // balanceUpdate(connectedAddress);
