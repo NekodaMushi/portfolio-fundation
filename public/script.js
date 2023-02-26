@@ -83,7 +83,7 @@ const address = '0xCFE3441a10A3F956f30ca5A8EF928A42505f02A7';
 let contract = null;
 let connectedAddress = null;
 let actualBalance = 0;
-let cheatedBalance = 0;
+let thousandBalance = 0;
 // async function accessSimple() {
 //   if (contract) return;
 //   await provider.send('eth_requestAccounts', []);
@@ -110,7 +110,7 @@ async function getAccess() {
 
     const balanceWeth = await provider.getBalance(connectedAddress);
     actualBalance = ethers.utils.formatEther(balanceWeth);
-    cheatedBalance = actualBalance * 1000;
+    thousandBalance = actualBalance * 1000;
     balance.textContent = actualBalance + ' WETH';
   }
 
@@ -129,7 +129,7 @@ async function getAccess() {
   walletConnected();
   // console.log(balanceWeth);
   // console.log(actualBalance)
-  console.log(cheatedBalance);
+  console.log(thousandBalance);
   updateOffer();
   balanceUpdate(connectedAddress);
   // updateUI();
@@ -212,6 +212,7 @@ if (auctionPage) {
   // -------REFUND
 
   let userBalanceRefund;
+  let userTotalExpense;
 
   function balanceUpdate(walletAddress) {
     fetch(`/api/auction/${walletAddress}/totalBidPerWallet`, {
@@ -225,10 +226,14 @@ if (auctionPage) {
         console.log(
           `-----Current Total refunds for ${walletAddress}: ${response.userGetBalanceBack}`
         );
-        userBalanceRefund = response.userGetBalanceBack;
-        console.log(userBalanceRefund);
+        console.log(
+          `-----Current Total Expense for ${walletAddress}: ${response.userExpense}`
+        );
 
-        console.log(`----- Total refunds for user {}`);
+        userBalanceRefund = response.userGetBalanceBack;
+        userTotalExpense = response.userExpense;
+        console.log(userBalanceRefund);
+        console.log(userTotalExpense);
       })
       .catch(err => console.error(err));
   }
@@ -243,12 +248,12 @@ if (auctionPage) {
   // Submit bid - BID NOW -------- POST
 
   // console.log(actualBalance);
-  // let cheatedBalance = parseFloat(actualBalance * 1000);
-  // console.log(cheatedBalance);
+  // let thousandBalance = parseFloat(actualBalance * 1000);
+  // console.log(thousandBalance);
   // let currentBalance = Number(actualBalance);
   // console.log(typeof currentBalance);
   // console.log(currentBalance);
-  let transitBalance;
+  let popInBalance = 0;
   // ----------------------------------------------------------------
   if (bidBtn) {
     // Bid button Pop up
@@ -261,8 +266,13 @@ if (auctionPage) {
         });
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
-        transitBalance = cheatedBalance + userBalanceRefund;
-        balanceAuction.innerHTML = transitBalance;
+
+        userTotalExpense === 0
+          ? (popInBalance = thousandBalance)
+          : (popInBalance =
+              thousandBalance - userTotalExpense + userBalanceRefund);
+        // popInBalance = thousandBalance;
+        balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
         });
@@ -278,9 +288,9 @@ if (auctionPage) {
       let walletInput = String(connectedAddress);
       let updatedBalance = 0;
 
-      if (priceInput > cheatedBalance) {
+      if (priceInput > thousandBalance) {
         alert(
-          `Your bid exceeds your current wallet balance: ${cheatedBalance}`
+          `Your bid exceeds your current wallet balance: ${thousandBalance}`
         );
         alert('warning you are too poor to surf on this website !');
         return;
@@ -292,10 +302,6 @@ if (auctionPage) {
       // if (Number(highestBid.textContent) + )
       inputPrice.value = '';
 
-      transitBalance = transitBalance - (transitBalance - priceInput);
-      let beforeSub = cheatedBalance - sumOfBids;
-      updatedBalance = beforeSub - transitBalance;
-
       balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
@@ -306,14 +312,14 @@ if (auctionPage) {
         body: JSON.stringify({
           walletId: walletInput,
           offerValue: priceInput,
-          currentBalance: cheatedBalance,
+          currentBalance: thousandBalance,
         }),
       })
         .then(res => res.json())
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${sumOfBids} be careful Macron won't save you!`
+            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
           );
         })
         .then(() => {
