@@ -125,6 +125,7 @@ async function getAccess() {
   walletConnected();
   updateOffer();
   balanceUpdate(connectedAddress);
+  displayHighestBidder();
 
 }
 
@@ -236,6 +237,7 @@ if (auctionPage) {
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
 
+
         userTotalExpense === 0
           ? (popInBalance = thousandBalance)
           : (popInBalance =
@@ -345,7 +347,18 @@ if (auctionPage) {
       console.error(error);
     });
 
-  // FINAL ***HIGHEST BIDDER WHO ARE YOU*** FINAL
+  function displayHighestBidder() {
+    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
+      .then(res => res.json())
+      .then(response => {
+        console.log(response[0]);
+        const topBidder = response[0].topbidder;
+        hiBidder.innerHTML = pKReduced(topBidder);
+      });
+  }
+
+
+  // FINAL ***HIGHEST BIDDER - WINNER *** FINAL
   if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
     fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
       .then(res => res.json())
