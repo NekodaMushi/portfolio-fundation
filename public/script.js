@@ -105,6 +105,7 @@ async function getAccess() {
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
     connectedAddress = await signer.getAddress();
+    console.log(connectedAddress);
     contract = new ethers.Contract(address, abi, signer);
     displayWallet.textContent = 'Connected';
 
@@ -212,6 +213,7 @@ if (auctionPage) {
   // -------REFUND
 
   let userBalanceRefund;
+  let userTotalExpense;
 
   function balanceUpdate(walletAddress) {
     fetch(`/api/auction/${walletAddress}/totalBidPerWallet`, {
@@ -225,9 +227,14 @@ if (auctionPage) {
         console.log(
           `-----Current Total refunds for ${walletAddress}: ${response.userGetBalanceBack}`
         );
-        userBalanceRefund = response.userGetBalanceBack;
-        console.log(userBalanceRefund);
+        console.log(
+          `-----Current Total Expense for ${walletAddress}: ${response.userExpense}`
+        );
 
+        userBalanceRefund = response.userGetBalanceBack;
+        userTotalExpense = response.userExpense;
+        console.log(userBalanceRefund);
+        console.log(userTotalExpense);
       })
       .catch(err => console.error(err));
   }
@@ -261,7 +268,11 @@ if (auctionPage) {
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
 
-        popInBalance = thousandBalance - userBalanceRefund;
+        userTotalExpense === 0
+          ? (popInBalance = thousandBalance)
+          : (popInBalance =
+            thousandBalance - userTotalExpense + userBalanceRefund);
+        // popInBalance = thousandBalance;
         balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
@@ -277,11 +288,10 @@ if (auctionPage) {
       let priceInput = Number(inputPrice.value);
       let walletInput = String(connectedAddress);
       let updatedBalance = 0;
+      console.log(popInBalance);
 
-      if (priceInput > thousandBalance) {
-        alert(
-          `Your bid exceeds your current wallet balance: ${thousandBalance}`
-        );
+      if (priceInput > popInBalance) {
+        alert(`Your bid exceeds your current wallet balance: ${popInBalance}`);
         alert('warning you are too poor to surf on this website !');
         return;
       }
@@ -291,8 +301,7 @@ if (auctionPage) {
       }
       // if (Number(highestBid.textContent) + )
       inputPrice.value = '';
-
-
+      updatedBalance = popInBalance - priceInput;
       balanceAuction.innerHTML = updatedBalance;
       alert('Successfully registered your bid offer, thank You');
       fetch(`/api/auction/${auctionId}/offer`, {
@@ -316,8 +325,6 @@ if (auctionPage) {
         .then(() => {
           popup.style.display = 'none';
           parentRow.innerHTML = '';
-        })
-        .then(() => {
           updateOffer();
         });
     });
@@ -470,7 +477,8 @@ if (auctionPage) {
       const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
-         <div class="of__tr__expir" id="TimeOffer">${hours} hour and ${min} min ago</div>
+         <div class="of__tr__expir" id="TimeOffer">${hours - 1
+        } hour and ${min} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
       parentRow.insertAdjacentHTML('afterend', html);
