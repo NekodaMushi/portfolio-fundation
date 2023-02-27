@@ -107,7 +107,6 @@ router.get(
         if (error) {
           throw error;
         }
-        console.log('Here the ONE WE WANT', results.rows);
 
         res.status(200).json(results.rows);
       }
