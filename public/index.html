@@ -194,14 +194,17 @@
   <script type="text/javascript" src="./script.js"></script>
 
   <script>
+    // METAMASK REQUIRED TO ACCESS AUCTIONS
     const links = document.querySelectorAll('.link_to_auction');
-    const test = 1;
-    if (test === 1) {
-      links.forEach(link => link.classList.remove('link_to_auction'));
-    } else {
-      links.forEach(link => link.classList.add('link_to_auction'));
+    function connectedStatus() {
+      if (displayWallet.textContent === 'Connected') {
+        links.forEach(link => link.classList.remove('link_to_auction'));
+      } else {
+        links.forEach(link => link.classList.add('link_to_auction'));
+      }
     }
-
+    displayWallet.addEventListener('DOMSubtreeModified', connectedStatus);
+    connectedStatus();
   </script>
 
 
