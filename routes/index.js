@@ -73,31 +73,57 @@ router.get('/api/auction/:auctionId/highOffer', function (req, res, next) {
   }
 });
 
-router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
-  if (req.params.auctionId) {
-    pool.query(
-      `SELECT auction_id, MIN(offer_value) as min_offer_value FROM offer WHERE auction_id=${req.params.auctionId} AND bidder_id=1 GROUP BY auction_id`,
-      (error, results) => {
-        if (error) {
-          throw error;
+// router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
+//   if (req.params.auctionId) {
+//     pool.query(
+//       `SELECT auction_id, MIN(offer_value) as min_offer_value FROM offer WHERE auction_id=${req.params.auctionId} AND bidder_id=1 GROUP BY auction_id`,
+//       (error, results) => {
+//         if (error) {
+//           throw error;
+//         }
+//         res.status(200).json(results.rows);
+//       }
+//     );
+//   }
+// });
+
+
+
+
+
+// TOP BIDDER
+
+router.get(
+  '/api/auction/:auctionId/topBidder',
+  function (req, res, next) {
+    if (req.params.auctionId) {
+      pool.query(
+        `SELECT wallet_id AS topBidder FROM bidder
+                WHERE bidder_id = (
+                  SELECT bidder_id
+                  FROM offer
+                  WHERE auction_id=${req.params.auctionId} AND offer_value = (SELECT MAX(offer_value) FROM offer)
+                )`,
+        (error, results) => {
+          if (error) {
+            throw error;
+          }
+          console.log('HERE-----------', results.rows);
+
+          res.status(200).json(results.rows);
         }
-        res.status(200).json(results.rows);
-      }
-    );
+      );
+    }
   }
-});
-
-
-
-
+);
 
 // Display Winner *** FINAL
 
 router.get(
-  '/api/auction/:auctionId/highestBidder',
+  '/api/auction/:auctionId/highestBidderFinal',
   function (req, res, next) {
     pool.query(
-      `SELECT wallet_id AS topBidder FROM bidder
+      `SELECT wallet_id AS winner FROM bidder
                 WHERE bidder_id = (
                   SELECT bidder_id
                   FROM offer
@@ -107,7 +133,6 @@ router.get(
         if (error) {
           throw error;
         }
-
         res.status(200).json(results.rows);
       }
     );

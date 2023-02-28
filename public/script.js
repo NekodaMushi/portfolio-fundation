@@ -126,6 +126,7 @@ async function getAccess() {
   updateOffer();
   balanceUpdate(connectedAddress);
   displayHighestBidder();
+  Over();
 
 }
 
@@ -259,9 +260,13 @@ if (auctionPage) {
       let updatedBalance = 0;
       console.log(popInBalance);
 
+      if (hiBidder.innerHTML === "You're the top bidder") {
+        alert("You are already the top bidder on this article");
+        return
+      }
+
       if (priceInput > popInBalance) {
         alert(`Your bid exceeds your current wallet balance: ${popInBalance}`);
-        alert('warning you are too poor to surf on this website !');
         return;
       }
       if (priceInput < Number(highestBid.textContent)) {
@@ -287,7 +292,7 @@ if (auctionPage) {
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
+            `Your new actual balance is ${updatedBalance} !`
           );
         })
         .then(() => {
@@ -347,30 +352,40 @@ if (auctionPage) {
       console.error(error);
     });
 
+  // ACTUAL TOP BIDDER
   function displayHighestBidder() {
-    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidder`)
+    fetch(`http://localhost:3000/api/auction/${auctionId}/topBidder`)
       .then(res => res.json())
       .then(response => {
         console.log(response[0]);
         const topBidder = response[0].topbidder;
         hiBidder.innerHTML = pKReduced(topBidder);
+        console.log(hiBidder.innerHTML);
+        console.log(pKReduced(connectedAddress));
+
+
+        if (hiBidder.innerHTML === pKReduced(connectedAddress)) {
+          hiBidder.innerHTML = "You're the top bidder"
+        }
       });
   }
 
 
   // FINAL ***HIGHEST BIDDER - WINNER *** FINAL
-  if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
-    fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
-      .then(res => res.json())
-      .then(response => {
-        console.log(response[0]);
-        const winner = response[0];
-        oID.innerHTML = winner.wallet_id;
-        oInfo.innerHTML = 'New happy Owner is ==>';
-        alert('AUCTIONS ARE OVER')
-      });
-  }
+  function Over() {
+    if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
+      fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
+        .then(res => res.json())
+        .then(response => {
+          console.log(response[0]);
+          const winner = response[0];
 
+          oID.innerHTML = winner.wallet_id;
+          oInfo.innerHTML = 'New happy Owner is ==>';
+          alert('AUCTIONS ARE OVER')
+        });
+    }
+  }
   function updateUI() {
     // FETCHING for feeding updateOffer function
     // *** all offers ***
@@ -426,17 +441,17 @@ if (auctionPage) {
         console.error(error);
       });
 
-    // FLOOR PRICE
-    fetch(`/api/auction/${auctionId}/lowOffer`)
-      .then(res => res.json())
-      .then(response => {
-        console.log(response);
-        const { min_offer_value } = response[0];
-        fPrice.innerHTML = min_offer_value;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    // // FLOOR PRICE
+    // fetch(`/api/auction/${auctionId}/lowOffer`)
+    //   .then(res => res.json())
+    //   .then(response => {
+    //     console.log(response);
+    //     const { min_offer_value } = response[0];
+    //     fPrice.innerHTML = min_offer_value;
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
   }
 
   function updateOffer() {
