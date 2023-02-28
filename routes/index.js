@@ -97,9 +97,14 @@ router.get('/api/auction/:auctionId/highestBidder', function (req, res, next) {
                   FROM offer
                   WHERE offer_value = (SELECT MAX(offer_value) FROM offer)
                 )`,
-    (error, results) => {
-      if (error) {
-        throw error;
+
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+
+        res.status(200).json(results.rows);
+
       }
       console.log('Here the ONE WE WANT', results.rows);
 
