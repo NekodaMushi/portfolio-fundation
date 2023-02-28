@@ -116,7 +116,6 @@ async function getAccess() {
   }
 
   const walletConnected = function () {
-
     displayWallet.textContent = 'Connected';
     displayWallet.value = pKReduced(connectedAddress);
 
@@ -126,14 +125,13 @@ async function getAccess() {
   updateOffer();
   balanceUpdate(connectedAddress);
   displayHighestBidder();
-
 }
 
 // ******* CHECK IF LITTLE MALIN CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
 
 // Check for changes in the connected account
 window.ethereum.on('accountsChanged', accounts => {
-  displayWallet.textContent = 'Connect';
+  displayWallet.textContent = 'Connect Wallet';
   displayWallet.addEventListener('click', function () {
     getAccess()
       .then(res => console.log(res))
@@ -193,7 +191,6 @@ if (auctionPage) {
       console.error(error);
     });
 
-
   // -------REFUND & EXPENSE
 
   let userBalanceRefund;
@@ -223,7 +220,6 @@ if (auctionPage) {
       .catch(err => console.error(err));
   }
 
-
   let popInBalance = 0;
   if (bidBtn) {
     // Bid button Pop up
@@ -237,11 +233,13 @@ if (auctionPage) {
         popDisplayWallet.textContent = pKReduced(connectedAddress);
         balanceAuction.classList.add('neon');
 
-
         userTotalExpense === 0
           ? (popInBalance = thousandBalance)
           : (popInBalance =
-            thousandBalance - userTotalExpense + userBalanceRefund);
+              thousandBalance - userTotalExpense + userBalanceRefund);
+        popInBalance > thousandBalance
+          ? (popInBalance = thousandBalance)
+          : (popInBalance = popInBalance);
         balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
@@ -287,7 +285,7 @@ if (auctionPage) {
         .then(response => {
           console.log(response);
           alert(
-            `Your new actual balance is ${updatedBalance} be careful Macron won't save you!`
+            `Your new actual balance is ${updatedBalance} be careful Emmanuel Macron won't help you!`
           );
         })
         .then(() => {
@@ -357,7 +355,6 @@ if (auctionPage) {
       });
   }
 
-
   // FINAL ***HIGHEST BIDDER - WINNER *** FINAL
   if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
     fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
@@ -367,7 +364,7 @@ if (auctionPage) {
         const winner = response[0];
         oID.innerHTML = winner.wallet_id;
         oInfo.innerHTML = 'New happy Owner is ==>';
-        alert('AUCTIONS ARE OVER')
+        alert('AUCTIONS ARE OVER');
       });
   }
 
@@ -452,8 +449,9 @@ if (auctionPage) {
       const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
-         <div class="of__tr__expir" id="TimeOffer">${hours - 1
-        } hour and ${min} min ago</div>
+         <div class="of__tr__expir" id="TimeOffer">${
+           hours - 1
+         } hour and ${min} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
       parentRow.insertAdjacentHTML('afterend', html);
