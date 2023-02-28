@@ -46,8 +46,10 @@ const fOffer = document.querySelector('#fromOffer');
 
 const pTransfer = document.querySelector('#priceTransfer');
 const eTransfer = document.querySelector('#expirationTransfer');
-const fTransfer = document.querySelector('#fromTransfer');
+// const fTransfer = document.querySelector('#fromTransfer');
 
+const rStart = document.querySelector('#restart');
+const resetOffer = document.querySelector('#resetOffer')
 // select element for update UI
 let parentRow = document.querySelector('.of__tr__row');
 
@@ -260,6 +262,7 @@ if (auctionPage) {
       let updatedBalance = 0;
       console.log(popInBalance);
 
+
       if (hiBidder.innerHTML === "You're the top bidder") {
         alert("You are already the top bidder on this article");
         return
@@ -269,7 +272,7 @@ if (auctionPage) {
         alert(`Your bid exceeds your current wallet balance: ${popInBalance}`);
         return;
       }
-      if (priceInput < Number(highestBid.textContent)) {
+      if (priceInput <= Number(highestBid.textContent)) {
         alert('BID REFUSED : You need to bid higher!');
         return;
       }
@@ -366,6 +369,7 @@ if (auctionPage) {
 
         if (hiBidder.innerHTML === pKReduced(connectedAddress)) {
           hiBidder.innerHTML = "You're the top bidder"
+          bidBtn.style.display = 'none';
         }
       });
   }
@@ -475,3 +479,43 @@ if (auctionPage) {
     });
   }
 }
+
+
+// ----------- RESTART AUCTION -------------
+
+// RESET OFFERS
+resetOffer.addEventListener('click', function () {
+  fetch('/api/restartOffer', {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('Reset offers: Confirmed');
+      } else {
+        console.error('Failed to delete offers');
+      }
+    })
+    .catch(error => {
+      console.error('Failed to delete rows:', error);
+    });
+});
+
+// RESET TIME : SALE ENDS
+rStart.addEventListener('click', function () {
+  fetch(`/api/auction/updateSaleEnds`, {
+    method: 'PUT',
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      return fetch(`/api/auction/updateSaleEnds`);
+    })
+    .then(response => response.json())
+    .then(auctionData => {
+      console.log(auctionData);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+});
