@@ -1,5 +1,6 @@
 .central {
-  background-color: #03193A;
+  background-color: rgb(6, 11, 25);
+  --border-color: rgb(255, 255, 255, 0.1);
   font-family: 'Prompt', sans-serif;
   font-size: 18px;
   color: white;
@@ -18,11 +19,22 @@ p {
   display: flex;
   flex-direction: column;
   padding: 40px;
+  background-image: url("../img/DarkGrid.jpg");
+  background-repeat: no-repeat;
 }
+
+
 
 .top_container_item {
   max-width: 20%;
   max-height: 30%;
+  font-size: 1.9rem;
+  /* Set the font size to 3 times the default size */
+  color: #fff;
+}
+
+.tester {
+  width: 30%;
 }
 
 #welcome {
@@ -124,3 +136,11 @@ p {
 /* .link_to_auction-clickable {
   pointer-events: auto;
 } */
+.auction_container {
+  border: 0.5px solid var(--border-color);
+}
+
+.para_desc {
+  font-family: "Rubik", sans-serif;
+  font-size: 23px;
+}
