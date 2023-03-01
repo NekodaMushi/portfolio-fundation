@@ -44,8 +44,8 @@ const pOffer = document.querySelector('#priceOffer');
 const eOffer = document.querySelector('#expirationOffer');
 const fOffer = document.querySelector('#fromOffer');
 
-const pTransfer = document.querySelector('#priceTransfer');
-const eTransfer = document.querySelector('#expirationTransfer');
+// const pTransfer = document.querySelector('#priceTransfer');
+// const eTransfer = document.querySelector('#expirationTransfer');
 // const fTransfer = document.querySelector('#fromTransfer');
 
 const rStart = document.querySelector('#restart');
@@ -53,7 +53,7 @@ const resetOffer = document.querySelector('#resetOffer')
 // select element for update UI
 let parentRow = document.querySelector('.of__tr__row');
 
-// array and stuff for update UI
+// array for update UI
 let bidArray = [];
 let walletArray = [];
 let timeArray = [];
@@ -132,7 +132,7 @@ async function getAccess() {
 
 }
 
-// ******* CHECK IF LITTLE MALIN CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
+// ******* CHECK IF FUNNY GUY CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
 
 // Check for changes in the connected account
 window.ethereum.on('accountsChanged', accounts => {
@@ -146,9 +146,8 @@ window.ethereum.on('accountsChanged', accounts => {
   console.log('New accounts:', accounts);
 });
 
-// setInterval(updateOffer, 5000);
-// setInterval(updateUI, 20000);
-// WEB3 --------------- END---------------
+
+// WEB3 --------------- END
 
 // Front---------------------------
 
@@ -510,12 +509,5 @@ rStart.addEventListener('click', function () {
       console.log(data);
       return fetch(`/api/auction/updateSaleEnds`);
     })
-    .then(response => response.json())
-    .then(auctionData => {
-      console.log(auctionData);
-    })
-    .catch(error => {
-      console.error(error);
-    });
 
 });

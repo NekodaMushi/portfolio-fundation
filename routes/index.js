@@ -360,7 +360,7 @@ router.delete('/api/restartOffer', function (req, res) {
 router.put('/api/auction/updateSaleEnds', function (req, res, next) {
   pool.query(
     `UPDATE auction
-       SET sale_ends = NOW() + INTERVAL '1 hour 5 minutes'`,
+       SET sale_ends = NOW() + INTERVAL '4 hour 2 minutes'`,
     (error, results) => {
       if (error) {
         throw error;
