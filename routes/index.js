@@ -278,57 +278,81 @@ router.post('/api/auction/:auctionId/offer', function (req, res) {
       let balanceAuction = currentBalance - totalBids;
       let total = totalBids;
 
-      if (offerValue > balanceAuction) {
-        res
-          .status(200)
-          .json({ error: 'Your bid exceeds your current wallet balance' });
-      } else {
-        pool.query(
-          `SELECT bidder_id FROM bidder WHERE wallet_id='${walletId}'`,
-          (error, results) => {
-            if (error) {
-              throw error;
-            }
-
-            if (results.rows.length === 0) {
-              pool.query(
-                `INSERT INTO bidder (wallet_id, created_on) VALUES ('${walletId}', now()) RETURNING *`,
-                (error, results) => {
-                  if (error) {
-                    throw error;
-                  }
-
-                  const bidderId = results.rows[0].bidder_id;
-                  pool.query(
-                    `INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${bidderId}, now(), ${offerValue}) RETURNING *`,
-                    (error, results) => {
-                      if (error) {
-                        throw error;
-                      }
-                      res.status(201).json(results.rows[0]);
-                    }
-                  );
-                }
-              );
-            } else {
-              const bidderId = results.rows[0].bidder_id;
-              pool.query(
-                `INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${bidderId}, now(), ${offerValue}) RETURNING *`,
-                (error, results) => {
-                  if (error) {
-                    throw error;
-                  }
-                  total += offerValue;
-
-                  let finalResponse = results.rows[0];
-                  finalResponse.totalBid = total;
-                  res.status(201).json(finalResponse);
-                }
-              );
-            }
+      pool.query(
+        `SELECT bidder_id FROM bidder WHERE wallet_id='${walletId}'`,
+        (error, results) => {
+          if (error) {
+            throw error;
           }
-        );
-      }
+
+          if (results.rows.length === 0) {
+            pool.query(
+              `INSERT INTO bidder (wallet_id, created_on) VALUES ('${walletId}', now()) RETURNING *`,
+              (error, results) => {
+                if (error) {
+                  throw error;
+                }
+
+                const bidderId = results.rows[0].bidder_id;
+                pool.query(
+                  `INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${bidderId}, now(), ${offerValue}) RETURNING *`,
+                  (error, results) => {
+                    if (error) {
+                      throw error;
+                    }
+                    res.status(201).json(results.rows[0]);
+                  }
+                );
+              }
+            );
+          } else {
+            const bidderId = results.rows[0].bidder_id;
+            pool.query(
+              `INSERT INTO offer (auction_id, bidder_id, created_on, offer_value) VALUES (${req.params.auctionId}, ${bidderId}, now(), ${offerValue}) RETURNING *`,
+              (error, results) => {
+                if (error) {
+                  throw error;
+                }
+                total += offerValue;
+
+                let finalResponse = results.rows[0];
+                finalResponse.totalBid = total;
+                res.status(201).json(finalResponse);
+              }
+            );
+          }
+        }
+      );
     }
   );
+});
+
+// ----------- RESTART AUCTION -------------
+// RESET OFFERS
+router.delete('/api/restartOffer', function (req, res) {
+  pool.query(
+    'DELETE FROM offer WHERE offer_id > 1',
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results);
+    }
+  );
+});
+
+// RESET TIME : SALE ENDS
+router.put('/api/auction/updateSaleEnds', function (req, res, next) {
+  pool.query(
+    `UPDATE auction
+       SET sale_ends = NOW() + INTERVAL '4 hour 2 minutes'`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).json({ message: 'Restarting Auctions' });
+    }
+  );
+
 });
