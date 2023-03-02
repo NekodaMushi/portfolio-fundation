@@ -113,7 +113,7 @@ async function getAccess() {
 
     const balanceWeth = await provider.getBalance(connectedAddress);
     actualBalance = ethers.utils.formatEther(balanceWeth);
-    thousandBalance = actualBalance;
+    thousandBalance = actualBalance * 1000;
     balance.textContent = actualBalance + ' WETH';
   }
 
@@ -127,21 +127,15 @@ async function getAccess() {
   updateOffer();
   balanceUpdate(connectedAddress);
   displayHighestBidder();
-  Over();
+  // Over();
 }
 
 // ******* CHECK IF FUNNY GUY CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
 
 // Check for changes in the connected account
 window.ethereum.on('accountsChanged', accounts => {
-  displayWallet.textContent = 'Connect Wallet';
-  displayWallet.addEventListener('click', function () {
-    getAccess()
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-  });
-  // Handle the new accounts array
-  console.log('New accounts:', accounts);
+  console.log('New account detected:', accounts);
+  document.location.reload();
 });
 
 // WEB3 --------------- END
@@ -153,6 +147,7 @@ const pKReduced = publicKey =>
   publicKey.slice(0, 4) + '...' + publicKey.slice(-4);
 
 // TIMER
+let auctionTimer = 100;
 if (auctionPage) {
   fetch(`/api/auction/${auctionId}/timer`)
     .then(res => res.json())
@@ -163,11 +158,23 @@ if (auctionPage) {
 
       const timeCount = function () {
         const now = new Date().getTime();
-        const auctionTimer = endTimeAuction - now;
+        auctionTimer = endTimeAuction - now;
 
         if (auctionTimer <= 0) {
           clearInterval(timer);
           bidBtn.classList.add('hidden');
+          fetch(
+            `http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`
+          )
+            .then(res => res.json())
+            .then(response => {
+              console.log(response[0]);
+              const winner = response[0];
+
+              oID.innerHTML = winner.winner;
+              oInfo.innerHTML = 'New happy Owner is ==>';
+              alert('AUCTIONS ARE OVER');
+            });
 
           return;
         }
@@ -238,9 +245,6 @@ if (auctionPage) {
           ? (popInBalance = thousandBalance)
           : (popInBalance =
               thousandBalance - userTotalExpense + userBalanceRefund);
-        popInBalance > thousandBalance
-          ? (popInBalance = thousandBalance)
-          : (popInBalance = popInBalance);
         balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
@@ -366,22 +370,6 @@ if (auctionPage) {
       });
   }
 
-  // FINAL ***HIGHEST BIDDER - WINNER *** FINAL
-  function Over() {
-    if (saEndHour === '00' && saEndMin === '00' && saEndSec === '00') {
-      fetch(`http://localhost:3000/api/auction/${auctionId}/highestBidderFinal`)
-        .then(res => res.json())
-        .then(response => {
-          console.log(response[0]);
-          const winner = response[0];
-
-          oID.innerHTML = winner.wallet_id;
-          oInfo.innerHTML = 'New happy Owner is ==>';
-          alert('AUCTIONS ARE OVER');
-        });
-    }
-  }
-  Over();
   function updateUI() {
     // FETCHING for feeding updateOffer function
     // *** all offers ***
