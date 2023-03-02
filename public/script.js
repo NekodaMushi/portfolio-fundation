@@ -111,7 +111,7 @@ async function getAccess() {
 
     const balanceWeth = await provider.getBalance(connectedAddress);
     actualBalance = ethers.utils.formatEther(balanceWeth);
-    thousandBalance = actualBalance * 1000;
+    thousandBalance = actualBalance;
     balance.textContent = actualBalance + ' WETH';
   }
 
@@ -267,7 +267,7 @@ if (auctionPage) {
         alert(`Your bid exceeds your current wallet balance: ${popInBalance}`);
         return;
       }
-      if (priceInput < Number(highestBid.textContent)) {
+      if (priceInput <= Number(highestBid.textContent)) {
         alert('BID REFUSED : You need to bid higher!');
         return;
       }
@@ -380,6 +380,7 @@ if (auctionPage) {
         });
     }
   }
+  Over();
   function updateUI() {
     // FETCHING for feeding updateOffer function
     // *** all offers ***
