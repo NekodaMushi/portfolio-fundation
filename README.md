@@ -1,7 +1,7 @@
-###HERE THE BASIC THINGS YOU NEED TO WORK WITH OUR PROJECT
 
 #API Nodejs based on express
-## To start developing
+## HERE THE BASIC THINGS YOU NEED TO WORK WITH OUR PROJECT
+To start developing
 
 ```docker-compose up -d ```
 
