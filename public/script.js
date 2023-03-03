@@ -31,11 +31,7 @@ const nItem = document.querySelector('#nameItem');
 const oInfo = document.querySelector('#ownerInfo');
 const oID = document.querySelector('#ownerID');
 
-// const saEndContain = document.querySelector('#sale_end_container')
 const saEndValue = document.querySelector('#saEndValue');
-// Not use for now
-// console.log(saEndContain.value)
-// const saEndDay = document.querySelector('#endDay');
 const saEndHour = document.querySelector('#endHour');
 const saEndMin = document.querySelector('#endMin');
 const saEndSec = document.querySelector('#endSec');
@@ -44,12 +40,9 @@ const pOffer = document.querySelector('#priceOffer');
 const eOffer = document.querySelector('#expirationOffer');
 const fOffer = document.querySelector('#fromOffer');
 
-// const pTransfer = document.querySelector('#priceTransfer');
-// const eTransfer = document.querySelector('#expirationTransfer');
-// const fTransfer = document.querySelector('#fromTransfer');
-
 const rStart = document.querySelector('#restart');
 const resetOffer = document.querySelector('#resetOffer')
+
 // select element for update UI
 let parentRow = document.querySelector('.of__tr__row');
 
@@ -60,7 +53,7 @@ let timeArray = [];
 let timeDisplay = [];
 
 // WEB3 ----------------- START
-
+// Calling and setting the provider
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const abi = [
   'constructor()',
@@ -81,19 +74,14 @@ const abi = [
   'function withdraw() payable',
 ];
 
+// Address of the contract on the Blockchain, coded in "hard" because immutable value
 const address = '0xCFE3441a10A3F956f30ca5A8EF928A42505f02A7';
 let contract = null;
 let connectedAddress = null;
 let actualBalance = 0;
 let thousandBalance = 0;
-// async function accessSimple() {
-//   if (contract) return;
-//   await provider.send('eth_requestAccounts', []);
-//   const signer = provider.getSigner();
-//   connectedAddress = await signer.getAddress();
-//   contract = new ethers.Contract(address, abi, signer);
-//   displayWallet.textContent = 'Connected';
-// }
+
+// Access the metamask wallet 
 async function getAccess() {
   if (location.pathname === './index.html') {
     if (contract) return;
@@ -132,7 +120,7 @@ async function getAccess() {
 
 }
 
-// ******* CHECK IF FUNNY GUY CHANGE HIS WALLET ACCOUNT, HENCE THE ADRESS ****
+// ******* CHECK IF FUNNY GUY CHANGE HIS WALLET ACCOUNT, REFRESH THE PAGE TO HAVE UPDATED ADDRESS ****
 
 // Check for changes in the connected account
 window.ethereum.on('accountsChanged', accounts => {
@@ -231,7 +219,6 @@ if (auctionPage) {
     // Bid button Pop up
     bidBtn.addEventListener('click', function () {
       if (contract) {
-        // console.log(actualBalance);
         popup.style.display = 'block';
         closeBtn.addEventListener('click', () => {
           popup.style.display = 'none';
@@ -443,22 +430,11 @@ if (auctionPage) {
       .catch(error => {
         console.error(error);
       });
-
-    // // FLOOR PRICE
-    // fetch(`/api/auction/${auctionId}/lowOffer`)
-    //   .then(res => res.json())
-    //   .then(response => {
-    //     console.log(response);
-    //     const { min_offer_value } = response[0];
-    //     fPrice.innerHTML = min_offer_value;
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
   }
 
   function updateOffer() {
-    updateUI(); // for having food for updateOffer()
+    // call updateUI() for updateOffer() works with the top last values
+    updateUI();
     const bidAr = bidArray.reverse();
     const timeAr = timeDisplay;
     const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
