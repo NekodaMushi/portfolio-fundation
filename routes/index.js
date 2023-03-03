@@ -87,35 +87,28 @@ router.get('/api/auction/:auctionId/highOffer', function (req, res, next) {
 //   }
 // });
 
-
-
-
-
 // TOP BIDDER
 
-router.get(
-  '/api/auction/:auctionId/topBidder',
-  function (req, res, next) {
-    if (req.params.auctionId) {
-      pool.query(
-        `SELECT wallet_id AS topBidder FROM bidder
+router.get('/api/auction/:auctionId/topBidder', function (req, res, next) {
+  if (req.params.auctionId) {
+    pool.query(
+      `SELECT wallet_id AS topBidder FROM bidder
                 WHERE bidder_id = (
                   SELECT bidder_id
                   FROM offer
                   WHERE auction_id=${req.params.auctionId} AND offer_value = (SELECT MAX(offer_value) FROM offer)
                 )`,
-        (error, results) => {
-          if (error) {
-            throw error;
-          }
-          console.log('HERE-----------', results.rows);
-
-          res.status(200).json(results.rows);
+      (error, results) => {
+        if (error) {
+          throw error;
         }
-      );
-    }
+        console.log('HERE-----------', results.rows);
+
+        res.status(200).json(results.rows);
+      }
+    );
   }
-);
+});
 
 // Display Winner *** FINAL
 
@@ -153,7 +146,6 @@ router.get('/api/auction/:auctionId/allOffers', function (req, res, next) {
     );
   }
 });
-
 
 // all bidders for that auction
 router.get('/api/auction/:auctionId/allBidders', function (req, res, next) {
@@ -222,7 +214,6 @@ router.get(
               throw error;
             }
             console.log('second result is: ', results2.rows);
-
             const refundBalanceArr = [];
             const expanseBalanceArr = [];
 
@@ -243,14 +234,11 @@ router.get(
               }
             }
 
-            console.log('refundBalanceArr: ', refundBalanceArr);
             const totalRefund = refundBalanceArr.reduce(
               (acc, cur) => acc + cur.highest_bid,
               0
             );
-            console.log('totalRefund: ', totalRefund);
 
-            console.log('expanseBalanceArr: ', expanseBalanceArr);
             const totalExpense = expanseBalanceArr.reduce(
               (acc, cur) => acc + cur.highest_bid,
               0
@@ -267,9 +255,6 @@ router.get(
     );
   }
 );
-
-
-
 
 // POST ----
 router.post('/api/auction/:auctionId/offer', function (req, res) {
