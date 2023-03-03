@@ -2,15 +2,17 @@ const { ethers } = require('hardhat');
 const fs = require('fs/promises');
 
 async function main() {
-  const AuctionHello = await ethers.getContractFactory('Auction');
+  const Transfer = await ethers.getContractFactory('Transfer');
 
   // start deployment, returning a promise that resolves to a contract object
-  const auction_hello = await AuctionHello.deploy();
-  await auction_hello.deployed();
-  console.log('Contract deployed to: ', auction_hello.address);
-  await writeDeployInfo(auction_hello);
+  const transfer = await Transfer.deploy();
+  await transfer.deployed();
+  console.log('Contract deployed to: ', transfer.address);
+  await writeDeployInfo(transfer);
 }
 
+// Utility function, to write the basic info of deployment in a separate file
+// Useful for keeping track of the address and abi of contract
 async function writeDeployInfo(contract) {
   const data = {
     contract: {
@@ -21,9 +23,11 @@ async function writeDeployInfo(contract) {
   };
 
   const content = JSON.stringify(data, null, 2);
-  await fs.writeFile('deployment.json', content, { encoding: 'utf-8' });
+  await fs.writeFile('deploymentTransfer.json', content, { encoding: 'utf-8' });
 }
 
+// calling the function to deploy the smart contract
+// chain it with proper error handling
 main()
   .then(() => process.exit(0))
   .catch(err => {
