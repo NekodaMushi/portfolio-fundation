@@ -73,24 +73,6 @@ router.get('/api/auction/:auctionId/highOffer', function (req, res, next) {
   }
 });
 
-// router.get('/api/auction/:auctionId/lowOffer', function (req, res, next) {
-//   if (req.params.auctionId) {
-//     pool.query(
-//       `SELECT auction_id, MIN(offer_value) as min_offer_value FROM offer WHERE auction_id=${req.params.auctionId} AND bidder_id=1 GROUP BY auction_id`,
-//       (error, results) => {
-//         if (error) {
-//           throw error;
-//         }
-//         res.status(200).json(results.rows);
-//       }
-//     );
-//   }
-// });
-
-
-
-
-
 // TOP BIDDER
 
 router.get(
