@@ -244,7 +244,7 @@ if (auctionPage) {
         userTotalExpense === 0
           ? (popInBalance = thousandBalance)
           : (popInBalance =
-            thousandBalance - userTotalExpense + userBalanceRefund);
+              thousandBalance - userTotalExpense + userBalanceRefund);
         balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
@@ -451,8 +451,9 @@ if (auctionPage) {
       const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
-         <div class="of__tr__expir" id="TimeOffer">${hours - 1
-        } hour and ${min} min ago</div>
+         <div class="of__tr__expir" id="TimeOffer">${
+           hours - 1
+         } hour and ${min} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
       parentRow.insertAdjacentHTML('afterend', html);
