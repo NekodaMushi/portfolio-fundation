@@ -15,8 +15,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
 </head>
 
@@ -24,7 +23,7 @@
 
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container">
-      <a href='https://dauction-test1.herokuapp.com/' class="navbar-brand">D-Auction</a>
+      <a href='http://localhost:3000/' class="navbar-brand">D-Auction</a>
       <!-- PROD vs DEV -->
       <!-- <a href='http://localhost:3000/' class="navbar-brand">D-Auction</a> -->
       <button class="navbar-toggler" type="button" onclick="toggleNav()">
@@ -107,7 +106,6 @@
               <div class="auction__details__value separator" id="floorPrice">Wait for first bid</div>
             </div> -->
           </div>
-
         </div>
 
         </div>
@@ -170,9 +168,9 @@
                     <br><br>
 
                     <button type="button" id="bid-submit">Bid now!</button>
-                    <button type="button" id="start-auction">
+                    <!-- <button type="button" id="start-auction">
                       Start!
-                    </button>
+                    </button> -->
                     <p>Wallet address:</p>
                     <span id="popDisplayWallet"></span>
                     <p id="balance">balance</p>
@@ -191,7 +189,7 @@
             </div>
             <div class="graph__container__wrapper ">
               <div class="graph__container">
-                <canvas id="chart" class="graph"></canvas>
+                <canvas id="line-chart" width="800" height="450"></canvas>
               </div>
             </div>
           </div>
