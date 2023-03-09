@@ -127,6 +127,7 @@ async function getAccess() {
   updateOffer();
   balanceUpdate(connectedAddress);
   displayHighestBidder();
+  updateChart();
   // Over();
 }
 
@@ -244,7 +245,7 @@ if (auctionPage) {
         userTotalExpense === 0
           ? (popInBalance = thousandBalance)
           : (popInBalance =
-              thousandBalance - userTotalExpense + userBalanceRefund);
+            thousandBalance - userTotalExpense + userBalanceRefund);
         balanceAuction.innerHTML = popInBalance;
         closeBtn.addEventListener('click', function () {
           popup.style.display = 'none';
@@ -371,13 +372,55 @@ if (auctionPage) {
   }
 
   function updateUI() {
-    // FETCHING for feeding updateOffer function
+    // FETCHING to feed updateOffer function
     // *** all offers ***
     fetch(`/api/auction/${auctionId}/allOffers`)
       .then(res => res.json())
       .then(response => {
         bidArray = response.map(obj => Object.values(obj)[0]);
-        console.log(bidArray);
+        // CHART
+        const bidChart = response.map(obj => Object.values(obj));
+        const bidChartArr = bidChart.flat();
+        const labels = [];
+        for (let i = 0; i <= 60; i++) {
+          labels.push(`${i}:00`);
+        }
+        const chart = new Chart(document.getElementById("line-chart"), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: bidChartArr.reverse(),
+              label: "Offer",
+              borderColor: "#3e95cd",
+              fill: false
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Offer History'
+            },
+            scales: {
+              xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Time (in minutes)'
+                },
+                ticks: {
+                  autoSkip: true,
+                  maxTicksLimit: 20
+                }
+              }],
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Offer Amount (in WETH)'
+                }
+              }]
+            }
+          }
+        });
       });
 
     // *** all bidders ***
@@ -439,7 +482,7 @@ if (auctionPage) {
   }
 
   function updateOffer() {
-    updateUI(); // for having food for updateOffer()
+    updateUI(); // get data for updateOffer()
     const bidAr = bidArray.reverse();
     const timeAr = timeDisplay;
     const walletArr = walletArray.map(k => k.slice(0, 4) + '...' + k.slice(-4));
@@ -448,12 +491,12 @@ if (auctionPage) {
 
     bidAr.forEach((elm, idx) => {
       const [hours, min] = timeAr[idx].split(':').map(str => parseInt(str));
+
       const html = `<div class="of__tr__row" id="trRow">
          <i class="fa-brands fa-ethereum price__eth"></i>
          <div class="of__tr__type of__tr__price price__eth">${bidAr[idx]}</div>
-         <div class="of__tr__expir" id="TimeOffer">${
-           hours - 1
-         } hour and ${min} min ago</div>
+         <div class="of__tr__expir" id="TimeOffer">${hours - 1
+        } hour and ${min} min ago</div>
          <div class="of__tr__from" id="fromOffer">${walletArr[idx]}</div>
       </div>`;
       parentRow.insertAdjacentHTML('afterend', html);

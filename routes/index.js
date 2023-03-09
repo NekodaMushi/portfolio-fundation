@@ -102,7 +102,6 @@ router.get('/api/auction/:auctionId/topBidder', function (req, res, next) {
         if (error) {
           throw error;
         }
-        console.log('HERE-----------', results.rows);
 
         res.status(200).json(results.rows);
       }
@@ -238,8 +237,8 @@ router.get(
               0
             );
 
-            console.log('expanseBalanceArr: ', expanseBalanceArr);
-            const totalExpense = expanseBalanceArr.reduce(
+            console.log('expenseBalanceArr: ', expenseBalanceArr);
+            const totalExpense = expenseBalanceArr.reduce(
               (acc, cur) => acc + cur.highest_bid,
               0
             );
