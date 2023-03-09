@@ -224,8 +224,7 @@ router.get(
             console.log('second result is: ', results2.rows);
 
             const refundBalanceArr = [];
-            const expanseBalanceArr = [];
-
+            const expenseBalanceArr = [];
             for (const row1 of results1.rows) {
               const row2 = results2.rows.find(
                 row => row.offer_id === row1.offer_id
@@ -236,13 +235,12 @@ router.get(
                   highest_bid: row1.highest_bid,
                 });
               } else {
-                expanseBalanceArr.push({
+                expenseBalanceArr.push({
                   auction_id: row1.auction_id,
                   highest_bid: row1.highest_bid,
                 });
               }
             }
-
             console.log('refundBalanceArr: ', refundBalanceArr);
             const totalRefund = refundBalanceArr.reduce(
               (acc, cur) => acc + cur.highest_bid,
@@ -250,13 +248,12 @@ router.get(
             );
             console.log('totalRefund: ', totalRefund);
 
-            console.log('expanseBalanceArr: ', expanseBalanceArr);
-            const totalExpense = expanseBalanceArr.reduce(
+            console.log('expenseBalanceArr: ', expenseBalanceArr);
+            const totalExpense = expenseBalanceArr.reduce(
               (acc, cur) => acc + cur.highest_bid,
               0
             );
             console.log('totalExpense: ', typeof totalExpense);
-
             res.status(200).json({
               userGetBalanceBack: totalRefund,
               userExpense: totalExpense,
@@ -360,7 +357,7 @@ router.delete('/api/restartOffer', function (req, res) {
 router.put('/api/auction/updateSaleEnds', function (req, res, next) {
   pool.query(
     `UPDATE auction
-       SET sale_ends = NOW() + INTERVAL '4 hour 2 minutes'`,
+       SET sale_ends = NOW() + INTERVAL '1 hour 4.5 minutes'`,
     (error, results) => {
       if (error) {
         throw error;
