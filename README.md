@@ -2,8 +2,11 @@
 # **D-Auction** :moneybag: <br> <em>because fine and rare products deserve the Blockchain technology</em>
 
 ## <i>Final project of Holberton fundamental curriculum</i> <br>
+![Presentation](https://github.com/NekodaMushi/portfolio-fundation/assets/98282927/558fe465-19f4-4ff7-abdc-b0f6d830481c)
 
 ### **Introduction**
+
+![Timeline](https://github.com/NekodaMushi/portfolio-fundation/assets/98282927/314875cd-0874-4e1b-82f7-64b716d7f3bd)
 
 The project purpose if to provide a website with several real world assets proposed on sale on an auction system. To be able to connect, view and bid on the products, you **need to install the web browser extension Metamask :fox_face:**. A Link to a **_"how-to"_** is provided on our index page. We had a lot of fun designing this final year project ! <br>
 The final and deployed version (at this stage) is available out [there](https://dauction-test1.herokuapp.com) <br>
@@ -21,6 +24,12 @@ Please note this is an **API Nodejs based on express**
   ==> If you are a windows user, installing docker desktop would be a must, so that you can see your container on the graphical interface.
 
   ### Important Note! Dev resources
+
+  ![2](https://github.com/NekodaMushi/portfolio-fundation/assets/98282927/eac920af-6160-4312-b4af-d6b077a9e529)
+
+  ![3](https://github.com/NekodaMushi/portfolio-fundation/assets/98282927/f44c92ed-a0bc-451e-a212-182ec8294cff)
+
+  
 
 **After starting docker compose, create a dotenv file with values:**
 
