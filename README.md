@@ -1,8 +1,8 @@
 
 # **D-Auction** :moneybag: <br> <em>because fine and rare products deserve the Blockchain technology</em>
-
-## <i>Final project of Holberton fundamental curriculum</i> <br>
 ![Presentation](https://github.com/NekodaMushi/portfolio-fundation/assets/98282927/558fe465-19f4-4ff7-abdc-b0f6d830481c)
+## <i>Final project of Holberton fundamental curriculum</i> <br>
+
 
 ### **Introduction**
 
